@@ -47,6 +47,7 @@ const nav = [
   { label: 'Resort', page: 'resort' },
   { label: 'Venues', page: 'venues' },
   { label: 'Dining', page: 'dining' },
+  { label: 'Bookings', page: 'bookings' },
   { label: 'Gallery', page: 'gallery' },
   { label: 'Contact', page: 'contact' }
 ];
@@ -114,6 +115,26 @@ const amenities = [
   { icon: Waves, label: 'Poolside leisure' },
   { icon: Trees, label: 'Landscaped grounds' }
 ];
+
+const roomChoices = [
+  'Resort room',
+  'Villa stay',
+  'Banquet enquiry',
+  'Restaurant & lounge',
+  'Poolside gathering'
+];
+
+const initialBooking = {
+  arrival: '',
+  departure: '',
+  guests: '2',
+  rooms: '1',
+  stayType: roomChoices[0],
+  name: '',
+  phone: '',
+  email: '',
+  notes: ''
+};
 
 const gallery = [
   { image: images.facade, title: 'Illuminated facade', area: 'Arrival' },
@@ -548,6 +569,141 @@ function Contact() {
   );
 }
 
+function BookingPage() {
+  const [booking, setBooking] = useState(initialBooking);
+  const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+
+  const updateBooking = (event) => {
+    const { name, value } = event.target;
+    setBooking((current) => ({ ...current, [name]: value }));
+    setErrors((current) => ({ ...current, [name]: '' }));
+    setSubmitted(false);
+  };
+
+  const validateBooking = () => {
+    const nextErrors = {};
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const arrival = booking.arrival ? new Date(booking.arrival) : null;
+    const departure = booking.departure ? new Date(booking.departure) : null;
+
+    if (!booking.arrival) nextErrors.arrival = 'Choose an arrival date.';
+    if (!booking.departure) nextErrors.departure = 'Choose a departure date.';
+    if (arrival && arrival < today) nextErrors.arrival = 'Arrival cannot be in the past.';
+    if (arrival && departure && departure <= arrival) nextErrors.departure = 'Departure must be after arrival.';
+    if (!booking.name.trim()) nextErrors.name = 'Enter the guest name.';
+    if (!/^[0-9+\-\s()]{8,}$/.test(booking.phone.trim())) nextErrors.phone = 'Enter a valid phone number.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(booking.email.trim())) nextErrors.email = 'Enter a valid email address.';
+
+    return nextErrors;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const nextErrors = validateBooking();
+    setErrors(nextErrors);
+
+    if (Object.keys(nextErrors).length === 0) {
+      setSubmitted(true);
+    }
+  };
+
+  return (
+    <>
+      <PageHero
+        label="Bookings"
+        title="Reserve the stay. Enquire for the occasion."
+        copy="Share your dates, room needs and event preferences. The team can follow up with availability and details."
+        image={images.pool}
+      />
+      <section className="booking page-section">
+        <div className="booking-copy">
+          <span className="tiny-label">Booking enquiry</span>
+          <h2>Start with the dates.</h2>
+          <p>
+            This front desk form keeps the first step focused: when you arrive, how many guests are
+            coming, what kind of space you need and how Olive Green should reach you.
+          </p>
+          <div className="booking-highlights">
+            <span><CalendarDays size={18} /> Date-led request</span>
+            <span><BedDouble size={18} /> Rooms, villas and venues</span>
+            <span><Sparkles size={18} /> Confirmation on submit</span>
+          </div>
+        </div>
+        <form className="booking-form" onSubmit={handleSubmit} noValidate>
+          <div className="form-grid">
+            <label>
+              <span>Arrival</span>
+              <input type="date" name="arrival" value={booking.arrival} onChange={updateBooking} />
+              {errors.arrival && <small>{errors.arrival}</small>}
+            </label>
+            <label>
+              <span>Departure</span>
+              <input type="date" name="departure" value={booking.departure} onChange={updateBooking} />
+              {errors.departure && <small>{errors.departure}</small>}
+            </label>
+            <label>
+              <span>Guests</span>
+              <input type="number" name="guests" min="1" max="80" value={booking.guests} onChange={updateBooking} />
+            </label>
+            <label>
+              <span>Rooms</span>
+              <input type="number" name="rooms" min="1" max="20" value={booking.rooms} onChange={updateBooking} />
+            </label>
+          </div>
+          <label>
+            <span>Stay or event type</span>
+            <select name="stayType" value={booking.stayType} onChange={updateBooking}>
+              {roomChoices.map((choice) => (
+                <option key={choice}>{choice}</option>
+              ))}
+            </select>
+          </label>
+          <div className="form-grid">
+            <label>
+              <span>Guest name</span>
+              <input type="text" name="name" value={booking.name} onChange={updateBooking} placeholder="Your name" />
+              {errors.name && <small>{errors.name}</small>}
+            </label>
+            <label>
+              <span>Phone</span>
+              <input type="tel" name="phone" value={booking.phone} onChange={updateBooking} placeholder="+91 98765 43210" />
+              {errors.phone && <small>{errors.phone}</small>}
+            </label>
+          </div>
+          <label>
+            <span>Email</span>
+            <input type="email" name="email" value={booking.email} onChange={updateBooking} placeholder="name@example.com" />
+            {errors.email && <small>{errors.email}</small>}
+          </label>
+          <label>
+            <span>Special requests</span>
+            <textarea name="notes" rows="4" value={booking.notes} onChange={updateBooking} placeholder="Early check-in, banquet setup, dietary notes or anything the team should know." />
+          </label>
+          <button type="submit">
+            Send booking enquiry
+            <ArrowRight size={19} />
+          </button>
+          {submitted && (
+            <motion.div
+              className="booking-confirmation"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              <strong>Enquiry received.</strong>
+              <span>
+                We have captured your {booking.stayType.toLowerCase()} request for {booking.guests} guest(s).
+                Olive Green can follow up with availability and next steps.
+              </span>
+            </motion.div>
+          )}
+        </form>
+      </section>
+    </>
+  );
+}
+
 function PageHero({ label, title, copy, image }) {
   return (
     <section className="page-hero">
@@ -649,6 +805,7 @@ function CurrentPage({ page }) {
     resort: <ResortPage />,
     venues: <VenuesPage />,
     dining: <DiningPage />,
+    bookings: <BookingPage />,
     gallery: <GalleryPage />,
     contact: <ContactPage />
   };
