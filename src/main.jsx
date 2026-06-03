@@ -29,6 +29,7 @@ import './styles.css';
 
 const images = {
   logo: '/images/logo.png',
+  frontDay: '/images/front-day.jpg',
   facade: '/images/side-evening.png',
   aerial: '/images/side-evening.png',
   banquet: '/images/big-banquet.png',
@@ -40,7 +41,8 @@ const images = {
   lobby3: '/images/lobby-3.png',
   olive: '/images/olive-tree.png',
   board: '/images/roadside-board.png',
-  pool: '/images/pool.png'
+  pool: '/images/pool.png',
+  poolDay: '/images/pool-day.jpg'
 };
 
 const nav = [
@@ -54,22 +56,22 @@ const nav = [
 
 const heroSlides = [
   {
-    image: images.facade,
+    image: images.frontDay,
     label: 'Arrival',
     title: 'Olive Green Resort & Villas',
     copy: 'A grand Kapurthala resort for stays, celebrations, dining and landscaped hospitality.'
   },
   {
-    image: images.banquet,
-    label: 'Banquets',
-    title: 'Ceremony at full scale',
-    copy: 'A chandelier-lit banquet hall built for weddings, receptions and destination gatherings.'
+    image: images.facade,
+    label: 'Resort',
+    title: 'A grand green arrival',
+    copy: 'Night-lit architecture, gardens and calm hospitality near Kanjli Lake.'
   },
   {
-    image: images.pool,
+    image: images.poolDay,
     label: 'Leisure',
-    title: 'Evenings by the water',
-    copy: 'Poolside atmosphere, warm lighting and private corners for slower resort moments.'
+    title: 'Poolside resort living',
+    copy: 'Sunny water, villa stays and slower moments inside the Olive Green campus.'
   }
 ];
 
@@ -137,6 +139,7 @@ const initialBooking = {
 };
 
 const gallery = [
+  { image: images.frontDay, title: 'Grand front facade', area: 'Arrival' },
   { image: images.facade, title: 'Illuminated facade', area: 'Arrival' },
   { image: images.aerial, title: 'Garden court', area: 'Exterior' },
   { image: images.banquet, title: 'Grand banquet', area: 'Events' },
@@ -146,6 +149,7 @@ const gallery = [
   { image: images.food, title: 'Signature plate', area: 'Dining' },
   { image: images.golf, title: 'Garden buggy', area: 'Grounds' },
   { image: images.olive, title: 'Olive tree', area: 'Landscape' },
+  { image: images.poolDay, title: 'Pool courtyard', area: 'Leisure' },
   { image: images.pool, title: 'Pool at night', area: 'Leisure' },
   { image: images.board, title: 'Roadside sign', area: 'Wayfinding' }
 ];
@@ -735,7 +739,7 @@ function ResortPage() {
         label="Resort / Kapurthala"
         title="A green destination with a grand address."
         copy="Rooms, villas, lawns, poolside evenings and royal interiors near Kanjli Lake."
-        image={images.aerial}
+        image={images.frontDay}
       />
       <Intro />
       <Signature />
@@ -792,7 +796,7 @@ function ContactPage() {
         label="Contact"
         title="Plan your visit to Olive Green."
         copy="Use the verified public details to enquire about rooms, banquets, dining or private events."
-        image={images.board}
+        image={images.frontDay}
       />
       <Contact />
     </>
@@ -831,7 +835,7 @@ function App() {
   const [page, setPageState] = useState(pageFromHash);
   const { scrollYProgress } = useScroll();
   const progress = useSpring(scrollYProgress, { stiffness: 100, damping: 28 });
-  const headerTone = useTransform(scrollYProgress, [0, 0.12], ['rgba(8, 18, 10, 0.62)', 'rgba(8, 18, 10, 0.9)']);
+  const headerTone = useTransform(scrollYProgress, [0, 0.12], ['rgba(17, 24, 13, 0.68)', 'rgba(17, 24, 13, 0.94)']);
   const pointer = usePointer();
 
   const setPage = (nextPage) => {
@@ -869,7 +873,6 @@ function App() {
       <CurrentPage page={page} />
       <footer>
         <img src={images.logo} alt="Olive Green Resort & Villas" />
-        <span>Olive Green Resort & Villas</span>
         <span>Near Kanjli Lake, Subhanpur Road, Kapurthala</span>
       </footer>
     </>
