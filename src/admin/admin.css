@@ -1,0 +1,1060 @@
+/* ============================================================
+   ADMIN PANEL STYLES
+   ============================================================ */
+
+/* --- Root Layout --- */
+.admin-root {
+  display: flex;
+  min-height: 100vh;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* --- Sidebar (Desktop) --- */
+.admin-sidebar {
+  width: 260px;
+  background: linear-gradient(160deg, #18210d 0%, #1c2710 55%, #0b1208 100%);
+  border-right: 1px solid var(--dark-line);
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+}
+
+.admin-sidebar-brand {
+  padding: 28px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-bottom: 1px solid var(--dark-line);
+}
+
+.admin-sidebar-logo {
+  width: 116px;
+  cursor: pointer;
+}
+
+.admin-sidebar-label {
+  font-size: 9px !important;
+  color: rgba(244, 240, 228, 0.35) !important;
+  letter-spacing: 0.12em;
+}
+
+.admin-sidebar-nav {
+  flex: 1;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+/* Nav button — two-line layout with icon */
+.admin-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: rgba(244, 240, 228, 0.7);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  transition: background 0.18s ease, color 0.18s ease;
+  position: relative;
+}
+
+.admin-nav-btn:hover {
+  background: rgba(244, 240, 228, 0.06);
+  color: var(--paper);
+}
+
+.admin-nav-btn.active {
+  background: rgba(197, 155, 70, 0.12);
+  color: var(--gold);
+}
+
+.admin-nav-btn-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(244, 240, 228, 0.05);
+  transition: background 0.18s;
+}
+
+.admin-nav-btn.active .admin-nav-btn-icon {
+  background: rgba(197, 155, 70, 0.15);
+}
+
+.admin-nav-btn-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-nav-btn-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.admin-nav-btn-hint {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(244, 240, 228, 0.4);
+  margin-top: 3px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.admin-nav-btn.active .admin-nav-btn-hint {
+  color: rgba(197, 155, 70, 0.6);
+}
+
+.admin-nav-btn-arrow {
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+/* --- Sidebar Footer (User / Logout) --- */
+.admin-sidebar-footer {
+  padding: 16px 12px 20px;
+  border-top: 1px solid var(--dark-line);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-user-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(197, 155, 70, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  flex-shrink: 0;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.admin-user-info { overflow: hidden; }
+
+.admin-user-name {
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-user-role {
+  font-size: 10px;
+  color: rgba(244, 240, 228, 0.4);
+  text-transform: uppercase;
+  font-weight: 800;
+}
+
+.admin-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 9px 14px;
+  background: transparent;
+  border: 1px solid rgba(244, 240, 228, 0.12);
+  border-radius: 6px;
+  color: rgba(244, 240, 228, 0.5);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  font: inherit;
+}
+
+.admin-logout-btn:hover {
+  border-color: var(--wine);
+  color: #ffd777;
+  background: rgba(116, 31, 35, 0.12);
+}
+
+/* --- Mobile Drawer --- */
+.admin-mobile-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(11, 18, 8, 0.97);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  padding: 28px;
+}
+
+.admin-mobile-drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 36px;
+}
+
+.admin-mobile-drawer-logo { width: 104px; }
+
+.admin-mobile-close-btn {
+  border: none;
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.admin-mobile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.admin-mobile-nav-btn {
+  background: transparent;
+  border: none;
+  color: rgba(244, 240, 228, 0.7);
+  font-size: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-align: left;
+  cursor: pointer;
+  padding: 14px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font: inherit;
+}
+
+.admin-mobile-nav-btn.active {
+  color: var(--gold);
+  background: rgba(197, 155, 70, 0.08);
+}
+
+.admin-mobile-nav-hint {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(244, 240, 228, 0.4);
+  text-transform: none;
+  margin-top: 2px;
+}
+
+.admin-mobile-footer {
+  padding: 20px 0;
+  border-top: 1px solid var(--dark-line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.admin-mobile-footer-name { font-weight: 800; }
+.admin-mobile-footer-role { font-size: 11px; color: rgba(244, 240, 228, 0.5); }
+
+.admin-mobile-logout-btn {
+  border: 1px solid rgba(244, 240, 228, 0.2);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--paper);
+  padding: 10px 18px;
+  font-weight: 800;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  text-transform: uppercase;
+}
+
+/* --- Main Content Area --- */
+.admin-main-wrapper {
+  flex: 1;
+  padding-left: 260px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.admin-header {
+  height: 72px;
+  border-bottom: 1px solid var(--dark-line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  position: sticky;
+  top: 0;
+  background: rgba(11, 18, 8, 0.88);
+  backdrop-filter: blur(16px);
+  z-index: 90;
+  gap: 20px;
+}
+
+.admin-hamburger {
+  border: none;
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+  display: none;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.admin-header-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.admin-header-title {
+  font-size: 18px;
+  font-weight: 950;
+  text-transform: uppercase;
+  margin: 0;
+  letter-spacing: 0.04em;
+  color: var(--paper);
+  line-height: 1;
+}
+
+.admin-header-hint {
+  font-size: 12px;
+  color: rgba(244, 240, 228, 0.4);
+  font-weight: 500;
+}
+
+.admin-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.admin-live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--olive);
+  animation: livePulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes livePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.admin-live-label {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(244, 240, 228, 0.35);
+}
+
+.admin-content {
+  flex: 1;
+  padding: 40px;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .admin-sidebar { display: none; }
+  .admin-main-wrapper { padding-left: 0; }
+  .admin-hamburger { display: grid; }
+  .admin-header { padding: 0 20px; height: 64px; }
+  .admin-content { padding: 20px; }
+}
+
+/* ============================================================
+   LOGIN PAGE
+   ============================================================ */
+.admin-login-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ink);
+  padding: clamp(32px, 6vw, 80px) clamp(20px, 4vw, 48px);
+}
+
+.admin-login-card {
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.admin-login-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-login-logo-link { display: inline-block; }
+.admin-login-logo { width: 120px; margin: 0 auto; }
+.admin-login-title { font-size: 32px; margin: 0; }
+.admin-login-form { width: 100%; }
+.admin-form-error { color: #ffd777; font-size: 14px; font-weight: 800; margin-top: 8px; }
+.admin-form-submit { width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 10px; }
+.admin-login-back { text-align: center; }
+.admin-login-back-link {
+  color: rgba(244, 240, 228, 0.6);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.admin-login-back-link:hover { color: var(--gold); }
+
+/* ============================================================
+   SHARED ADMIN UTILITIES
+   ============================================================ */
+.admin-page { display: flex; flex-direction: column; gap: 28px; }
+
+.admin-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.admin-page-subtitle {
+  color: rgba(244, 240, 228, 0.55);
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.admin-error-msg {
+  color: #ffd777;
+  font-weight: 800;
+  font-size: 14px;
+  background: rgba(197, 155, 70, 0.08);
+  border: 1px solid rgba(197, 155, 70, 0.2);
+  padding: 12px 16px;
+  border-radius: 4px;
+}
+
+.admin-empty-state {
+  color: rgba(244, 240, 228, 0.4);
+  text-align: center;
+  padding: 48px;
+  font-size: 14px;
+}
+
+.admin-card {
+  background: rgba(244, 240, 228, 0.03);
+  border: 1px solid var(--dark-line);
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.admin-card-title {
+  font-size: 14px;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin: 0 0 20px 0;
+  letter-spacing: 0.06em;
+}
+
+.admin-loading-state {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  background: var(--ink);
+}
+
+/* Form sections */
+.form-section-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--dark-line);
+  margin-top: 4px;
+}
+
+/* ============================================================
+   DASHBOARD PAGE
+   ============================================================ */
+.dash-section-label {
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(244, 240, 228, 0.35);
+  margin-bottom: 14px;
+}
+
+/* Greeting banner */
+.dash-greeting-banner {
+  background: rgba(197, 155, 70, 0.06);
+  border: 1px solid rgba(197, 155, 70, 0.15);
+  border-radius: 10px;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.dash-greeting-text {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--paper);
+}
+
+.dash-greeting-date {
+  font-size: 13px;
+  color: rgba(244, 240, 228, 0.5);
+  margin-top: 3px;
+}
+
+.dash-greeting-summary {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.dash-greeting-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(197, 155, 70, 0.1);
+  border: 1px solid rgba(197, 155, 70, 0.25);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--gold);
+}
+
+/* Stats */
+.dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.dashboard-stat-card {
+  background: rgba(244, 240, 228, 0.03);
+  border: 1px solid var(--dark-line);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.2s;
+}
+
+.dashboard-stat-card:hover {
+  border-color: rgba(197, 155, 70, 0.25);
+}
+
+.dashboard-stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.dashboard-stat-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(244, 240, 228, 0.5);
+}
+
+.dashboard-stat-icon { opacity: 0.8; }
+.dashboard-stat-value { font-size: 28px; font-weight: 950; line-height: 1; }
+.dashboard-stat-change { font-size: 12px; color: rgba(244, 240, 228, 0.45); font-weight: 600; margin-top: 4px; }
+
+.dashboard-lower-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 24px;
+}
+
+.dash-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--dark-line);
+}
+
+.dash-see-all {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--gold);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  text-decoration: none;
+}
+
+.dash-see-all:hover { text-decoration: underline; }
+
+.dashboard-card-title {
+  border-bottom: 1px solid var(--dark-line);
+  padding-bottom: 12px;
+  margin-bottom: 20px !important;
+}
+
+.dashboard-empty-italic { color: rgba(244, 240, 228, 0.4); font-size: 14px; font-style: italic; margin: 0; padding: 12px 0; }
+.dashboard-booking-list { display: flex; flex-direction: column; gap: 14px; }
+.dashboard-booking-row { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--dark-line); padding-bottom: 12px; }
+.dashboard-booking-row:last-child { border-bottom: none; padding-bottom: 0; }
+.dashboard-booking-name { font-weight: 800; font-size: 14px; }
+.dashboard-booking-meta { font-size: 12px; color: rgba(244, 240, 228, 0.45); margin-top: 2px; }
+.dashboard-booking-right { text-align: right; flex-shrink: 0; }
+.dashboard-booking-amount { font-weight: 800; color: var(--gold); font-size: 14px; }
+.dashboard-booking-status { font-size: 10px; text-transform: uppercase; font-weight: 900; margin-top: 2px; }
+.dashboard-booking-status.status-confirmed { color: #a3d168; }
+.dashboard-booking-status.status-pending { color: var(--gold); }
+.dashboard-booking-status.status-cancelled { color: #e87070; }
+.dashboard-booking-status.status-unpaid { color: rgba(244,240,228,0.35); }
+
+/* Quick action cards */
+.dashboard-quick-actions { display: flex; flex-direction: column; gap: 10px; }
+
+.dash-quick-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: rgba(244, 240, 228, 0.03);
+  border: 1px solid rgba(244, 240, 228, 0.08);
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--paper);
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.dash-quick-card:hover {
+  background: rgba(244, 240, 228, 0.06);
+  border-color: rgba(197, 155, 70, 0.3);
+}
+
+.dash-quick-card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(244, 240, 228, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dash-quick-card-text { flex: 1; min-width: 0; }
+
+.dash-quick-card-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--paper);
+  line-height: 1;
+}
+
+.dash-quick-card-desc {
+  font-size: 11px;
+  color: rgba(244, 240, 228, 0.45);
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+.dash-quick-card-arrow { color: rgba(244, 240, 228, 0.3); flex-shrink: 0; }
+.dash-quick-card:hover .dash-quick-card-arrow { color: var(--gold); }
+
+/* Shared Buttons */
+.btn-primary { display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--ink);border:2px solid var(--gold);border-radius:8px;padding:11px 22px;font-weight:950;cursor:pointer;font-size:13px;text-transform:uppercase;letter-spacing:.04em;transition:background .2s,transform .2s;font:inherit; }
+.btn-primary:hover { background:#d6b159;transform:translateY(-1px); }
+.btn-primary:disabled { opacity:.6;cursor:not-allowed;transform:none; }
+.btn-secondary { display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--paper);border:1px solid rgba(244,240,228,.2);border-radius:8px;padding:11px 22px;font-weight:900;cursor:pointer;font-size:13px;text-transform:uppercase;transition:border-color .2s,color .2s;font:inherit; }
+.btn-secondary:hover { border-color:var(--gold);color:var(--gold); }
+.btn-danger { display:inline-flex;align-items:center;gap:8px;background:transparent;color:#ffd777;border:1px solid var(--wine);border-radius:8px;padding:10px 20px;font-size:12px;font-weight:800;cursor:pointer;text-transform:uppercase;transition:background .2s;font:inherit; }
+.btn-danger:hover { background:rgba(116,31,35,.2); }
+.btn-success { display:inline-flex;align-items:center;gap:8px;background:var(--olive);color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:12px;font-weight:800;cursor:pointer;text-transform:uppercase;font:inherit; }
+.btn-icon { background:transparent;border:1px solid rgba(244,240,228,.15);border-radius:6px;color:var(--paper);padding:8px;cursor:pointer;display:grid;place-items:center;transition:border-color .2s,color .2s;font:inherit; }
+.btn-icon:hover { border-color:var(--gold);color:var(--gold); }
+.btn-icon-gold { color:var(--gold); }
+
+/* Admin Modal */
+.admin-modal-backdrop { position:fixed;inset:0;z-index:200;background:rgba(11,18,8,.92);backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:24px;overflow-y:auto; }
+.admin-modal { background:rgba(244,240,228,.05);border:1px solid rgba(244,240,228,.12);backdrop-filter:blur(20px);border-radius:12px;width:100%;display:flex;flex-direction:column;gap:20px;position:relative;padding:clamp(22px,4vw,40px); }
+.admin-modal-sm { max-width:560px; }
+.admin-modal-md { max-width:680px; }
+.admin-modal-lg { max-width:720px;max-height:90vh;overflow-y:auto; }
+.admin-modal-close { position:absolute;top:16px;right:16px;background:transparent;border:none;color:rgba(244,240,228,.4);cursor:pointer;display:grid;place-items:center;padding:4px; }
+.admin-modal-close:hover { color:var(--gold); }
+.admin-modal-title { font-size:18px;font-weight:950;text-transform:uppercase;color:var(--gold);margin:0;border-bottom:1px solid var(--dark-line);padding-bottom:16px;letter-spacing:.04em; }
+.admin-modal-title-sm { font-size:16px; }
+.admin-modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Every label in the modal form stacks vertically and stretches full width */
+.admin-modal-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.admin-modal-form label > span {
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(244, 240, 228, 0.55);
+}
+
+.admin-modal-form input,
+.admin-modal-form textarea,
+.admin-modal-form select {
+  width: 100%;
+  background: rgba(17, 24, 13, 0.5);
+  border: 1px solid rgba(244, 240, 228, 0.14);
+  border-radius: 6px;
+  color: var(--paper);
+  font: inherit;
+  font-size: 14px;
+  padding: 12px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.admin-modal-form textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.55;
+}
+
+.admin-modal-form select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='rgba(244,240,228,0.4)' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.admin-modal-form input:focus,
+.admin-modal-form textarea:focus,
+.admin-modal-form select:focus {
+  border-color: rgba(197, 155, 70, 0.5);
+  background: rgba(17, 24, 13, 0.7);
+}
+
+.admin-modal-form input::placeholder,
+.admin-modal-form textarea::placeholder {
+  color: rgba(244, 240, 228, 0.25);
+}
+
+/* Two-column grid for paired fields inside admin modals */
+.admin-modal-form .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+@media (max-width: 600px) {
+  .admin-modal-form .form-grid { grid-template-columns: 1fr; }
+}
+
+.admin-modal-footer { display:flex;justify-content:flex-end;gap:12px;margin-top:8px;border-top:1px solid var(--dark-line);padding-top:18px; }
+
+/* Admin Table */
+.admin-table-wrap { background:rgba(244,240,228,.03);border:1px solid var(--dark-line);border-radius:8px;overflow-x:auto; }
+.admin-table { width:100%;border-collapse:collapse;text-align:left;min-width:700px; }
+.admin-table thead tr { border-bottom:1px solid var(--dark-line); }
+.admin-table th { padding:16px 20px;color:rgba(244,240,228,0.4);font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.1em; }
+.admin-table th.right { text-align:right; }
+.admin-table tbody tr { border-bottom:1px solid rgba(244,240,228,0.05);transition:background .15s; }
+.admin-table tbody tr:hover { background:rgba(244,240,228,.02); }
+.admin-table td { padding:14px 20px; }
+.admin-table td.right { text-align:right; }
+
+/* Admin Badges */
+.admin-badge { border-radius:4px;padding:3px 10px;font-size:10px;font-weight:900;text-transform:uppercase;display:inline-block;border:1px solid transparent;letter-spacing:.04em; }
+.admin-badge-confirmed { background:rgba(79,102,31,.2);border-color:var(--olive);color:#a3d168; }
+.admin-badge-pending { background:rgba(197,155,70,.12);border-color:rgba(197,155,70,.4);color:#d6b159; }
+.admin-badge-cancelled,.admin-badge-expired { background:rgba(116,31,35,.12);border-color:rgba(116,31,35,.4);color:#e87070; }
+.admin-badge-paid { background:rgba(79,102,31,.2);border-color:var(--olive);color:#a3d168; }
+.admin-badge-unpaid { background:transparent;border-color:rgba(244,240,228,.15);color:rgba(244,240,228,.4); }
+
+/* Admin Filter Bar */
+.admin-filter-bar { background:rgba(244,240,228,.03);border:1px solid var(--dark-line);border-radius:8px;padding:16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center; }
+.admin-filter-search { display:flex;align-items:center;gap:10px;flex:1;min-width:240px;background:rgba(17,24,13,.4);border:1px solid rgba(244,240,228,.12);border-radius:6px;padding:0 12px;min-height:40px; }
+.admin-filter-search-icon { color:rgba(244,240,228,.3);flex-shrink:0; }
+.admin-filter-search input { border:none;background:transparent;color:var(--paper);font:inherit;font-size:14px;outline:none;width:100%; }
+.admin-filter-search input::placeholder { color:rgba(244,240,228,.3); }
+.admin-filter-select { min-height:40px;padding:0 12px;background:rgba(17,24,13,.5);border:1px solid rgba(244,240,228,.12);border-radius:6px;color:var(--paper);font:inherit;font-size:13px;outline:none;cursor:pointer; }
+
+/* Amenity Tags */
+.admin-amenity-tag { background:rgba(197,155,70,.1);border:1px solid rgba(197,155,70,.25);border-radius:4px;padding:5px 10px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;color:var(--gold); }
+.admin-amenity-remove { border:none;background:transparent;color:rgba(197,155,70,.6);cursor:pointer;padding:0;display:flex;font:inherit; }
+.admin-amenity-remove:hover { color:var(--gold); }
+
+/* Image Uploader */
+.admin-upload-zone { border:1px dashed rgba(244,240,228,.18);border-radius:6px;padding:24px;text-align:center;background:rgba(17,24,13,.2);display:flex;flex-direction:column;align-items:center;gap:10px;cursor:pointer;position:relative; }
+.admin-upload-zone input[type=file] { position:absolute;inset:0;opacity:0;cursor:pointer; }
+.admin-upload-icon { color:var(--gold); }
+.admin-upload-label { font-size:13px;font-weight:800; }
+.admin-upload-hint { font-size:11px;color:rgba(244,240,228,.4); }
+.admin-image-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-top:14px; }
+.admin-image-thumb { position:relative;height:64px;border:1px solid var(--dark-line);border-radius:4px;overflow:hidden; }
+.admin-image-thumb img { width:100%;height:100%;object-fit:cover; }
+.admin-image-remove { position:absolute;top:3px;right:3px;background:rgba(116,31,35,.9);color:#fff;border:none;border-radius:2px;padding:2px;cursor:pointer;display:flex;font:inherit; }
+
+/* ============================================================
+   ROOM TYPES PAGE — Card Grid Layout
+   ============================================================ */
+.rt-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.rt-card {
+  background: rgba(244, 240, 228, 0.03);
+  border: 1px solid var(--dark-line);
+  border-radius: 10px;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.rt-card:hover {
+  border-color: rgba(197, 155, 70, 0.3);
+  transform: translateY(-2px);
+}
+
+.rt-card-img {
+  height: 160px;
+  background: rgba(244, 240, 228, 0.06);
+  position: relative;
+  overflow: hidden;
+}
+
+.rt-card-img img { width: 100%; height: 100%; object-fit: cover; }
+
+.rt-card-img-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(244, 240, 228, 0.2);
+}
+
+.rt-status-pill {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+  border: 1px solid;
+  font: inherit;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.rt-status-active { background: rgba(79,102,31,.4);border-color:var(--olive);color:#a3d168; }
+.rt-status-inactive { background: rgba(17,24,13,.6);border-color:rgba(244,240,228,.2);color:rgba(244,240,228,.4); }
+
+.rt-card-body {
+  padding: 16px;
+  border-bottom: 1px solid var(--dark-line);
+}
+
+.rt-card-title { font-size: 16px; font-weight: 800; color: var(--paper); margin-bottom: 6px; }
+.rt-card-price { font-size: 20px; font-weight: 950; color: var(--gold); line-height: 1; margin-bottom: 8px; }
+.rt-card-price span { font-size: 13px; font-weight: 600; color: rgba(244,240,228,.4); }
+.rt-card-meta { font-size: 12px; color: rgba(244,240,228,.45); display: flex; gap: 8px; }
+
+.rt-card-actions {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  align-items: center;
+}
+
+.rt-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: transparent;
+  border: 1px solid rgba(244,240,228,.12);
+  border-radius: 6px;
+  color: rgba(244,240,228,.7);
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+  font: inherit;
+  flex: 1;
+  justify-content: center;
+}
+
+.rt-action-btn:hover { border-color: var(--gold); color: var(--gold); }
+.rt-action-btn-icon { flex: 0; padding: 8px 10px; }
+
+/* Old table-based room classes (kept for reference) */
+.room-type-thumb { width:64px;height:44px;background:rgba(244,240,228,.08);overflow:hidden;border-radius:4px; }
+.room-type-thumb img { width:100%;height:100%;object-fit:cover; }
+.room-type-thumb-empty { width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:rgba(244,240,228,.3); }
+.room-type-name { font-weight:800; }
+.room-type-slug { font-size:11px;color:rgba(244,240,228,.5);margin-top:2px;font-family:monospace; }
+.room-status-btn { border-radius:4px;padding:4px 12px;font-size:11px;font-weight:900;text-transform:uppercase;cursor:pointer;border:1px solid;font:inherit; }
+.room-status-active { background:rgba(79,102,31,.2);border-color:var(--olive);color:#a3d168; }
+.room-status-inactive { background:transparent;border-color:rgba(244,240,228,.2);color:rgba(244,240,228,.5); }
+.room-unit-list { display:flex;flex-direction:column;gap:8px;max-height:280px;overflow-y:auto;padding-right:4px; }
+.room-unit-item { display:flex;justify-content:space-between;align-items:center;background:rgba(244,240,228,.04);border:1px solid rgba(244,240,228,.08);border-radius:6px;padding:10px 14px; }
+.room-unit-item-label { font-weight:800; }
+.room-unit-delete { background:transparent;border:none;color:rgba(244,240,228,.3);cursor:pointer;display:flex;padding:4px;font:inherit;border-radius:4px; }
+.room-unit-delete:hover { color:#e87070; }
+
+/* ============================================================
+   AVAILABILITY PAGE
+   ============================================================ */
+.availability-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.6fr;
+  gap: 24px;
+  align-items: start;
+}
+.avail-occupancy-card { display:flex;flex-direction:column;gap:24px; }
+.avail-card-header { display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;gap:16px; }
+.avail-unit-row { border-bottom:1px solid rgba(244,240,228,.06);padding-bottom:16px;margin-bottom:4px; }
+.avail-unit-row:last-child { border-bottom:none; }
+.avail-unit-header { display:flex;justify-content:space-between;align-items:center;margin-bottom:8px; }
+.avail-unit-name { font-weight:800;color:var(--paper);font-size:15px; }
+.avail-unit-count { font-size:11px;color:rgba(244,240,228,.35);font-weight:800;text-transform:uppercase; }
+.avail-unit-empty { font-size:13px;color:rgba(244,240,228,.35);font-style:italic; }
+.avail-schedule-list { display:flex;flex-direction:column;gap:6px; }
+.avail-booking-item { background:rgba(13,47,55,.2);border-left:3px solid var(--water);border-radius:4px;padding:9px 12px;font-size:13px;display:flex;justify-content:space-between;align-items:center; }
+.avail-booking-guest { color:var(--paper);font-weight:700; }
+.avail-booking-dates { color:rgba(244,240,228,.5); }
+.avail-booking-badge { font-size:10px;background:rgba(13,47,55,.5);color:var(--water);padding:2px 8px;border-radius:4px;text-transform:uppercase;font-weight:900;flex-shrink:0; }
+.avail-block-item { background:rgba(116,31,35,.1);border-left:3px solid var(--wine);border-radius:4px;padding:9px 12px;font-size:13px;display:flex;justify-content:space-between;align-items:center; }
+.avail-block-label { color:#ffd777;font-weight:700; }
+.avail-block-badge { font-size:10px;background:rgba(116,31,35,.4);color:#ffd777;padding:2px 8px;border-radius:4px;text-transform:uppercase;font-weight:900;flex-shrink:0; }
+.avail-registry-list { display:flex;flex-direction:column;gap:10px;max-height:420px;overflow-y:auto; }
+.avail-block-card { background:rgba(244,240,228,.03);border:1px solid rgba(244,240,228,.08);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:8px;position:relative; }
+.avail-block-delete { position:absolute;top:12px;right:12px;background:transparent;border:none;color:rgba(244,240,228,.25);cursor:pointer;padding:4px;display:grid;place-items:center;font:inherit;border-radius:4px; }
+.avail-block-delete:hover { color:#e87070;background:rgba(116,31,35,.2); }
+.avail-block-meta { display:flex;flex-direction:column;gap:2px;padding-right:28px; }
+.avail-block-type { font-size:11px;color:var(--gold);font-weight:900;text-transform:uppercase;letter-spacing:.04em; }
+.avail-block-unit { font-size:15px;font-weight:700; }
+.avail-block-dates { display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(244,240,228,.7); }
+.avail-block-reason { font-size:13px;color:rgba(244,240,228,.5);border-top:1px solid rgba(244,240,228,.06);padding-top:8px;margin-top:2px; }
+
+.avail-info-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(13, 47, 55, 0.15);
+  border: 1px solid rgba(124, 184, 194, 0.2);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-size: 12px;
+  color: rgba(244, 240, 228, 0.6);
+  font-weight: 600;
+}
+
+.avail-info-box svg { color: #7cb8c2; flex-shrink: 0; }
+
+/* ============================================================
+   BOOKINGS PAGE
+   ============================================================ */
+.booking-guest-strip {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: rgba(197,155,70,.05);
+  border: 1px solid rgba(197,155,70,.12);
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.booking-guest-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(197, 155, 70, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 950;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.booking-detail-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:20px;font-size:14px; }
+.booking-detail-section-title { display:block;margin-bottom:8px;color:var(--gold); }
+.booking-detail-name { font-weight:800;font-size:16px; }
+.booking-detail-contact { color:rgba(244,240,228,.6);margin-top:4px;font-size:14px; }
+.booking-detail-amount { font-size:22px;font-weight:950;color:var(--gold);margin-bottom:4px; }
+.booking-razorpay-block { border-top:1px solid var(--dark-line);padding-top:14px;font-size:12px;color:rgba(244,240,228,.5);display:grid;gap:4px; }
+.booking-notes-block { border-top:1px solid var(--dark-line);padding-top:14px;font-size:13px; }
+.booking-notes-text { background:rgba(17,24,13,.3);padding:12px;border:1px solid var(--dark-line);border-radius:4px;font-style:italic;color:rgba(244,240,228,.7); }
+
+/* Responsive */
+@media (max-width: 900px) {
+  .dashboard-lower-grid { grid-template-columns: 1fr; }
+  .availability-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .booking-detail-grid { grid-template-columns: 1fr; }
+  .rt-card-grid { grid-template-columns: 1fr; }
+  .dash-greeting-banner { flex-direction: column; align-items: flex-start; }
+}

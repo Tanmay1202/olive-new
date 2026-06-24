@@ -1243,3 +1243,36 @@ footer img {
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   SHARED UTILITIES
+   ============================================================ */
+
+.form-error-msg {
+  color: #ffd777;
+  font-weight: 800;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.admin-loading-state {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  background: var(--ink);
+}
+
+.admin-loading-orb {
+  position: relative;
+  bottom: auto;
+}
+
+.admin-loading-text {
+  margin-top: 20px;
+  color: var(--gold);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 12px;
+}
+

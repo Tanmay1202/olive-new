@@ -26,6 +26,15 @@ import {
   X
 } from 'lucide-react';
 import './styles.css';
+import { supabase } from './lib/supabaseClient';
+import { loadRazorpayScript, openRazorpayCheckout } from './lib/razorpay';
+import { useAuth } from './admin/hooks/useAuth';
+import { LoginPage } from './admin/pages/LoginPage';
+import { AdminLayout } from './admin/layouts/AdminLayout';
+import { DashboardPage } from './admin/pages/DashboardPage';
+import { RoomTypesPage } from './admin/pages/RoomTypesPage';
+import { AvailabilityPage } from './admin/pages/AvailabilityPage';
+import { BookingsPage } from './admin/pages/BookingsPage';
 
 const images = {
   logo: '/images/logo.png',
@@ -178,8 +187,21 @@ function pageHref(page) {
 }
 
 function pageFromHash() {
-  const page = window.location.hash.replace(/^#\/?/, '') || 'home';
+  let page = window.location.hash.replace(/^#\/?/, '');
+  
+  if (!page && window.location.pathname.startsWith('/admin')) {
+    page = window.location.pathname.replace(/^\//, '');
+  }
+  
+  page = page || 'home';
+
   const validPages = ['home', ...nav.map((item) => item.page)];
+  if (page.startsWith('admin/')) {
+    return page;
+  }
+  if (page === 'admin') {
+    return 'admin/dashboard';
+  }
   return validPages.includes(page) ? page : 'home';
 }
 
@@ -577,6 +599,10 @@ function BookingPage() {
   const [booking, setBooking] = useState(initialBooking);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [availableRooms, setAvailableRooms] = useState([]);
+  const [loadingRooms, setLoadingRooms] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const [successInfo, setSuccessInfo] = useState(null);
 
   const updateBooking = (event) => {
     const { name, value } = event.target;
@@ -603,13 +629,145 @@ function BookingPage() {
     return nextErrors;
   };
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    const fetchRooms = async () => {
+      if (!booking.arrival || !booking.departure) return;
+      
+      const arrivalDate = new Date(booking.arrival);
+      const departureDate = new Date(booking.departure);
+      if (departureDate <= arrivalDate) return;
+
+      setLoadingRooms(true);
+      try {
+        const { data, error } = await supabase.rpc('get_room_types_with_availability', {
+          p_check_in: booking.arrival,
+          p_check_out: booking.departure
+        });
+
+        if (error) throw error;
+        setAvailableRooms(data || []);
+      } catch (err) {
+        console.error('Error fetching available rooms:', err);
+      } finally {
+        setLoadingRooms(false);
+      }
+    };
+
+    fetchRooms();
+  }, [booking.arrival, booking.departure]);
+
+  useEffect(() => {
+    if (availableRooms.length > 0) {
+      const isStillValid = availableRooms.some(r => r.name === booking.stayType) ||
+                           ['Banquet enquiry', 'Restaurant & lounge', 'Poolside gathering'].includes(booking.stayType);
+      
+      if (!isStillValid) {
+        const firstAvailable = availableRooms.find(r => r.is_available);
+        if (firstAvailable) {
+          setBooking(current => ({ ...current, stayType: firstAvailable.name }));
+        }
+      }
+    }
+  }, [availableRooms]);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = validateBooking();
     setErrors(nextErrors);
 
-    if (Object.keys(nextErrors).length === 0) {
+    if (Object.keys(nextErrors).length > 0) return;
+
+    const selectedRoom = availableRooms.find(r => r.name === booking.stayType);
+
+    if (!selectedRoom) {
+      // Occasion enquiry (no online payment needed)
+      setSuccessInfo({
+        title: "Enquiry received.",
+        detail: `We have captured your ${booking.stayType.toLowerCase()} request for ${booking.guests} guest(s). Olive Green will follow up with details.`
+      });
       setSubmitted(true);
+      return;
+    }
+
+    setPaying(true);
+    try {
+      const { data: orderData, error: orderError } = await supabase.functions.invoke('create-booking-order', {
+        body: {
+          room_type_id: selectedRoom.id,
+          check_in: booking.arrival,
+          check_out: booking.departure,
+          guest_name: booking.name,
+          guest_email: booking.email,
+          guest_phone: booking.phone,
+          qty: Number(booking.rooms || 1),
+          notes: booking.notes
+        }
+      });
+
+      if (orderError || !orderData) {
+        throw new Error(orderError?.message || 'Failed to create booking order');
+      }
+
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        throw new Error('Razorpay SDK failed to load. Please check your internet connection.');
+      }
+
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Olive Green Resort & Villas",
+        description: `Booking for ${selectedRoom.name}`,
+        order_id: orderData.razorpay_order_id,
+        prefill: {
+          name: booking.name,
+          email: booking.email,
+          contact: booking.phone
+        },
+        handler: async (response) => {
+          setPaying(true);
+          try {
+            const { data: verifyData, error: verifyError } = await supabase.functions.invoke('verify-payment', {
+              body: {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              }
+            });
+
+            if (verifyError || !verifyData || !verifyData.success) {
+              throw new Error(verifyError?.message || 'Payment verification failed');
+            }
+
+            setSuccessInfo({
+              title: "Booking Confirmed!",
+              detail: `Your booking for ${selectedRoom.name} from ${booking.arrival} to ${booking.departure} is confirmed. Payment ID: ${response.razorpay_payment_id}.`
+            });
+            setSubmitted(true);
+          } catch (err) {
+            console.error('Verification error:', err);
+            setErrors({ submit: err.message || 'Payment verification failed. Please contact support.' });
+          } finally {
+            setPaying(false);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setPaying(false);
+            setErrors({ submit: 'Checkout was cancelled. You can try paying again.' });
+          }
+        },
+        theme: {
+          color: "#4f661f"
+        }
+      };
+
+      openRazorpayCheckout(options);
+    } catch (err) {
+      console.error('Order creation error:', err);
+      setErrors({ submit: err.message || 'Failed to initiate booking payment.' });
+      setPaying(false);
     }
   };
 
@@ -658,10 +816,26 @@ function BookingPage() {
           </div>
           <label>
             <span>Stay or event type</span>
-            <select name="stayType" value={booking.stayType} onChange={updateBooking}>
-              {roomChoices.map((choice) => (
-                <option key={choice}>{choice}</option>
-              ))}
+            <select name="stayType" value={booking.stayType} onChange={updateBooking} disabled={loadingRooms}>
+              {loadingRooms ? (
+                <option>Checking availability...</option>
+              ) : availableRooms.length === 0 ? (
+                roomChoices.map((choice) => (
+                  <option key={choice} value={choice}>{choice}</option>
+                ))
+              ) : (
+                <>
+                  {availableRooms.map((room) => (
+                    <option key={room.id} value={room.name} disabled={!room.is_available}>
+                      {room.name} {room.is_available ? `(₹${Number(room.base_price).toFixed(0)} - ${room.available_units} available)` : '(Sold out)'}
+                    </option>
+                  ))}
+                  <option disabled>--- Event Occasions ---</option>
+                  <option value="Banquet enquiry">Banquet enquiry</option>
+                  <option value="Restaurant & lounge">Restaurant & lounge</option>
+                  <option value="Poolside gathering">Poolside gathering</option>
+                </>
+              )}
             </select>
           </label>
           <div className="form-grid">
@@ -685,21 +859,25 @@ function BookingPage() {
             <span>Special requests</span>
             <textarea name="notes" rows="4" value={booking.notes} onChange={updateBooking} placeholder="Early check-in, banquet setup, dietary notes or anything the team should know." />
           </label>
-          <button type="submit">
-            Send booking enquiry
+
+          {errors.submit && (
+            <div className="form-error-msg">
+              {errors.submit}
+            </div>
+          )}
+
+          <button type="submit" disabled={paying}>
+            {paying ? 'Processing Checkout...' : 'Pay & Book Now'}
             <ArrowRight size={19} />
           </button>
-          {submitted && (
+          {submitted && successInfo && (
             <motion.div
               className="booking-confirmation"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
             >
-              <strong>Enquiry received.</strong>
-              <span>
-                We have captured your {booking.stayType.toLowerCase()} request for {booking.guests} guest(s).
-                Olive Green can follow up with availability and next steps.
-              </span>
+              <strong>{successInfo.title}</strong>
+              <span>{successInfo.detail}</span>
             </motion.div>
           )}
         </form>
@@ -838,8 +1016,11 @@ function App() {
   const headerTone = useTransform(scrollYProgress, [0, 0.12], ['rgba(17, 24, 13, 0.68)', 'rgba(17, 24, 13, 0.94)']);
   const pointer = usePointer();
 
+  const { user, profile, loading: authLoading, isAdmin, logout } = useAuth();
+
   const setPage = (nextPage) => {
     setPageState(nextPage);
+    window.location.hash = `/${nextPage}`;
     window.setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 0);
   };
 
@@ -858,23 +1039,71 @@ function App() {
     return () => window.removeEventListener('hashchange', onHashChange);
   }, []);
 
+  useEffect(() => {
+    if (!authLoading) {
+      if (page.startsWith('admin/')) {
+        if (page === 'admin/login') {
+          if (user && isAdmin) {
+            setPage('admin/dashboard');
+          }
+        } else {
+          if (!user || !isAdmin) {
+            setPage('admin/login');
+          }
+        }
+      }
+    }
+  }, [page, user, isAdmin, authLoading]);
+
+  const isMenuOverlayAndHeaderNeeded = !page.startsWith('admin/');
+
   return (
     <>
-      <Loader loaded={loaded} />
+      {isMenuOverlayAndHeaderNeeded && <Loader loaded={loaded} />}
       <motion.div className="cursor-dot" style={pointer} />
-      <motion.div className="progress" style={{ scaleX: progress }} />
-      {loaded && (
+      {isMenuOverlayAndHeaderNeeded && <motion.div className="progress" style={{ scaleX: progress }} />}
+      {loaded && isMenuOverlayAndHeaderNeeded && (
         <>
           <motion.div className="header-backdrop" style={{ backgroundColor: headerTone }} />
           <Header setMenuOpen={setMenuOpen} setPage={setPage} />
         </>
       )}
-      <MenuOverlay menuOpen={menuOpen} setMenuOpen={setMenuOpen} setPage={setPage} />
-      <CurrentPage page={page} />
-      <footer>
-        <img src={images.logo} alt="Olive Green Resort & Villas" />
-        <span>Near Kanjli Lake, Subhanpur Road, Kapurthala</span>
-      </footer>
+      {isMenuOverlayAndHeaderNeeded && (
+        <MenuOverlay menuOpen={menuOpen} setMenuOpen={setMenuOpen} setPage={setPage} />
+      )}
+      
+      {page.startsWith('admin/') ? (
+        authLoading ? (
+          <div className="admin-loading-state">
+            <div className="loader-stage">
+              <div className="loader-orb admin-loading-orb" />
+              <div className="admin-loading-text">
+                Verifying Credentials...
+              </div>
+            </div>
+          </div>
+        ) : page === 'admin/login' ? (
+          <LoginPage setPage={setPage} isAdmin={isAdmin} />
+        ) : !isAdmin ? (
+          null
+        ) : (
+          <AdminLayout page={page} setPage={setPage} profile={profile} logout={logout}>
+            {page === 'admin/dashboard' && <DashboardPage />}
+            {page === 'admin/room-types' && <RoomTypesPage />}
+            {page === 'admin/availability' && <AvailabilityPage />}
+            {page === 'admin/bookings' && <BookingsPage />}
+          </AdminLayout>
+        )
+      ) : (
+        <CurrentPage page={page} />
+      )}
+
+      {isMenuOverlayAndHeaderNeeded && (
+        <footer>
+          <img src={images.logo} alt="Olive Green Resort & Villas" />
+          <span>Near Kanjli Lake, Subhanpur Road, Kapurthala</span>
+        </footer>
+      )}
     </>
   );
 }
