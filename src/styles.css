@@ -1,6 +1,10 @@
+@import "tailwindcss";
+
 :root {
   color-scheme: light;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, "Times New Roman", serif;
+  font-family: var(--font-sans);
   --ink: #11180d;
   --ash: #0b1208;
   --paper: #f4f0e4;
@@ -51,17 +55,45 @@ img {
   max-width: 100%;
 }
 
+/* Film grain texture overlay — adds luxury depth */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 128px 128px;
+}
+
 .cursor-dot {
   position: fixed;
   z-index: 210;
   top: 0;
   left: 0;
-  width: 28px;
-  height: 28px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(197, 155, 70, 0.45);
+  background: rgba(197, 155, 70, 0.05);
+  pointer-events: none;
+  backdrop-filter: blur(1.5px);
+  mix-blend-mode: normal;
+  transition: transform 0.1s linear, width 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), height 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cursor-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
   border-radius: 50%;
   background: var(--gold);
-  mix-blend-mode: difference;
-  pointer-events: none;
 }
 
 .progress {
@@ -362,21 +394,27 @@ p {
 h1,
 h2,
 h3 {
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
 }
 
 h1 {
   max-width: 760px;
   margin-top: 16px;
-  font-size: clamp(42px, 6.8vw, 98px);
-  font-weight: 950;
-  line-height: 0.9;
-  text-transform: uppercase;
+  font-family: var(--font-serif);
+  font-size: clamp(46px, 7.2vw, 108px);
+  font-weight: 500;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
 }
 
 .hero h1 {
-  font-size: clamp(32px, 5.2vw, 68px);
+  font-size: clamp(36px, 5.8vw, 76px);
   margin-top: 12px;
+  text-transform: none;
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 
 .hero-panel p {
@@ -420,12 +458,14 @@ h1 {
   right: clamp(18px, 5vw, 70px);
   bottom: clamp(78px, 13vh, 128px);
   display: grid;
-  color: rgba(244, 240, 228, 0.18);
-  font-size: clamp(58px, 12vw, 180px);
-  font-weight: 950;
+  color: rgba(244, 240, 228, 0.07);
+  font-family: var(--font-serif);
+  font-size: clamp(72px, 14vw, 220px);
+  font-weight: 300;
   line-height: 0.82;
   text-align: right;
-  text-transform: uppercase;
+  font-style: italic;
+  letter-spacing: -0.04em;
   pointer-events: none;
 }
 
@@ -454,7 +494,13 @@ h1 {
 
 .page-hero h1 {
   margin-top: 18px;
-  font-size: clamp(42px, 6.8vw, 90px);
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 7vw, 96px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: none;
 }
 
 .page-hero p {
@@ -523,19 +569,22 @@ section {
 .gallery-top h2,
 .contact h2 {
   margin-top: 14px;
-  font-size: clamp(38px, 6.7vw, 90px);
-  font-weight: 950;
-  line-height: 0.9;
-  text-transform: uppercase;
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 7vw, 100px);
+  font-weight: 400;
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  text-transform: none;
 }
 
 .intro h2 {
-  font-size: clamp(32px, 4.5vw, 64px);
+  font-size: clamp(34px, 4.8vw, 70px);
 }
 
 .intro h2 em {
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 400;
+  font-style: italic;
+  font-weight: 300;
+  color: var(--gold);
   text-transform: none;
 }
 
@@ -576,10 +625,12 @@ section {
 
 .manifesto-pin strong {
   max-width: 260px;
-  color: #f7eed7;
-  font-size: 26px;
-  font-weight: 950;
-  line-height: 1;
+  color: rgba(244, 240, 228, 0.54);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.4;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
@@ -589,13 +640,15 @@ section {
 }
 
 .manifesto-list p {
-  border-bottom: 3px solid rgba(197, 155, 70, 0.54);
+  border-bottom: 1px solid rgba(197, 155, 70, 0.28);
   padding-bottom: clamp(18px, 3vw, 32px);
   color: #f7eed7;
-  font-size: clamp(32px, 5.5vw, 76px);
-  font-weight: 950;
-  line-height: 0.86;
-  text-transform: uppercase;
+  font-family: var(--font-serif);
+  font-size: clamp(38px, 6.5vw, 92px);
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.02em;
   text-shadow: 0 18px 52px rgba(0, 0, 0, 0.32);
 }
 
@@ -628,8 +681,8 @@ section {
   height: 100%;
   min-height: inherit;
   object-fit: cover;
-  filter: saturate(0.92);
-  transition: transform 0.72s ease, filter 0.72s ease;
+  filter: saturate(0.88) brightness(0.96);
+  transition: transform 0.88s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.88s ease;
 }
 
 .venue-tile::after {
@@ -640,8 +693,8 @@ section {
 }
 
 .venue-tile:hover img {
-  filter: saturate(1.08);
-  transform: scale(1.05);
+  filter: saturate(1.1) brightness(1.04);
+  transform: scale(1.06);
 }
 
 .venue-tile div {
@@ -664,10 +717,12 @@ section {
 .venue-tile h3 {
   max-width: 560px;
   color: var(--paper);
-  font-size: clamp(38px, 5.5vw, 82px);
-  font-weight: 950;
-  line-height: 0.88;
-  text-transform: uppercase;
+  font-family: var(--font-serif);
+  font-size: clamp(32px, 4.5vw, 68px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1;
+  letter-spacing: -0.01em;
 }
 
 .venue-tile p {
@@ -795,11 +850,11 @@ section {
   height: 100%;
   min-height: inherit;
   object-fit: cover;
-  transition: transform 0.55s ease;
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .gallery-grid button:hover img {
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
 
 .gallery-grid span {
@@ -849,10 +904,12 @@ section {
 
 .booking h2 {
   margin-top: 14px;
-  font-size: clamp(42px, 7.2vw, 104px);
-  font-weight: 950;
-  line-height: 0.9;
-  text-transform: uppercase;
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 7.2vw, 108px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
 }
 
 .booking-copy {
@@ -1035,20 +1092,54 @@ section {
 
 footer {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr auto;
   gap: 24px;
   align-items: center;
-  padding: 42px clamp(20px, 5vw, 74px);
-  background: var(--ink);
-  color: rgba(244, 240, 228, 0.58);
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+  padding: clamp(36px, 5vw, 60px) clamp(20px, 5vw, 74px);
+  background: var(--ash);
+  border-top: 1px solid rgba(197, 155, 70, 0.14);
+  color: rgba(244, 240, 228, 0.42);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 footer img {
-  width: 96px;
+  width: 88px;
+  height: auto;
+  opacity: 0.72;
+}
+
+.footer-address {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(244, 240, 228, 0.36);
+}
+
+.footer-contact {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.footer-contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: rgba(244, 240, 228, 0.54);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.footer-contact a:hover {
+  color: var(--gold);
 }
 
 .lightbox {
@@ -1099,6 +1190,14 @@ footer img {
   .venue-grid,
   .gallery-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  footer {
+    grid-template-columns: auto 1fr;
+  }
+
+  .footer-contact {
+    display: none;
   }
 }
 
@@ -1276,3 +1375,56 @@ footer img {
   font-size: 12px;
 }
 
+
+/* ============================================================
+   VengenceUI — Required utilities
+   https://www.vengenceui.com/docs/add-utilities
+   ============================================================ */
+
+@layer utilities {
+  /* Mask utilities used by several VengenceUI components */
+  .mask-radial-from-0\% {
+    mask-image: radial-gradient(circle, black 0%, transparent 100%);
+  }
+
+  .mask-radial-from-50\% {
+    mask-image: radial-gradient(circle, black 50%, transparent 100%);
+  }
+
+  /* Border beam animation */
+  @keyframes border-beam {
+    100% {
+      offset-distance: 100%;
+    }
+  }
+
+  /* Shine sweep animation */
+  @keyframes shine {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* Flip animation for Flip Text components */
+  @keyframes flip {
+    0%   { transform: rotateX(0deg); }
+    50%  { transform: rotateX(90deg); }
+    100% { transform: rotateX(0deg); }
+  }
+
+  /* Marquee scroll for Logo Slider */
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  @keyframes marquee-reverse {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+  }
+
+  .animate-border-beam   { animation: border-beam linear infinite; }
+  .animate-shine         { animation: shine 3s linear infinite; }
+  .animate-flip          { animation: flip 0.6s ease-in-out; }
+  .animate-marquee       { animation: marquee var(--duration, 30s) linear infinite; }
+  .animate-marquee-reverse { animation: marquee-reverse var(--duration, 30s) linear infinite; }
+}

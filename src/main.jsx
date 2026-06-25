@@ -171,8 +171,8 @@ function usePointer() {
 
   useEffect(() => {
     const onMove = (event) => {
-      x.set(event.clientX - 14);
-      y.set(event.clientY - 14);
+      x.set(event.clientX - 22);
+      y.set(event.clientY - 22);
     };
 
     window.addEventListener('pointermove', onMove);
@@ -187,21 +187,25 @@ function pageHref(page) {
 }
 
 function pageFromHash() {
-  let page = window.location.hash.replace(/^#\/?/, '');
+  let hashPage = window.location.hash.replace(/^#\/?/, '');
   
-  if (!page && window.location.pathname.startsWith('/admin')) {
-    page = window.location.pathname.replace(/^\//, '');
+  if (window.location.pathname.startsWith('/admin')) {
+    // If we have a hash and it's an admin route, use the hash (internal admin navigation)
+    if (hashPage.startsWith('admin/')) {
+      return hashPage;
+    }
+    // Otherwise, prioritize the pathname (user just arrived at /admin, maybe with a lingering public hash)
+    let pathPage = window.location.pathname.replace(/^\//, '');
+    if (pathPage === 'admin' || pathPage === 'admin/') {
+      return 'admin/dashboard';
+    }
+    if (pathPage.startsWith('admin/')) {
+      return pathPage;
+    }
   }
-  
-  page = page || 'home';
 
+  let page = hashPage || 'home';
   const validPages = ['home', ...nav.map((item) => item.page)];
-  if (page.startsWith('admin/')) {
-    return page;
-  }
-  if (page === 'admin') {
-    return 'admin/dashboard';
-  }
   return validPages.includes(page) ? page : 'home';
 }
 
@@ -331,10 +335,10 @@ function Hero() {
           key={current.image}
           src={current.image}
           alt=""
-          initial={{ opacity: 0, scale: 1.06 }}
+          initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.02 }}
-          transition={{ duration: 1.1, ease: 'easeOut' }}
+          exit={{ opacity: 0, scale: 1.05 }}
+          transition={{ duration: 8.5, ease: 'easeOut' }}
         />
       </AnimatePresence>
       <div className="hero-overlay" />
@@ -527,17 +531,21 @@ function Gallery() {
       </div>
       <div className="gallery-grid">
         {visibleGallery.map((item, index) => (
-          <button
+          <motion.button
             className={index === 0 || index === 5 ? 'wide' : ''}
             key={item.title}
             onClick={() => setActive(item)}
+            initial={{ opacity: 0, scale: 0.98, y: 30 }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.7, delay: (index % 4) * 0.1 }}
           >
             <img src={item.image} alt={item.title} />
             <span>
               <small>{item.area}</small>
               {item.title}
             </span>
-          </button>
+          </motion.button>
         ))}
       </div>
       <AnimatePresence>
@@ -889,7 +897,13 @@ function BookingPage() {
 function PageHero({ label, title, copy, image }) {
   return (
     <section className="page-hero">
-      <img src={image} alt="" />
+      <motion.img 
+        src={image} 
+        alt="" 
+        initial={{ opacity: 0, scale: 1.1 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 6, ease: 'easeOut' }}
+      />
       <div className="hero-overlay" />
       <div>
         <span className="tiny-label">{label}</span>
@@ -1100,8 +1114,18 @@ function App() {
 
       {isMenuOverlayAndHeaderNeeded && (
         <footer>
-          <img src={images.logo} alt="Olive Green Resort & Villas" />
-          <span>Near Kanjli Lake, Subhanpur Road, Kapurthala</span>
+          <img src={images.logo} alt="Olive Green Resort &amp; Villas" width="88" height="44" />
+          <span className="footer-address">Near Kanjli Lake, Subhanpur Road, Kapurthala</span>
+          <div className="footer-contact">
+            <a href="tel:+917083300001">
+              <Phone size={13} />
+              +91 70833 00001
+            </a>
+            <a href="mailto:cmd@olivegreenresortandvilla.com">
+              <Sparkles size={13} />
+              cmd@olivegreenresortandvilla.com
+            </a>
+          </div>
         </footer>
       )}
     </>
