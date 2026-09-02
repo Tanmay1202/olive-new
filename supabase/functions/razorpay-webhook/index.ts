@@ -70,56 +70,18 @@ serve(async (req) => {
         });
       }
 
-      // Idempotency — already confirmed, skip processing
-      if (booking.status !== "confirmed") {
-        const { data: units, error: unitsErr } = await supabaseClient
-          .from("room_units")
-          .select("id, unit_label")
-          .eq("room_type_id", booking.room_type_id)
-          .eq("is_active", true);
-
-        if (unitsErr) throw unitsErr;
-
-        let assignedUnitId: string | null = null;
-
-        for (const unit of (units || [])) {
-          const { data: overlappingBookings } = await supabaseClient
-            .from("bookings")
-            .select("id")
-            .eq("room_unit_id", unit.id)
-            .eq("status", "confirmed")
-            .lt("check_in", booking.check_out)
-            .gt("check_out", booking.check_in);
-
-          const { data: overlappingBlocks } = await supabaseClient
-            .from("availability_blocks")
-            .select("id")
-            .eq("room_unit_id", unit.id)
-            .lt("start_date", booking.check_out)
-            .gt("end_date", booking.check_in);
-
-          if (
-            (!overlappingBookings || overlappingBookings.length === 0) &&
-            (!overlappingBlocks || overlappingBlocks.length === 0)
-          ) {
-            assignedUnitId = unit.id;
-            break;
-          }
+      // 3. Atomically assign units and update the booking to confirmed & paid via RPC
+      // The RPC inherently handles idempotency by checking if the status is already 'confirmed'
+      const { data: confirmSuccess, error: confirmError } = await supabaseClient.rpc(
+        "confirm_booking_and_assign_units",
+        {
+          p_booking_id: booking.id,
+          p_payment_id: paymentId,
         }
+      );
 
-        const { error: updateErr } = await supabaseClient
-          .from("bookings")
-          .update({
-            status: "confirmed",
-            payment_status: "paid",
-            hold_expires_at: null,
-            room_unit_id: assignedUnitId,
-            razorpay_payment_id: paymentId,
-            updated_at: new Date().toISOString(),
-          })
-          .eq("id", booking.id);
-
-        if (updateErr) throw updateErr;
+      if (confirmError || !confirmSuccess) {
+        throw confirmError || new Error("Failed to confirm booking and assign units");
       }
     } else if (event === "payment.failed") {
       const payment = eventData.payload?.payment?.entity;

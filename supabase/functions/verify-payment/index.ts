@@ -88,71 +88,28 @@ serve(async (req) => {
       );
     }
 
-    // 3. Assign a free room unit for the dates
-    const { data: units, error: unitsErr } = await supabaseClient
-      .from("room_units")
-      .select("id, unit_label")
-      .eq("room_type_id", booking.room_type_id)
-      .eq("is_active", true);
-
-    if (unitsErr) throw unitsErr;
-
-    let assignedUnitId: string | null = null;
-
-    for (const unit of (units || [])) {
-      const { data: overlappingBookings, error: bOverlapErr } = await supabaseClient
-        .from("bookings")
-        .select("id")
-        .eq("room_unit_id", unit.id)
-        .eq("status", "confirmed")
-        .lt("check_in", booking.check_out)
-        .gt("check_out", booking.check_in);
-
-      if (bOverlapErr) throw bOverlapErr;
-
-      const { data: overlappingBlocks, error: blockOverlapErr } = await supabaseClient
-        .from("availability_blocks")
-        .select("id")
-        .eq("room_unit_id", unit.id)
-        .lt("start_date", booking.check_out)
-        .gt("end_date", booking.check_in);
-
-      if (blockOverlapErr) throw blockOverlapErr;
-
-      if (
-        (!overlappingBookings || overlappingBookings.length === 0) &&
-        (!overlappingBlocks || overlappingBlocks.length === 0)
-      ) {
-        assignedUnitId = unit.id;
-        break;
+    // 3 & 4. Atomically assign units and update the booking to confirmed & paid via RPC
+    const { data: confirmSuccess, error: confirmError } = await supabaseClient.rpc(
+      "confirm_booking_and_assign_units",
+      {
+        p_booking_id: booking.id,
+        p_payment_id: razorpay_payment_id,
       }
+    );
+
+    if (confirmError || !confirmSuccess) {
+      throw confirmError || new Error("Failed to confirm booking and assign units");
     }
-
-    // 4. Update the booking to paid & confirmed
-    const { data: updatedBooking, error: updateErr } = await supabaseClient
-      .from("bookings")
-      .update({
-        status: "confirmed",
-        payment_status: "paid",
-        hold_expires_at: null,
-        room_unit_id: assignedUnitId,
-        razorpay_payment_id: razorpay_payment_id,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("id", booking.id)
-      .select()
-      .single();
-
-    if (updateErr) throw updateErr;
 
     return new Response(
       JSON.stringify({
         success: true,
-        booking_id: updatedBooking.id,
-        assigned_room_unit: assignedUnitId,
+        booking_id: booking.id,
       }),
       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
+
+
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Internal Server Error";
     return new Response(JSON.stringify({ error: message }), {

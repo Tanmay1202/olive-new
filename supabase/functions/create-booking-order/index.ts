@@ -124,48 +124,31 @@ serve(async (req) => {
 
     const totalAmount = Number(roomType.base_price) * nights * bookingQty;
 
-    // 3. Re-verify availability using supabase function
-    const { data: isAvailable, error: availError } = await supabaseClient.rpc("check_availability", {
+    // 3 & 4. Atomically check availability and create pending booking via RPC
+    const { data: bookingId, error: rpcError } = await supabaseClient.rpc("create_pending_booking", {
       p_room_type_id: room_type_id,
       p_check_in: check_in,
       p_check_out: check_out,
+      p_guest_name: guest_name.trim(),
+      p_guest_email: String(guest_email).trim().toLowerCase(),
+      p_guest_phone: String(guest_phone).trim(),
+      p_guests_count: bookingGuestsCount,
       p_qty: bookingQty,
+      p_total_amount: totalAmount,
+      p_notes: notes ? String(notes).trim().slice(0, 1000) : null,
     });
 
-    if (availError || !isAvailable) {
-      return new Response(JSON.stringify({ error: "Selected dates are no longer available for this room type" }), {
-        status: 409,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    if (rpcError || !bookingId) {
+      if (rpcError?.message?.includes("Selected dates are no longer available")) {
+        return new Response(JSON.stringify({ error: rpcError.message }), {
+          status: 409,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      throw rpcError || new Error("Failed to create pending booking");
     }
 
-    // 4. Create pending booking record
-    const holdExpiresAt = new Date(Date.now() + 15 * 60 * 1000); // 15 mins hold
-
-    const { data: booking, error: insertError } = await supabaseClient
-      .from("bookings")
-      .insert([{
-        room_type_id,
-        guest_name: guest_name.trim(),
-        guest_email: String(guest_email).trim().toLowerCase(),
-        guest_phone: String(guest_phone).trim(),
-        check_in,
-        check_out,
-        guests_count: bookingGuestsCount,
-        qty: bookingQty,
-        total_amount: totalAmount,
-        status: "pending",
-        payment_status: "unpaid",
-        hold_expires_at: holdExpiresAt.toISOString(),
-        source: "online",
-        notes: notes ? String(notes).trim().slice(0, 1000) : null,
-      }])
-      .select()
-      .single();
-
-    if (insertError || !booking) {
-      throw insertError || new Error("Failed to insert booking record");
-    }
+    const booking = { id: bookingId };
 
     // 5. Call Razorpay Orders API
     const razorpayKeyId = Deno.env.get("RAZORPAY_KEY_ID") ?? "";
@@ -207,7 +190,11 @@ serve(async (req) => {
       .eq("id", booking.id);
 
     if (updateError) {
-      throw updateError;
+      // Issue 2 fix: clean up the orphan booking so it doesn't linger without
+      // a razorpay_order_id — the Razorpay order already exists server-side,
+      // so without this link the payment can never be confirmed or tracked.
+      await supabaseClient.from("bookings").delete().eq("id", booking.id);
+      throw new Error(`Failed to link Razorpay order to booking: ${updateError.message}`);
     }
 
     return new Response(

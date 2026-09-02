@@ -89,16 +89,25 @@ export function AvailabilityPage() {
     try {
       const [unitsResult, bookingsResult] = await Promise.all([
         supabase.from('room_units').select('*').eq('room_type_id', roomTypeId).order('unit_label', { ascending: true }),
-        supabase.from('bookings')
-          .select(`id, guest_name, check_in, check_out, status, room_unit_id, room_units ( unit_label )`)
-          .eq('room_type_id', roomTypeId)
-          .in('status', ['confirmed', 'pending'])
-          .order('check_in', { ascending: true }),
+        supabase.from('booking_units')
+          .select(`booking_id, room_unit_id, bookings!inner ( id, guest_name, check_in, check_out, status, room_type_id )`)
+          .eq('bookings.room_type_id', roomTypeId)
+          .in('bookings.status', ['confirmed', 'pending'])
       ]);
       if (unitsResult.error) throw unitsResult.error;
       if (bookingsResult.error) throw bookingsResult.error;
+
+      const formattedBookings = (bookingsResult.data || []).map((bu: any) => ({
+        id: bu.booking_id + '-' + bu.room_unit_id, // ensure unique key for rendering if a booking spans multiple units
+        guest_name: bu.bookings.guest_name,
+        check_in: bu.bookings.check_in,
+        check_out: bu.bookings.check_out,
+        status: bu.bookings.status,
+        room_unit_id: bu.room_unit_id,
+      }));
+
       setRoomUnits(unitsResult.data || []);
-      setBookings((bookingsResult.data as Booking[]) || []);
+      setBookings(formattedBookings as Booking[]);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error fetching room data.');
     }

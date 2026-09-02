@@ -26,7 +26,7 @@ interface BookingRecord {
   created_at: string;
   updated_at: string;
   room_types?: { name: string };
-  room_units?: { unit_label: string };
+  booking_units?: { room_units: { unit_label: string } }[];
 }
 
 function statusBadgeClass(status: string): string {
@@ -106,7 +106,7 @@ export function BookingsPage() {
     try {
       const { data, error: fetchErr } = await supabase
         .from('bookings')
-        .select(`*, room_types ( name ), room_units ( unit_label )`)
+        .select(`*, room_types ( name ), booking_units ( room_units ( unit_label ) )`)
         .order('created_at', { ascending: false });
       if (fetchErr) throw fetchErr;
       setBookings((data as BookingRecord[]) || []);
@@ -137,52 +137,28 @@ export function BookingsPage() {
     }
 
     try {
-      const { data: isAvailable, error: availError } = await supabase.rpc('check_availability', {
+      const { error: rpcErr } = await supabase.rpc('create_manual_booking', {
         p_room_type_id: formRoomTypeId,
         p_check_in: formCheckIn,
         p_check_out: formCheckOut,
-        p_qty: formQty,
+        p_guest_name: formGuestName.trim(),
+        p_guest_email: formGuestEmail.trim(),
+        p_guest_phone: formGuestPhone.trim(),
+        p_guests_count: Number(formGuestsCount),
+        p_qty: Number(formQty),
+        p_total_amount: Number(formTotalAmount),
+        p_payment_status: formPaymentStatus,
+        p_notes: formNotes.trim() || null,
       });
-      if (availError || !isAvailable) {
-        setError('No availability for this room type on the selected dates.');
+
+      if (rpcErr) {
+        if (rpcErr.message.includes('Selected dates are no longer available')) {
+          setError('No availability for this room type on the selected dates.');
+        } else {
+          throw rpcErr;
+        }
         setActionLoading(false); return;
       }
-
-      const { data: units } = await supabase
-        .from('room_units').select('id, unit_label')
-        .eq('room_type_id', formRoomTypeId).eq('is_active', true);
-
-      let assignedUnitId: string | null = null;
-      for (const unit of (units || [])) {
-        const { data: overlapB } = await supabase.from('bookings').select('id')
-          .eq('room_unit_id', unit.id).eq('status', 'confirmed')
-          .lt('check_in', formCheckOut).gt('check_out', formCheckIn);
-        const { data: overlapBlocks } = await supabase.from('availability_blocks').select('id')
-          .eq('room_unit_id', unit.id)
-          .lt('start_date', formCheckOut).gt('end_date', formCheckIn);
-        if ((!overlapB || overlapB.length === 0) && (!overlapBlocks || overlapBlocks.length === 0)) {
-          assignedUnitId = unit.id;
-          break;
-        }
-      }
-
-      const { error: insertErr } = await supabase.from('bookings').insert([{
-        room_type_id: formRoomTypeId,
-        room_unit_id: assignedUnitId,
-        guest_name: formGuestName.trim(),
-        guest_email: formGuestEmail.trim(),
-        guest_phone: formGuestPhone.trim(),
-        check_in: formCheckIn,
-        check_out: formCheckOut,
-        guests_count: Number(formGuestsCount),
-        qty: Number(formQty),
-        total_amount: Number(formTotalAmount),
-        status: 'confirmed',
-        payment_status: formPaymentStatus,
-        source: 'manual',
-        notes: formNotes.trim() || null,
-      }]);
-      if (insertErr) throw insertErr;
 
       setShowAddModal(false);
       await fetchBookings();
@@ -311,9 +287,9 @@ export function BookingsPage() {
                   </td>
                   <td style={{ fontWeight: 700 }}>
                     <div>{b.room_types?.name}</div>
-                    {b.room_units?.unit_label ? (
+                    {b.booking_units && b.booking_units.length > 0 ? (
                       <div style={{ fontSize: '11px', color: 'var(--gold)', marginTop: '2px', textTransform: 'uppercase', fontWeight: 900 }}>
-                        {b.room_units.unit_label}
+                        {b.booking_units.map(u => u.room_units.unit_label).join(', ')}
                       </div>
                     ) : b.status === 'confirmed' ? (
                       <div style={{ fontSize: '11px', color: '#ffd777', marginTop: '2px', textTransform: 'uppercase', fontWeight: 800 }}>
@@ -371,9 +347,9 @@ export function BookingsPage() {
               <div>
                 <span className="tiny-label booking-detail-section-title">Stay Details</span>
                 <div>Room: <strong>{selectedBooking.room_types?.name || '—'}</strong></div>
-                {selectedBooking.room_units?.unit_label && (
+                {selectedBooking.booking_units && selectedBooking.booking_units.length > 0 && (
                   <div style={{ marginTop: '4px', color: 'var(--gold)', fontWeight: 800 }}>
-                    Assigned: {selectedBooking.room_units.unit_label}
+                    Assigned: {selectedBooking.booking_units.map(u => u.room_units.unit_label).join(', ')}
                   </div>
                 )}
                 <div style={{ marginTop: '4px' }}>Check-in: <strong>{selectedBooking.check_in}</strong></div>

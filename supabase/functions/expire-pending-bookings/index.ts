@@ -4,11 +4,13 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 serve(async (req) => {
   try {
     // Security: validate a shared cron secret so this endpoint
-    // cannot be triggered by arbitrary public HTTP requests
+    // cannot be triggered by arbitrary public HTTP requests.
+    // IMPORTANT: if CRON_SECRET is not set in Supabase secrets, ALL requests are rejected.
+    // Run: supabase secrets set CRON_SECRET=<random-string>
     const cronSecret = Deno.env.get("CRON_SECRET") ?? "";
     const incomingSecret = req.headers.get("x-cron-secret") ?? "";
 
-    if (cronSecret && incomingSecret !== cronSecret) {
+    if (!cronSecret || incomingSecret !== cronSecret) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { "Content-Type": "application/json" },
