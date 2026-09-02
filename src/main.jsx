@@ -127,9 +127,7 @@ const amenities = [
   { icon: Trees, label: 'Landscaped grounds' }
 ];
 
-const roomChoices = [
-  'Resort room',
-  'Villa stay',
+const eventChoices = [
   'Banquet enquiry',
   'Restaurant & lounge',
   'Poolside gathering'
@@ -140,7 +138,7 @@ const initialBooking = {
   departure: '',
   guests: '2',
   rooms: '1',
-  stayType: roomChoices[0],
+  stayType: '',
   name: '',
   phone: '',
   email: '',
@@ -666,10 +664,12 @@ function BookingPage() {
 
   useEffect(() => {
     if (availableRooms.length > 0) {
-      const isStillValid = availableRooms.some(r => r.name === booking.stayType) ||
-                           ['Banquet enquiry', 'Restaurant & lounge', 'Poolside gathering'].includes(booking.stayType);
-      
-      if (!isStillValid) {
+      // If current selection is no longer a valid room name (e.g. was empty or a stale room),
+      // auto-select the first available room from the database
+      const isRoomSelection = availableRooms.some(r => r.name === booking.stayType && r.is_available);
+      const isEventSelection = eventChoices.includes(booking.stayType);
+
+      if (!isRoomSelection && !isEventSelection) {
         const firstAvailable = availableRooms.find(r => r.is_available);
         if (firstAvailable) {
           setBooking(current => ({ ...current, stayType: firstAvailable.name }));
@@ -827,21 +827,32 @@ function BookingPage() {
             <select name="stayType" value={booking.stayType} onChange={updateBooking} disabled={loadingRooms}>
               {loadingRooms ? (
                 <option>Checking availability...</option>
+              ) : !booking.arrival || !booking.departure ? (
+                // No dates picked yet — don't show static fake options
+                <>
+                  <option value="">— Pick dates above to see rooms —</option>
+                  <option disabled>--- Event Occasions ---</option>
+                  {eventChoices.map((choice) => (
+                    <option key={choice} value={choice}>{choice}</option>
+                  ))}
+                </>
               ) : availableRooms.length === 0 ? (
-                roomChoices.map((choice) => (
-                  <option key={choice} value={choice}>{choice}</option>
-                ))
+                <option value="">No rooms available for these dates</option>
               ) : (
                 <>
-                  {availableRooms.map((room) => (
-                    <option key={room.id} value={room.name} disabled={!room.is_available}>
-                      {room.name} {room.is_available ? `(₹${Number(room.base_price).toFixed(0)} - ${room.available_units} available)` : '(Sold out)'}
+                  {/* Only show rooms that have availability — hide sold-out ones entirely */}
+                  {availableRooms.filter(room => room.is_available).map((room) => (
+                    <option key={room.id} value={room.name}>
+                      {room.name} — ₹{Number(room.base_price).toFixed(0)}/night ({room.available_units} available)
                     </option>
                   ))}
+                  {availableRooms.every(r => !r.is_available) && (
+                    <option value="" disabled>All rooms sold out for these dates</option>
+                  )}
                   <option disabled>--- Event Occasions ---</option>
-                  <option value="Banquet enquiry">Banquet enquiry</option>
-                  <option value="Restaurant & lounge">Restaurant & lounge</option>
-                  <option value="Poolside gathering">Poolside gathering</option>
+                  {eventChoices.map((choice) => (
+                    <option key={choice} value={choice}>{choice}</option>
+                  ))}
                 </>
               )}
             </select>
