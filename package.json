@@ -6,19 +6,27 @@
   "scripts": {
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
-    "preview": "vite preview --host 127.0.0.1"
+    "preview": "vite preview --host 127.0.0.1",
+    "server": "node server.js"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.1",
     "@tailwindcss/vite": "^4.3.1",
     "@vitejs/plugin-react": "latest",
     "clsx": "^2.1.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
     "framer-motion": "latest",
     "lucide-react": "latest",
+    "nodemailer": "^9.1.1",
     "react": "latest",
     "react-dom": "latest",
     "tailwind-merge": "^3.6.0",
     "tailwindcss": "^4.3.1",
     "vite": "latest"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.4"
   }
 }
