@@ -37,27 +37,32 @@ import { AvailabilityPage } from './admin/pages/AvailabilityPage';
 import { BookingsPage } from './admin/pages/BookingsPage';
 
 const images = {
-  logo: '/images/logo.png',
-  frontDay: '/images/front-day.jpg',
-  facade: '/images/side-evening.png',
-  aerial: '/images/side-evening.png',
-  banquet: '/images/big-banquet.png',
-  bar: '/images/bar.png',
-  food: '/images/food.png',
-  golf: '/images/golf-car.png',
-  lobby1: '/images/lobby-1.png',
-  lobby2: '/images/lobby-2.png',
-  lobby3: '/images/lobby-3.png',
-  olive: '/images/olive-tree.png',
-  board: '/images/roadside-board.png',
-  pool: '/images/pool.png',
-  poolDay: '/images/pool-day.jpg'
+  logo: '/images/logo.PNG',
+  frontDay: '/images/front-day.webp',
+  facade: '/images/side-evening.webp',
+  aerial: '/images/side-evening.webp',
+  banquet: '/images/big-banquet.webp',
+  bar: '/images/bar.webp',
+  food: '/images/food.webp',
+  golf: '/images/golf-car.webp',
+  lobby1: '/images/lobby-1.webp',
+  lobby2: '/images/lobby-2.webp',
+  lobby3: '/images/lobby-3.webp',
+  olive: '/images/olive-tree.webp',
+  board: '/images/roadside-board.webp',
+  pool: '/images/pool.webp',
+  poolDay: '/images/pool-day.webp'
 };
 
 const nav = [
-  { label: 'Resort', page: 'resort' },
-  { label: 'Venues', page: 'venues' },
-  { label: 'Dining', page: 'dining' },
+  { label: 'About Resort', page: 'resort' },
+  { label: 'Rooms', page: 'rooms' },
+  { label: 'Banquets', page: 'banquets' },
+  { label: 'Dining / Restaurant', page: 'restaurant' },
+  { label: 'Bar', page: 'bar' },
+  { label: 'Kitty Halls', page: 'kitty-halls' },
+  { label: 'PDRs', page: 'pdrs' },
+  { label: 'Offers', page: 'offers' },
   { label: 'Bookings', page: 'bookings' },
   { label: 'Gallery', page: 'gallery' },
   { label: 'Contact', page: 'contact' }
@@ -341,14 +346,7 @@ function Hero() {
       </AnimatePresence>
       <div className="hero-overlay" />
       <div className="hero-panel">
-        <motion.span
-          className="tiny-label"
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          {current.label} / Kapurthala
-        </motion.span>
+
         <AnimatePresence mode="wait">
           <motion.div
             key={current.title}
@@ -577,7 +575,16 @@ function Contact() {
   return (
     <section className="contact page-section">
       <div className="contact-image">
-        <img src={images.board} alt="Olive Green Resort & Villas roadside sign" />
+        <iframe
+          src="https://maps.google.com/maps?q=Olive+Green+Resorts+and+Villa,Kapurthala&output=embed"
+          width="100%"
+          height="100%"
+          style={{ border: 0, minHeight: '400px', filter: 'invert(90%) hue-rotate(180deg) brightness(85%) contrast(85%)' }}
+          allowFullScreen=""
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          title="Olive Green Resort Map"
+        ></iframe>
       </div>
       <div className="contact-copy">
         <span className="tiny-label">Contact</span>
@@ -925,11 +932,192 @@ function PageHero({ label, title, copy, image }) {
   );
 }
 
+function HomeBookingForm() {
+  const [formData, setFormData] = useState({ name: '', phone: '', city: '', bookingType: 'Rooms', date: '' });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch('http://localhost:3001/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Failed to send enquiry. Please try again.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Network error. Is the email server running?');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section className="home-booking page-section">
+      <div className="home-booking-copy">
+        <span className="tiny-label">Booking Enquiry</span>
+        <h2>Reserve your experience.</h2>
+      </div>
+      <form onSubmit={handleSubmit} className="booking-form" noValidate>
+        <div className="form-grid">
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Your Name" />
+          </label>
+          <label>
+            <span>Phone Number</span>
+            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="+91 98765 43210" />
+          </label>
+          <label>
+            <span>City</span>
+            <input type="text" name="city" value={formData.city} onChange={handleChange} required placeholder="Your City" />
+          </label>
+          <label>
+            <span>Booking Type</span>
+            <select name="bookingType" value={formData.bookingType} onChange={handleChange}>
+              <option value="Rooms">Rooms</option>
+              <option value="Banquets">Banquets</option>
+              <option value="Kitty Hall">Kitty Hall</option>
+              <option value="Restaurant">Restaurant</option>
+            </select>
+          </label>
+        </div>
+        <label>
+          <span>Date</span>
+          <input type="date" name="date" value={formData.date} onChange={handleChange} required />
+        </label>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Sending...' : 'Submit Enquiry'}
+          {!loading && <ArrowRight size={19} />}
+        </button>
+        {error && <p style={{ color: '#ff6b6b', marginTop: '10px' }}>{error}</p>}
+        {submitted && (
+          <motion.div
+            className="booking-confirmation"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <strong>Enquiry Sent!</strong>
+            <span>Your enquiry has been successfully delivered to our team. We'll be in touch soon.</span>
+          </motion.div>
+        )}
+      </form>
+    </section>
+  );
+}
+
+function HomeAccommodation() {
+  return (
+    <section className="venues page-section">
+      <div className="section-heading">
+        <span className="tiny-label">Stays & Events</span>
+        <h2>Your space awaits.</h2>
+      </div>
+      <div className="venue-grid">
+        <motion.article 
+          className="venue-tile"
+          initial={{ opacity: 0, y: 42 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.64 }}
+        >
+          <img src={images.poolDay} alt="Villa Rooms" />
+          <div>
+            <span>Accommodation</span>
+            <h3>Villa Rooms</h3>
+            <p>Experience our premium villa rooms with private access and serene views.</p>
+            <div className="hero-actions" style={{ marginTop: '4px' }}>
+              <a href={pageHref('bookings')}>Book Now</a>
+            </div>
+          </div>
+        </motion.article>
+        <motion.article 
+          className="venue-tile"
+          initial={{ opacity: 0, y: 42 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.64, delay: 0.1 }}
+        >
+          <img src={images.banquet} alt="Grand Banquets" />
+          <div>
+            <span>Celebrations</span>
+            <h3>Banquets</h3>
+            <p>Host your celebrations in our spacious and elegant banquet halls.</p>
+            <div className="hero-actions" style={{ marginTop: '4px' }}>
+              <a href={pageHref('venues')}>Enquire Now</a>
+            </div>
+          </div>
+        </motion.article>
+      </div>
+    </section>
+  );
+}
+
+function HomeAttractions() {
+  return (
+    <section className="intro" style={{ background: 'var(--ash)' }}>
+      <div className="intro-copy">
+        <span className="tiny-label">Explore</span>
+        <h2>Nearby Attractions.</h2>
+      </div>
+      <div className="intro-text">
+        <p>Discover the heritage and beauty of Kapurthala and beyond during your stay:</p>
+        <ul style={{ color: 'var(--paper)', display: 'grid', gap: '10px', paddingLeft: '20px' }}>
+          <li><strong>Sultanpur Lodhi Gurudwara:</strong> A historic and sacred site nearby.</li>
+          <li><strong>Golden Temple (Amritsar):</strong> Just an hour away.</li>
+          <li><strong>Pushpa Gujral Science City:</strong> Perfect for family visits.</li>
+          <li><strong>Moorish Mosque & Jagatjit Palace:</strong> Marvel at Kapurthala's royal architecture.</li>
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+function HomeTourPackage() {
+  return (
+    <section className="manifesto">
+      <div className="manifesto-pin">
+        <CircleDot size={84} />
+        <strong>City Tours</strong>
+      </div>
+      <div className="manifesto-list">
+        <p>Customised Kapurthala City Tour Package</p>
+        <div style={{ color: 'rgba(244, 240, 228, 0.72)', fontSize: '18px', marginTop: '-15px', paddingBottom: '30px' }}>
+          Experience a complete guided tour including luxury accommodation, curated food, and comfortable transport.
+        </div>
+        <div className="hero-actions">
+          <a href={pageHref('contact')}>Enquire About Tours</a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HomePage() {
   return (
     <>
       <Hero />
+      <HomeBookingForm />
       <Intro />
+      <HomeAccommodation />
+      <HomeAttractions />
+      <HomeTourPackage />
       <Manifesto />
     </>
   );
@@ -939,12 +1127,76 @@ function ResortPage() {
   return (
     <>
       <PageHero
-        label="Resort / Kapurthala"
+        label="About Resort / Kapurthala"
         title="A green destination with a grand address."
         copy="Rooms, villas, lawns, poolside evenings and royal interiors near Kanjli Lake."
         image={images.frontDay}
       />
-      <Intro />
+      <section className="intro">
+        <div className="intro-copy">
+          <span className="tiny-label">Management</span>
+          <h2>A message from the Managing Director.</h2>
+        </div>
+        <div className="intro-text">
+          <p>
+            "We built Olive Green to be Punjab's and Kapurthala's favourite dream destination resort. 
+            Our goal is to provide luxury without noise, where every guest feels personal hospitality."
+          </p>
+          <p>
+            <strong>— S. Sarup Singh, S. Inderpal Singh &amp; S. Ishaman Singh</strong><br/>
+            <small>Managing Directors &amp; Founders</small>
+          </p>
+          <p>
+            Olive Green Resort & Villas is proudly owned and managed by <strong>Inderpal Hospitality Pvt. Ltd.</strong>
+          </p>
+        </div>
+      </section>
+
+      <section className="manifesto">
+        <div className="manifesto-pin">
+          <CircleDot size={84} />
+          <strong>Everything you need.</strong>
+        </div>
+        <div className="manifesto-list">
+          <p>Luxury Villa Rooms</p>
+          <p>Grand Banquet Halls</p>
+          <p>Lush Green Lawns</p>
+          <p>Swimming Pool</p>
+          <p>Restaurant & Bar</p>
+          <p>Kitty Hall & PDRs (Tulip, Lily)</p>
+        </div>
+      </section>
+
+      <section className="intro" style={{ background: 'var(--ash)' }}>
+        <div className="intro-copy">
+          <span className="tiny-label">Location</span>
+          <h2>Accessibility & Surroundings.</h2>
+        </div>
+        <div className="intro-text">
+          <p>Located near Kanjli Lake, our resort is well-connected and easy to reach:</p>
+          <ul style={{ color: 'var(--paper)', display: 'grid', gap: '10px', paddingLeft: '20px' }}>
+            <li><strong>Railway Station:</strong> 5 mins drive</li>
+            <li><strong>Bus Stand:</strong> 10 mins drive</li>
+            <li><strong>Jalandhar:</strong> 30 mins drive</li>
+            <li><strong>Amritsar:</strong> 1 hour drive</li>
+            <li><strong>Phagwara:</strong> 40 mins drive</li>
+          </ul>
+          <div style={{ marginTop: '30px', height: '350px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(244, 240, 228, 0.15)' }}>
+            <iframe
+              src="https://maps.google.com/maps?q=Olive+Green+Resorts+and+Villa,Kapurthala&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(85%) contrast(85%)' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Olive Green Resort Map Location"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      <Testimonials category="resort" />
       <Signature />
     </>
   );
@@ -1006,12 +1258,222 @@ function ContactPage() {
   );
 }
 
+const allReviews = [
+  { text: "Absolutely stunning property! The villa rooms were incredibly luxurious and private.", author: "Aman S.", category: "rooms" },
+  { text: "The perfect getaway. The green surroundings and the pool made our weekend.", author: "Priya M.", category: "resort" },
+  { text: "We hosted our daughter's wedding here. The Grand Banquet was magnificent.", author: "Gurpreet K.", category: "banquets" },
+  { text: "Food was exquisite. The ambiance in the restaurant is truly premium.", author: "Rahul V.", category: "restaurant" },
+  { text: "Great place to unwind. The bar has a fantastic selection of single malts.", author: "Vikram S.", category: "bar" },
+  { text: "Our kitty party was a huge success. The staff took care of everything seamlessly.", author: "Neha G.", category: "kitty" },
+  { text: "The PDR Tulip offered the most private and elegant dining experience.", author: "Sonia B.", category: "pdr" },
+  { text: "Beautifully lit at night. The facade is a sight to behold.", author: "Anjali T.", category: "resort" },
+  { text: "Spacious rooms with top-notch amenities. Highly recommended for families.", author: "Rakesh P.", category: "rooms" },
+  { text: "The lawn attached to the banquet hall made our reception unforgettable.", author: "Simran J.", category: "banquets" },
+  { text: "Every dish we ordered was flavorful and beautifully presented.", author: "Karan D.", category: "restaurant" },
+  { text: "Loved the signature cocktails. The bartender knows his craft.", author: "Rohan M.", category: "bar" },
+  { text: "Perfect size for a gathering of 20 friends. Kitty Hall was great.", author: "Pooja W.", category: "kitty" },
+  { text: "Exceptional service in the Lily PDR. Made our anniversary very special.", author: "Amit C.", category: "pdr" },
+  { text: "The resort feels like an oasis. Very peaceful and well-maintained.", author: "Harman S.", category: "resort" },
+  { text: "Waking up to the pool view from the villa was the best part of our stay.", author: "Divya R.", category: "rooms" },
+  { text: "Corporate offsite was handled brilliantly in the Intimate Hall.", author: "Sunil K.", category: "banquets" },
+  { text: "Best dining experience in Kapurthala. The chef is a master.", author: "Manish L.", category: "restaurant" },
+  { text: "A very sophisticated vibe in the lounge area.", author: "Sneha P.", category: "bar" },
+  { text: "The team customized the decor for our kitty party beautifully.", author: "Ritika A.", category: "kitty" },
+  { text: "The private dining room made our business lunch discreet and successful.", author: "Naveen G.", category: "pdr" },
+  { text: "I can't wait to come back. The hospitality is unmatched.", author: "Tanya M.", category: "resort" },
+];
+
+function Testimonials({ category }) {
+  const reviews = allReviews.filter(r => r.category === category || category === 'all').slice(0, 3);
+  if (reviews.length === 0) return null;
+
+  return (
+    <section className="page-section" style={{ background: 'var(--ash)', padding: 'clamp(60px, 8vw, 100px) clamp(20px, 5vw, 74px)' }}>
+      <div className="section-heading" style={{ marginBottom: '40px' }}>
+        <span className="tiny-label">Guest Experiences</span>
+        <h2>What our guests say.</h2>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
+        {reviews.map((review, i) => (
+          <div key={i} style={{ background: 'var(--ink)', padding: '30px', border: '1px solid var(--dark-line)', display: 'grid', gap: '15px' }}>
+            <div style={{ color: 'var(--gold)' }}>
+              ★★★★★
+            </div>
+            <p style={{ color: 'rgba(244, 240, 228, 0.85)', fontSize: '16px', lineHeight: '1.6', fontStyle: 'italic' }}>
+              "{review.text}"
+            </p>
+            <strong style={{ color: 'var(--paper)', fontSize: '14px', letterSpacing: '0.05em' }}>
+              — {review.author}
+            </strong>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function RoomsPage() {
+  return (
+    <>
+      <PageHero label="Rooms" title="Luxury Villa Rooms." copy="Experience unparalleled luxury in our private villa rooms designed for comfort and tranquility." image={images.poolDay} />
+      <section className="intro">
+        <div className="intro-copy">
+          <span className="tiny-label">Accommodation</span>
+          <h2>Your Private Sanctuary.</h2>
+        </div>
+        <div className="intro-text">
+          <p>Our luxury villa rooms offer an exquisite blend of modern elegance and comforting warmth. Wake up to serene views and enjoy a space crafted for ultimate relaxation.</p>
+        </div>
+      </section>
+      <Testimonials category="rooms" />
+    </>
+  );
+}
+
+function BanquetsPage() {
+  return (
+    <>
+      <PageHero label="Banquets" title="Spaces for Every Celebration." copy="Host your events in our elegant banquet halls, designed to impress." image={images.banquet} />
+      <section className="intro">
+        <div className="intro-copy">
+          <span className="tiny-label">Events</span>
+          <h2>Grandeur for Your Occasions.</h2>
+        </div>
+        <div className="intro-text">
+          <p>We feature two exceptional banquet halls to cater to your specific event needs:</p>
+          <ul style={{ color: 'var(--paper)', display: 'grid', gap: '10px', paddingLeft: '20px' }}>
+            <li><strong>Intimate Hall:</strong> Perfect for smaller gatherings, with a capacity of 200–300 guests. Ideal for pre-wedding functions, corporate meetings, and private parties.</li>
+            <li><strong>Grand Hall & Lawn:</strong> Designed for magnificent celebrations, accommodating 400–1500 guests. This hall opens up to our lush green lawn, offering a seamless indoor-outdoor experience for grand weddings and large-scale receptions.</li>
+          </ul>
+        </div>
+      </section>
+      <Testimonials category="banquets" />
+    </>
+  );
+}
+
+function RestaurantPage() {
+  return (
+    <>
+      <PageHero label="Dining / Restaurant" title="Culinary Excellence." copy="Savor exquisite flavors in a setting of refined elegance." image={images.food} />
+      <section className="intro">
+        <div className="intro-copy">
+          <span className="tiny-label">Dining</span>
+          <h2>A Feast for the Senses.</h2>
+        </div>
+        <div className="intro-text">
+          <p>Our restaurant offers a diverse menu of expertly crafted dishes, blending local traditions with global culinary trends. Enjoy a memorable dining experience characterized by exceptional taste and impeccable service.</p>
+        </div>
+      </section>
+      <Testimonials category="restaurant" />
+    </>
+  );
+}
+
+function BarPage() {
+  return (
+    <>
+      <PageHero label="Bar" title="Spirits and Conversations." copy="Unwind in our sophisticated bar lounge." image={images.bar} />
+      <section className="intro">
+        <div className="intro-copy">
+          <span className="tiny-label">Lounge</span>
+          <h2>Relax and Recharge.</h2>
+        </div>
+        <div className="intro-text">
+          <p>Our bar offers a curated selection of premium spirits, signature cocktails, and fine wines. It’s the perfect spot to relax after a long day or celebrate special moments with friends and colleagues.</p>
+          <p>We also provide access to our exclusive Private Dining Rooms (Tulip & Lily) for those seeking a more intimate setting for their gatherings.</p>
+        </div>
+      </section>
+      <Testimonials category="bar" />
+    </>
+  );
+}
+
+function KittyHallsPage() {
+  return (
+    <>
+      <PageHero label="Kitty Halls" title="Intimate Gatherings." copy="Perfect spaces for kitty parties and small get-togethers." image={images.lobby1} />
+      <section className="intro">
+        <div className="intro-copy">
+          <span className="tiny-label">Social</span>
+          <h2>Celebrate Together.</h2>
+        </div>
+        <div className="intro-text">
+          <p>Our Kitty Halls are thoughtfully designed to host your private social events. Enjoy personalized service, tailored menus, and a vibrant atmosphere that ensures every get-together is a joyous occasion.</p>
+        </div>
+      </section>
+      <Testimonials category="kitty" />
+    </>
+  );
+}
+
+function PdrsPage() {
+  return (
+    <>
+      <PageHero label="PDRs" title="Private Dining Rooms." copy="Exclusive dining experiences in Tulip and Lily." image={images.lobby2} />
+      <section className="intro">
+        <div className="intro-copy">
+          <span className="tiny-label">Exclusive</span>
+          <h2>Tulip & Lily.</h2>
+        </div>
+        <div className="intro-text">
+          <p>Experience the ultimate in private dining within our exclusive PDRs, Tulip and Lily. Whether it's a family dinner, a business lunch, or a romantic evening, these rooms offer privacy, dedicated service, and a bespoke culinary journey.</p>
+        </div>
+      </section>
+      <Testimonials category="pdr" />
+    </>
+  );
+}
+
+function OffersPage() {
+  return (
+    <>
+      <PageHero label="Offers" title="Exclusive Promotions." copy="Discover our latest deals for stays, dining, and more." image={images.pool} />
+      <section className="venues page-section">
+        <div className="section-heading">
+          <span className="tiny-label">Specials</span>
+          <h2>Dynamic Offers.</h2>
+        </div>
+        <div className="venue-grid">
+          <article className="venue-tile">
+            <img src={images.food} alt="Dining Offer" />
+            <div>
+              <span>Dining</span>
+              <h3>20% Off on Food</h3>
+              <p>Enjoy a 20% discount on all food and dining services during your visit this season.</p>
+              <div className="hero-actions" style={{ marginTop: '16px' }}>
+                <a href={pageHref('contact')}>Book Table</a>
+              </div>
+            </div>
+          </article>
+          <article className="venue-tile">
+            <img src={images.poolDay} alt="Stay Offer" />
+            <div>
+              <span>Accommodation</span>
+              <h3>Stay 3, Pay 2</h3>
+              <p>Book a 2-night stay in our luxury villa rooms and get the 3rd night absolutely free.</p>
+              <div className="hero-actions" style={{ marginTop: '16px' }}>
+                <a href={pageHref('bookings')}>Book Stay</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </>
+  );
+}
+
 function CurrentPage({ page }) {
   const pages = {
     home: <HomePage />,
     resort: <ResortPage />,
-    venues: <VenuesPage />,
-    dining: <DiningPage />,
+    rooms: <RoomsPage />,
+    banquets: <BanquetsPage />,
+    restaurant: <RestaurantPage />,
+    bar: <BarPage />,
+    'kitty-halls': <KittyHallsPage />,
+    pdrs: <PdrsPage />,
+    offers: <OffersPage />,
     bookings: <BookingPage />,
     gallery: <GalleryPage />,
     contact: <ContactPage />
@@ -1026,7 +1488,7 @@ function CurrentPage({ page }) {
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
       >
-        {pages[page]}
+        {pages[page] || <HomePage />}
       </motion.main>
     </AnimatePresence>
   );
