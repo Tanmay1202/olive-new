@@ -1166,7 +1166,7 @@ function ResortPage() {
 
       <section className="manifesto">
         <div className="manifesto-pin">
-          <CircleDot size={84} />
+          <Sparkles size={36} />
           <strong>Everything you need.</strong>
         </div>
         <div className="manifesto-list">
@@ -1179,21 +1179,21 @@ function ResortPage() {
         </div>
       </section>
 
-      <section className="intro" style={{ background: 'var(--ash)' }}>
+      <section className="intro attractions-section">
         <div className="intro-copy">
           <span className="tiny-label">Location</span>
-          <h2>Accessibility & Surroundings.</h2>
+          <h2>Accessibility &amp; Surroundings.</h2>
         </div>
         <div className="intro-text">
           <p>Located near Kanjli Lake, our resort is well-connected and easy to reach:</p>
-          <ul style={{ color: 'var(--paper)', display: 'grid', gap: '10px', paddingLeft: '20px' }}>
+          <ul className="attraction-list">
             <li><strong>Railway Station:</strong> 5 mins drive</li>
             <li><strong>Bus Stand:</strong> 10 mins drive</li>
             <li><strong>Jalandhar:</strong> 30 mins drive</li>
             <li><strong>Amritsar:</strong> 1 hour drive</li>
             <li><strong>Phagwara:</strong> 40 mins drive</li>
           </ul>
-          <div style={{ marginTop: '30px', height: '350px', borderRadius: '12px', overflow: 'hidden', border: '1px solid rgba(244, 240, 228, 0.15)' }}>
+          <div className="map-embed">
             <iframe
               src="https://maps.google.com/maps?q=Olive+Green+Resorts+and+Villa,Kapurthala&output=embed"
               width="100%"
@@ -1300,23 +1300,17 @@ function Testimonials({ category }) {
   if (reviews.length === 0) return null;
 
   return (
-    <section className="page-section" style={{ background: 'var(--ash)', padding: 'clamp(60px, 8vw, 100px) clamp(20px, 5vw, 74px)' }}>
-      <div className="section-heading" style={{ marginBottom: '40px' }}>
+    <section className="testimonials-section">
+      <div className="section-heading">
         <span className="tiny-label">Guest Experiences</span>
         <h2>What our guests say.</h2>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '30px' }}>
+      <div className="review-grid">
         {reviews.map((review, i) => (
-          <div key={i} style={{ background: 'var(--ink)', padding: '30px', border: '1px solid var(--dark-line)', display: 'grid', gap: '15px' }}>
-            <div style={{ color: 'var(--gold)' }}>
-              ★★★★★
-            </div>
-            <p style={{ color: 'rgba(244, 240, 228, 0.85)', fontSize: '16px', lineHeight: '1.6', fontStyle: 'italic' }}>
-              "{review.text}"
-            </p>
-            <strong style={{ color: 'var(--paper)', fontSize: '14px', letterSpacing: '0.05em' }}>
-              — {review.author}
-            </strong>
+          <div key={i} className="review-card">
+            <div className="review-stars">★★★★★</div>
+            <p className="review-text">"{review.text}"</p>
+            <strong className="review-author">— {review.author}</strong>
           </div>
         ))}
       </div>
@@ -1353,9 +1347,9 @@ function BanquetsPage() {
         </div>
         <div className="intro-text">
           <p>We feature two exceptional banquet halls to cater to your specific event needs:</p>
-          <ul style={{ color: 'var(--paper)', display: 'grid', gap: '10px', paddingLeft: '20px' }}>
+          <ul className="attraction-list">
             <li><strong>Intimate Hall:</strong> Perfect for smaller gatherings, with a capacity of 200–300 guests. Ideal for pre-wedding functions, corporate meetings, and private parties.</li>
-            <li><strong>Grand Hall & Lawn:</strong> Designed for magnificent celebrations, accommodating 400–1500 guests. This hall opens up to our lush green lawn, offering a seamless indoor-outdoor experience for grand weddings and large-scale receptions.</li>
+            <li><strong>Grand Hall &amp; Lawn:</strong> Designed for magnificent celebrations, accommodating 400–1500 guests. This hall opens up to our lush green lawn, offering a seamless indoor-outdoor experience for grand weddings and large-scale receptions.</li>
           </ul>
         </div>
       </section>
@@ -1453,9 +1447,7 @@ function OffersPage() {
               <span>Dining</span>
               <h3>20% Off on Food</h3>
               <p>Enjoy a 20% discount on all food and dining services during your visit this season.</p>
-              <div className="hero-actions" style={{ marginTop: '16px' }}>
-                <a href={pageHref('contact')}>Book Table</a>
-              </div>
+              <a className="tile-cta" href={pageHref('contact')}>Book Table <ArrowRight size={15} /></a>
             </div>
           </article>
           <article className="venue-tile">
@@ -1464,9 +1456,7 @@ function OffersPage() {
               <span>Accommodation</span>
               <h3>Stay 3, Pay 2</h3>
               <p>Book a 2-night stay in our luxury villa rooms and get the 3rd night absolutely free.</p>
-              <div className="hero-actions" style={{ marginTop: '16px' }}>
-                <a href={pageHref('bookings')}>Book Stay</a>
-              </div>
+              <a className="tile-cta" href={pageHref('bookings')}>Book Stay <ArrowRight size={15} /></a>
             </div>
           </article>
         </div>
