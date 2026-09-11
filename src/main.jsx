@@ -54,6 +54,7 @@ const images = {
   poolDay: '/images/pool-day.webp'
 };
 
+// All pages — used by the full-screen menu overlay (shows everything)
 const nav = [
   { label: 'About Resort', page: 'resort' },
   { label: 'Rooms', page: 'rooms' },
@@ -66,6 +67,16 @@ const nav = [
   { label: 'Bookings', page: 'bookings' },
   { label: 'Gallery', page: 'gallery' },
   { label: 'Contact', page: 'contact' }
+];
+
+// Desktop top-bar: 6 primary links only — rest live in the full-screen menu
+const primaryNav = [
+  { label: 'Rooms', page: 'rooms' },
+  { label: 'Banquets', page: 'banquets' },
+  { label: 'Dining', page: 'restaurant' },
+  { label: 'Offers', page: 'offers' },
+  { label: 'Gallery', page: 'gallery' },
+  { label: 'Contact', page: 'contact' },
 ];
 
 const heroSlides = [
@@ -219,19 +230,20 @@ function Header({ setMenuOpen, setPage }) {
         <img src={images.logo} alt="Olive Green Resort & Villas" />
       </a>
       <nav className="desktop-nav" aria-label="Primary navigation">
-        {nav.map((item) => (
+        {primaryNav.map((item) => (
           <a key={item.label} href={pageHref(item.page)} onClick={() => setPage(item.page)}>
             {item.label}
           </a>
         ))}
       </nav>
-      <a className="call-link" href="tel:+917083300001">
-        <Phone size={17} />
-        +91 70833 00001
-      </a>
-      <button className="menu-button" onClick={() => setMenuOpen(true)} aria-label="Open menu">
-        <Menu size={34} />
-      </button>
+      <div className="header-actions">
+        <a className="header-book-btn" href={pageHref('bookings')} onClick={() => setPage('bookings')}>
+          Book Now
+        </a>
+        <button className="menu-button" onClick={() => setMenuOpen(true)} aria-label="Open menu">
+          <Menu size={22} />
+        </button>
+      </div>
     </header>
   );
 }
