@@ -426,7 +426,7 @@ function Manifesto() {
   return (
     <section className="manifesto">
       <div className="manifesto-pin">
-        <CircleDot size={84} />
+        <Sparkles size={36} />
         <strong>Stay green. Host grand.</strong>
       </div>
       <div className="manifesto-list">
@@ -588,10 +588,8 @@ function Contact() {
     <section className="contact page-section">
       <div className="contact-image">
         <iframe
+          className="contact-map"
           src="https://maps.google.com/maps?q=Olive+Green+Resorts+and+Villa,Kapurthala&output=embed"
-          width="100%"
-          height="100%"
-          style={{ border: 0, minHeight: '400px', filter: 'invert(90%) hue-rotate(180deg) brightness(85%) contrast(85%)' }}
           allowFullScreen=""
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
