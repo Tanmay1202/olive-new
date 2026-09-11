@@ -37,7 +37,7 @@ import { AvailabilityPage } from './admin/pages/AvailabilityPage';
 import { BookingsPage } from './admin/pages/BookingsPage';
 
 const images = {
-  logo: '/images/logo.PNG',
+  logo: '/images/logo.png',
   frontDay: '/images/front-day.webp',
   facade: '/images/side-evening.webp',
   aerial: '/images/side-evening.webp',
