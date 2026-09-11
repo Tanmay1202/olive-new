@@ -1042,7 +1042,7 @@ function HomeAccommodation() {
         <h2>Your space awaits.</h2>
       </div>
       <div className="venue-grid">
-        <motion.article 
+        <motion.article
           className="venue-tile"
           initial={{ opacity: 0, y: 42 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -1054,12 +1054,12 @@ function HomeAccommodation() {
             <span>Accommodation</span>
             <h3>Villa Rooms</h3>
             <p>Experience our premium villa rooms with private access and serene views.</p>
-            <div className="hero-actions" style={{ marginTop: '4px' }}>
-              <a href={pageHref('bookings')}>Book Now</a>
-            </div>
+            <a className="tile-cta" href={pageHref('bookings')}>
+              Book Now <ArrowRight size={15} />
+            </a>
           </div>
         </motion.article>
-        <motion.article 
+        <motion.article
           className="venue-tile"
           initial={{ opacity: 0, y: 42 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -1071,9 +1071,9 @@ function HomeAccommodation() {
             <span>Celebrations</span>
             <h3>Banquets</h3>
             <p>Host your celebrations in our spacious and elegant banquet halls.</p>
-            <div className="hero-actions" style={{ marginTop: '4px' }}>
-              <a href={pageHref('venues')}>Enquire Now</a>
-            </div>
+            <a className="tile-cta" href={pageHref('banquets')}>
+              Enquire Now <ArrowRight size={15} />
+            </a>
           </div>
         </motion.article>
       </div>
@@ -1083,14 +1083,14 @@ function HomeAccommodation() {
 
 function HomeAttractions() {
   return (
-    <section className="intro" style={{ background: 'var(--ash)' }}>
+    <section className="intro attractions-section">
       <div className="intro-copy">
         <span className="tiny-label">Explore</span>
         <h2>Nearby Attractions.</h2>
       </div>
       <div className="intro-text">
         <p>Discover the heritage and beauty of Kapurthala and beyond during your stay:</p>
-        <ul style={{ color: 'var(--paper)', display: 'grid', gap: '10px', paddingLeft: '20px' }}>
+        <ul className="attraction-list">
           <li><strong>Sultanpur Lodhi Gurudwara:</strong> A historic and sacred site nearby.</li>
           <li><strong>Golden Temple (Amritsar):</strong> Just an hour away.</li>
           <li><strong>Pushpa Gujral Science City:</strong> Perfect for family visits.</li>
@@ -1105,12 +1105,12 @@ function HomeTourPackage() {
   return (
     <section className="manifesto">
       <div className="manifesto-pin">
-        <CircleDot size={84} />
+        <MapPin size={42} />
         <strong>City Tours</strong>
       </div>
       <div className="manifesto-list">
         <p>Customised Kapurthala City Tour Package</p>
-        <div style={{ color: 'rgba(244, 240, 228, 0.72)', fontSize: '18px', marginTop: '-15px', paddingBottom: '30px' }}>
+        <div className="tour-desc">
           Experience a complete guided tour including luxury accommodation, curated food, and comfortable transport.
         </div>
         <div className="hero-actions">
