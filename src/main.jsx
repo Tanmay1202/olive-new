@@ -51,7 +51,11 @@ const images = {
   olive: '/images/olive-tree.webp',
   board: '/images/roadside-board.webp',
   pool: '/images/pool.webp',
-  poolDay: '/images/pool-day.webp'
+  poolDay: '/images/pool-day.webp',
+  map: '/images/location-map.jpg',
+  palace: '/images/attraction-palace.jpg',
+  mosque: '/images/attraction-mosque.jpg',
+  lake: '/images/attraction-lake.jpg'
 };
 
 // All pages — used by the full-screen menu overlay (shows everything)
@@ -1220,19 +1224,68 @@ function HomeAccommodation() {
 
 function HomeAttractions() {
   return (
-    <section className="intro attractions-section">
-      <div className="intro-copy">
+    <section className="venues page-section">
+      <div className="section-heading">
         <span className="tiny-label">Explore</span>
-        <h2>Nearby Attractions.</h2>
+        <h2>Nearby Attractions (within 30km).</h2>
       </div>
-      <div className="intro-text">
-        <p>Discover the heritage and beauty of Kapurthala and beyond during your stay:</p>
-        <ul className="attraction-list">
-          <li><strong>Sultanpur Lodhi Gurudwara:</strong> A historic and sacred site nearby.</li>
-          <li><strong>Golden Temple (Amritsar):</strong> Just an hour away.</li>
-          <li><strong>Pushpa Gujral Science City:</strong> Perfect for family visits.</li>
-          <li><strong>Moorish Mosque & Jagatjit Palace:</strong> Marvel at Kapurthala's royal architecture.</li>
-        </ul>
+      <div className="venue-grid" style={{ marginTop: '2rem' }}>
+        <motion.article
+          className="venue-tile"
+          initial={{ opacity: 0, y: 42 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.64 }}
+        >
+          <img src={images.palace} alt="Jagatjit Palace" style={{ filter: 'brightness(0.9)' }} />
+          <div>
+            <span>Heritage</span>
+            <h3>Jagatjit Palace</h3>
+            <p>Marvel at Kapurthala's royal French Renaissance architecture, inspired by Versailles.</p>
+          </div>
+        </motion.article>
+        <motion.article
+          className="venue-tile"
+          initial={{ opacity: 0, y: 42 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.64, delay: 0.1 }}
+        >
+          <img src={images.mosque} alt="Moorish Mosque" style={{ filter: 'brightness(0.9)' }} />
+          <div>
+            <span>Culture</span>
+            <h3>Moorish Mosque</h3>
+            <p>A grand elegant mosque showcasing breathtaking Moroccan architecture.</p>
+          </div>
+        </motion.article>
+        <motion.article
+          className="venue-tile"
+          initial={{ opacity: 0, y: 42 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.64, delay: 0.2 }}
+        >
+          <img src={images.lake} alt="Kanjli Wetland" style={{ filter: 'brightness(0.9)' }} />
+          <div>
+            <span>Nature</span>
+            <h3>Kanjli Wetland</h3>
+            <p>A peaceful and serene lake surrounded by lush green wetland nature.</p>
+          </div>
+        </motion.article>
+        <motion.article
+          className="venue-tile"
+          initial={{ opacity: 0, y: 42 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.25 }}
+          transition={{ duration: 0.64, delay: 0.3 }}
+        >
+          <img src={images.aerial} alt="Sultanpur Lodhi" style={{ filter: 'brightness(0.8)' }} />
+          <div>
+            <span>Spiritual</span>
+            <h3>Sultanpur Lodhi</h3>
+            <p>A historic and sacred spiritual site located just a short scenic drive away.</p>
+          </div>
+        </motion.article>
       </div>
     </section>
   );
@@ -1323,25 +1376,16 @@ function ResortPage() {
           <h2>Accessibility &amp; Surroundings.</h2>
         </div>
         <div className="intro-text">
-          <p>Located near Kanjli Lake, our resort is well-connected and easy to reach:</p>
-          <ul className="attraction-list">
+          <p>Located near Kanjli Lake, our resort is well-connected and exceptionally easy to reach from all major transit hubs:</p>
+          <ul className="attraction-list" style={{ marginBottom: '2rem' }}>
             <li><strong>Railway Station:</strong> 5 mins drive</li>
             <li><strong>Bus Stand:</strong> 10 mins drive</li>
             <li><strong>Jalandhar:</strong> 30 mins drive</li>
             <li><strong>Amritsar:</strong> 1 hour drive</li>
             <li><strong>Phagwara:</strong> 40 mins drive</li>
           </ul>
-          <div className="map-embed">
-            <iframe
-              src="https://maps.google.com/maps?q=Olive+Green+Resorts+and+Villa,Kapurthala&output=embed"
-              width="100%"
-              height="100%"
-              style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(85%) contrast(85%)' }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Olive Green Resort Map Location"
-            ></iframe>
+          <div className="map-embed" style={{ borderRadius: '4px', overflow: 'hidden' }}>
+            <img src={images.map} alt="Map of Olive Green Resort connections" style={{ width: '100%', height: 'auto', display: 'block' }} />
           </div>
         </div>
       </section>
