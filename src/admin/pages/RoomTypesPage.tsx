@@ -17,6 +17,7 @@ export interface RoomType {
   display_order: number;
   created_at: string;
   updated_at: string;
+  available_today?: number;
 }
 
 export interface RoomUnit {
@@ -60,7 +61,25 @@ export function RoomTypesPage() {
       const { data, error: fetchErr } = await supabase
         .from('room_types').select('*').order('display_order', { ascending: true });
       if (fetchErr) throw fetchErr;
-      setRoomTypes(data || []);
+      
+      // Fetch live availability for today to show in the admin cards
+      const today = new Date().toISOString().split('T')[0];
+      const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+      
+      const { data: availData } = await supabase.rpc('get_room_types_with_availability', {
+        p_check_in: today,
+        p_check_out: tomorrow
+      });
+
+      const enhancedData = (data || []).map(type => {
+        const availRoom = (availData || []).find((a: any) => a.id === type.id);
+        return {
+          ...type,
+          available_today: availRoom ? availRoom.available_count : type.total_units
+        };
+      });
+
+      setRoomTypes(enhancedData);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to fetch room types.');
     } finally {
@@ -289,7 +308,9 @@ export function RoomTypesPage() {
                 <div className="rt-card-meta">
                   <span>{type.max_occupancy} guests max</span>
                   <span>·</span>
-                  <span>{type.total_units} room{type.total_units !== 1 ? 's' : ''}</span>
+                  <span style={{ color: type.available_today === 0 ? 'var(--red)' : 'var(--gold)', fontWeight: 600 }}>
+                    {type.available_today} / {type.total_units} available today
+                  </span>
                 </div>
               </div>
 
