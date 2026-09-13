@@ -75,7 +75,7 @@ export function RoomTypesPage() {
         const availRoom = (availData || []).find((a: any) => a.id === type.id);
         return {
           ...type,
-          available_today: availRoom ? availRoom.available_count : type.total_units
+          available_today: availRoom ? availRoom.available_units : type.total_units
         };
       });
 
