@@ -62,9 +62,13 @@ export function RoomTypesPage() {
         .from('room_types').select('*').order('display_order', { ascending: true });
       if (fetchErr) throw fetchErr;
       
-      // Fetch live availability for today to show in the admin cards
-      const today = new Date().toISOString().split('T')[0];
-      const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+      // Fetch live availability for today (using local timezone, not UTC) to show in the admin cards
+      const now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+      const today = now.toISOString().split('T')[0];
+      
+      const nextDay = new Date(now.getTime() + 86400000);
+      const tomorrow = nextDay.toISOString().split('T')[0];
       
       const { data: availData } = await supabase.rpc('get_room_types_with_availability', {
         p_check_in: today,
