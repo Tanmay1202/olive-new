@@ -56,6 +56,7 @@ const images = {
 
 // All pages — used by the full-screen menu overlay (shows everything)
 const nav = [
+  { label: 'Home', page: 'home' },
   { label: 'About Resort', page: 'resort' },
   { label: 'Rooms', page: 'rooms' },
   { label: 'Banquets', page: 'banquets' },
@@ -71,6 +72,10 @@ const nav = [
 
 // Desktop top-bar groups
 const desktopNavGroups = [
+  {
+    label: 'Home',
+    page: 'home'
+  },
   {
     label: 'Resort',
     items: [
@@ -1073,6 +1078,98 @@ function HomeBookingForm() {
   );
 }
 
+function TourBookingForm() {
+  const [formData, setFormData] = useState({ from: '', to: '', date: '', pax: '', phone: '', isTourLead: true });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.from || !formData.to || !formData.date || !formData.pax || !formData.phone) {
+      setError('All fields are required.');
+      return;
+    }
+    if (formData.pax < 1) {
+      setError('Pax must be a positive number.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({ from: '', to: '', date: '', pax: '', phone: '', isTourLead: true });
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Failed to send enquiry. Please try again.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Network error. Is the server running?');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div id="tour-package-form" style={{ marginTop: '2.5rem', padding: '2rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', border: '1px solid rgba(197, 155, 70, 0.15)' }}>
+      <div style={{ marginBottom: '1.5rem' }}>
+        <span className="tiny-label" style={{ color: 'var(--gold)' }}>Quick Lead</span>
+        <h3 style={{ fontSize: '28px', color: '#f7eed7', fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 300, marginTop: '8px' }}>Customize Tour Package.</h3>
+      </div>
+      <form onSubmit={handleSubmit} className="booking-form" noValidate>
+        <div className="form-grid">
+          <label>
+            <span>From</span>
+            <input type="text" name="from" value={formData.from} onChange={handleChange} required placeholder="Departure City" />
+          </label>
+          <label>
+            <span>To</span>
+            <input type="text" name="to" value={formData.to} onChange={handleChange} required placeholder="Destination" />
+          </label>
+          <label>
+            <span>Travel Date</span>
+            <input type="date" name="date" value={formData.date} onChange={handleChange} required />
+          </label>
+          <label>
+            <span>Pax (No. of travellers)</span>
+            <input type="number" min="1" name="pax" value={formData.pax} onChange={handleChange} required placeholder="e.g. 2" />
+          </label>
+        </div>
+        <label>
+          <span>Phone Number</span>
+          <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="+91 98765 43210" />
+        </label>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Sending...' : 'Get a Quote'}
+          {!loading && <ArrowRight size={19} />}
+        </button>
+        {error && <p style={{ color: '#ff6b6b', marginTop: '10px' }}>{error}</p>}
+        {submitted && (
+          <motion.div
+            className="booking-confirmation"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <strong>Enquiry Sent!</strong>
+            <span>Your tour package enquiry has been successfully delivered. We'll be in touch soon.</span>
+          </motion.div>
+        )}
+      </form>
+    </div>
+  );
+}
+
 function HomeAccommodation() {
   return (
     <section className="venues page-section">
@@ -1153,8 +1250,9 @@ function HomeTourPackage() {
           Experience a complete guided tour including luxury accommodation, curated food, and comfortable transport.
         </div>
         <div className="hero-actions">
-          <a href={pageHref('contact')}>Enquire About Tours</a>
+          <a href="#tour-package-form">Enquire About Tours</a>
         </div>
+        <TourBookingForm />
       </div>
     </section>
   );
