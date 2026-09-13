@@ -52,7 +52,6 @@ const images = {
   board: '/images/roadside-board.webp',
   pool: '/images/pool.webp',
   poolDay: '/images/pool-day.webp',
-  map: '/images/location-map.jpg',
   palace: '/images/attraction-palace.jpg',
   mosque: '/images/attraction-mosque.jpg',
   lake: '/images/attraction-lake.jpg',
