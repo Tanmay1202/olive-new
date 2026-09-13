@@ -69,14 +69,39 @@ const nav = [
   { label: 'Contact', page: 'contact' }
 ];
 
-// Desktop top-bar: 6 primary links only — rest live in the full-screen menu
-const primaryNav = [
-  { label: 'Rooms', page: 'rooms' },
-  { label: 'Banquets', page: 'banquets' },
-  { label: 'Dining', page: 'restaurant' },
-  { label: 'Offers', page: 'offers' },
-  { label: 'Gallery', page: 'gallery' },
-  { label: 'Contact', page: 'contact' },
+// Desktop top-bar groups
+const desktopNavGroups = [
+  {
+    label: 'Resort',
+    items: [
+      { label: 'About Resort', page: 'resort' },
+      { label: 'Gallery', page: 'gallery' },
+      { label: 'Offers', page: 'offers' }
+    ]
+  },
+  {
+    label: 'Rooms',
+    page: 'rooms'
+  },
+  {
+    label: 'Events',
+    items: [
+      { label: 'Banquets', page: 'banquets' },
+      { label: 'Kitty Halls', page: 'kitty-halls' },
+      { label: 'PDRs', page: 'pdrs' }
+    ]
+  },
+  {
+    label: 'Dining',
+    items: [
+      { label: 'Restaurant', page: 'restaurant' },
+      { label: 'Bar', page: 'bar' }
+    ]
+  },
+  {
+    label: 'Contact',
+    page: 'contact'
+  }
 ];
 
 const heroSlides = [
@@ -230,11 +255,27 @@ function Header({ setMenuOpen, setPage }) {
         <img src={images.logo} alt="Olive Green Resort & Villas" />
       </a>
       <nav className="desktop-nav" aria-label="Primary navigation">
-        {primaryNav.map((item) => (
-          <a key={item.label} href={pageHref(item.page)} onClick={() => setPage(item.page)}>
-            {item.label}
-          </a>
-        ))}
+        {desktopNavGroups.map((group) => {
+          if (group.page) {
+            return (
+              <a key={group.label} href={pageHref(group.page)} onClick={() => setPage(group.page)}>
+                {group.label}
+              </a>
+            );
+          }
+          return (
+            <div key={group.label} className="nav-dropdown-group">
+              <span className="nav-dropdown-label">{group.label}</span>
+              <div className="nav-dropdown-menu">
+                {group.items.map(subItem => (
+                  <a key={subItem.label} href={pageHref(subItem.page)} onClick={() => setPage(subItem.page)}>
+                    {subItem.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          );
+        })}
       </nav>
       <div className="header-actions">
         <a className="header-book-btn" href={pageHref('bookings')} onClick={() => setPage('bookings')}>
