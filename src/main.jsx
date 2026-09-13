@@ -1639,7 +1639,7 @@ function OffersPage() {
               <span>Dining</span>
               <h3>20% Off on Food</h3>
               <p>Enjoy a 20% discount on all food and dining services during your visit this season.</p>
-              <a className="tile-cta" href={pageHref('contact')}>Book Table <ArrowRight size={15} /></a>
+              <a className="tile-cta" href={pageHref('bookings')}>Book Table <ArrowRight size={15} /></a>
             </div>
           </article>
           <article className="venue-tile">
@@ -1657,6 +1657,15 @@ function OffersPage() {
   );
 }
 
+function BookingEnquiryPage() {
+  return (
+    <>
+      <PageHero label="Bookings" title="Send a Booking Enquiry." copy="Reserve your stay, dining, or event space by filling out the form below." image={images.facade} />
+      <HomeBookingForm />
+    </>
+  );
+}
+
 function CurrentPage({ page }) {
   const pages = {
     home: <HomePage />,
@@ -1668,7 +1677,7 @@ function CurrentPage({ page }) {
     'kitty-halls': <KittyHallsPage />,
     pdrs: <PdrsPage />,
     offers: <OffersPage />,
-    bookings: <BookingPage />,
+    bookings: <BookingEnquiryPage />,
     gallery: <GalleryPage />,
     contact: <ContactPage />
   };
