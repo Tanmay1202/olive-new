@@ -55,7 +55,8 @@ const images = {
   map: '/images/location-map.jpg',
   palace: '/images/attraction-palace.jpg',
   mosque: '/images/attraction-mosque.jpg',
-  lake: '/images/attraction-lake.jpg'
+  lake: '/images/attraction-lake.jpg',
+  gurudwara: '/images/attraction-gurudwara.jpg'
 };
 
 // All pages — used by the full-screen menu overlay (shows everything)
@@ -1279,7 +1280,7 @@ function HomeAttractions() {
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.64, delay: 0.3 }}
         >
-          <img src={images.aerial} alt="Sultanpur Lodhi" style={{ filter: 'brightness(0.8)' }} />
+          <img src={images.gurudwara} alt="Sultanpur Lodhi" style={{ filter: 'brightness(0.9)' }} />
           <div>
             <span>Spiritual</span>
             <h3>Sultanpur Lodhi</h3>
