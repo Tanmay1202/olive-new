@@ -1378,15 +1378,24 @@ function ResortPage() {
         </div>
         <div className="intro-text">
           <p>Located near Kanjli Lake, our resort is well-connected and exceptionally easy to reach from all major transit hubs:</p>
-          <ul className="attraction-list" style={{ marginBottom: '2rem' }}>
+          <ul className="attraction-list">
             <li><strong>Railway Station:</strong> 5 mins drive</li>
             <li><strong>Bus Stand:</strong> 10 mins drive</li>
             <li><strong>Jalandhar:</strong> 30 mins drive</li>
             <li><strong>Amritsar:</strong> 1 hour drive</li>
             <li><strong>Phagwara:</strong> 40 mins drive</li>
           </ul>
-          <div className="map-embed" style={{ borderRadius: '4px', overflow: 'hidden' }}>
-            <img src={images.map} alt="Map of Olive Green Resort connections" style={{ width: '100%', height: 'auto', display: 'block' }} />
+          <div className="map-embed">
+            <iframe
+              src="https://maps.google.com/maps?q=Olive+Green+Resorts+and+Villa,Kapurthala&output=embed"
+              width="100%"
+              height="100%"
+              style={{ border: 0, filter: 'invert(90%) hue-rotate(180deg) brightness(85%) contrast(85%)' }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              title="Olive Green Resort Map Location"
+            ></iframe>
           </div>
         </div>
       </section>
