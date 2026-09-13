@@ -873,12 +873,12 @@ function BookingPage() {
           <div className="form-grid">
             <label>
               <span>Arrival</span>
-              <input type="date" name="arrival" value={booking.arrival} onChange={updateBooking} />
+              <input type="date" name="arrival" value={booking.arrival} onChange={updateBooking} min={new Date().toISOString().split('T')[0]} />
               {errors.arrival && <small>{errors.arrival}</small>}
             </label>
             <label>
               <span>Departure</span>
-              <input type="date" name="departure" value={booking.departure} onChange={updateBooking} />
+              <input type="date" name="departure" value={booking.departure} onChange={updateBooking} min={booking.arrival || new Date().toISOString().split('T')[0]} />
               {errors.departure && <small>{errors.departure}</small>}
             </label>
             <label>
