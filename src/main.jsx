@@ -39,7 +39,7 @@ import { BookingsPage } from './admin/pages/BookingsPage';
 const images = {
   logo: '/images/logo.png',
   frontDay: '/images/front-day.webp',
-  facade: '/images/side-evening.webp',
+  facade: '/images/front-wide.webp',
   aerial: '/images/side-evening.webp',
   banquet: '/images/big-banquet.webp',
   bar: '/images/bar.webp',
@@ -114,19 +114,19 @@ const heroSlides = [
     image: images.frontDay,
     label: 'Arrival',
     title: 'Olive Green Resort & Villas',
-    copy: 'A grand Kapurthala resort for stays, celebrations, dining and landscaped hospitality.'
+    copy: 'A grand Kapurthala resort for stays, celebrations, dining and landscaped hospitality. Experience an oasis of tranquility where every detail is crafted for your utmost comfort and luxury.'
   },
   {
     image: images.facade,
     label: 'Resort',
     title: 'A grand green arrival',
-    copy: 'Night-lit architecture, gardens and calm hospitality near Kanjli Lake.'
+    copy: 'Night-lit architecture, sprawling gardens, and calm hospitality near Kanjli Lake. A perfect blend of heritage-inspired design and modern luxury.'
   },
   {
     image: images.poolDay,
     label: 'Leisure',
     title: 'Poolside resort living',
-    copy: 'Sunny water, villa stays and slower moments inside the Olive Green campus.'
+    copy: 'Sunny water, exclusive villa stays, and slower moments inside the Olive Green campus. Unwind in our temperature-controlled pool surrounded by nature.'
   }
 ];
 
@@ -142,25 +142,25 @@ const venues = [
     title: 'Banquet Hall',
     meta: 'Weddings / Receptions / Corporate dinners',
     image: images.banquet,
-    copy: 'A formal hall with sculpted ceilings, chandeliers, stage visibility and generous dining layouts.'
+    copy: 'A formal hall with sculpted ceilings, magnificent chandeliers, excellent stage visibility, and generous dining layouts for your grandest celebrations.'
   },
   {
     title: 'Royal Lobby',
     meta: 'Arrival / Lounge / Portrait gallery',
     image: images.lobby2,
-    copy: 'A long marble gallery of chandeliers, drapery and seating for arrivals that feel composed.'
+    copy: 'A long marble gallery of chandeliers, premium drapery, and plush seating for arrivals that feel composed, welcoming, and truly royal.'
   },
   {
     title: 'Restaurant & Bar',
     meta: 'Dining / Cocktails / Private hosting',
     image: images.bar,
-    copy: 'A warm lounge language for dinner service, beverages and after-event conversations.'
+    copy: 'A warm lounge language for dinner service, artisanal beverages, and after-event conversations, offering a curated menu of global and local delicacies.'
   },
   {
     title: 'Garden Court',
     meta: 'Landscapes / Outdoor flow / Photo moments',
     image: images.aerial,
-    copy: 'Illuminated gardens, fountains and wide paved courts frame the resort from day into night.'
+    copy: 'Illuminated gardens, elegant fountains, and wide paved courts frame the resort from day into night, providing a breathtaking backdrop for any occasion.'
   }
 ];
 
@@ -196,6 +196,7 @@ const gallery = [
   { image: images.facade, title: 'Illuminated facade', area: 'Arrival' },
   { image: images.aerial, title: 'Garden court', area: 'Exterior' },
   { image: images.banquet, title: 'Grand banquet', area: 'Events' },
+  { image: images.lobby1, title: 'Resort Lobby', area: 'Interior' },
   { image: images.lobby2, title: 'Marble gallery', area: 'Interior' },
   { image: images.lobby3, title: 'Salon corridor', area: 'Interior' },
   { image: images.bar, title: 'Bar lounge', area: 'Dining' },
@@ -1465,7 +1466,7 @@ function RoomsPage() {
           <h2>Your Private Sanctuary.</h2>
         </div>
         <div className="intro-text">
-          <p>Our luxury villa rooms offer an exquisite blend of modern elegance and comforting warmth. Wake up to serene views and enjoy a space crafted for ultimate relaxation.</p>
+          <p>Our luxury villa rooms offer an exquisite blend of modern elegance and comforting warmth. Wake up to serene views and enjoy a space crafted for ultimate relaxation. Each room features premium bedding, bespoke furnishings, and luxury amenities to make your stay feel like a true escape.</p>
         </div>
       </section>
       <Testimonials category="rooms" />
@@ -1535,14 +1536,14 @@ function BarPage() {
 function KittyHallsPage() {
   return (
     <>
-      <PageHero label="Kitty Halls" title="Intimate Gatherings." copy="Perfect spaces for kitty parties and small get-togethers." image={images.lobby1} />
+      <PageHero label="Kitty Halls" title="Intimate Gatherings." copy="Perfect spaces for kitty parties and small get-togethers." image={images.banquet} />
       <section className="intro">
         <div className="intro-copy">
           <span className="tiny-label">Social</span>
           <h2>Celebrate Together.</h2>
         </div>
         <div className="intro-text">
-          <p>Our Kitty Halls are thoughtfully designed to host your private social events. Enjoy personalized service, tailored menus, and a vibrant atmosphere that ensures every get-together is a joyous occasion.</p>
+          <p>Our Kitty Halls are thoughtfully designed to host your private social events in an exclusive and intimate setting. Enjoy highly personalized service, custom-curated menus, and a vibrant atmosphere that ensures every get-together is a joyous occasion.</p>
         </div>
       </section>
       <Testimonials category="kitty" />
