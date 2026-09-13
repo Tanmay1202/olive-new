@@ -5,15 +5,30 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const { name, phone, city, bookingType, date, from, to, pax, isTourLead } = req.body;
+  // Sanitize helper to prevent huge inputs and basic HTML injection
+  const sanitize = (val, maxLen = 100) => {
+    if (val === undefined || val === null) return '';
+    const str = String(val).trim();
+    return str.substring(0, maxLen).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  };
+
+  const isTourLead = Boolean(req.body.isTourLead);
+  const name = sanitize(req.body.name);
+  const phone = sanitize(req.body.phone, 20);
+  const city = sanitize(req.body.city, 50);
+  const bookingType = sanitize(req.body.bookingType, 50);
+  const date = sanitize(req.body.date, 50);
+  const from = sanitize(req.body.from, 100);
+  const to = sanitize(req.body.to, 100);
+  const pax = sanitize(req.body.pax, 10);
 
   if (isTourLead) {
     if (!from || !to || !date || !pax || !phone) {
-      return res.status(400).json({ error: "All fields are required for tour lead." });
+      return res.status(400).json({ error: "All fields are required for tour lead and must be valid." });
     }
   } else {
     if (!name || !phone || !city || !bookingType || !date) {
-      return res.status(400).json({ error: "All fields are required." });
+      return res.status(400).json({ error: "All fields are required and must be valid." });
     }
   }
 
