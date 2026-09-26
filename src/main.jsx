@@ -1127,10 +1127,10 @@ function TourBookingForm() {
   };
 
   return (
-    <div id="tour-package-form" style={{ marginTop: '2.5rem', padding: '2rem', background: 'rgba(0,0,0,0.2)', borderRadius: '12px', border: '1px solid rgba(197, 155, 70, 0.15)' }}>
-      <div style={{ marginBottom: '1.5rem' }}>
+    <div id="tour-package-form" className="tour-form-wrapper">
+      <div className="tour-form-header">
         <span className="tiny-label" style={{ color: 'var(--gold)' }}>Quick Lead</span>
-        <h3 style={{ fontSize: '28px', color: '#f7eed7', fontFamily: 'var(--font-serif)', fontStyle: 'italic', fontWeight: 300, marginTop: '8px' }}>Customize Tour Package.</h3>
+        <h3 className="tour-form-title">Customize Tour Package.</h3>
       </div>
       <form onSubmit={handleSubmit} className="booking-form" noValidate>
         <div className="form-grid">
