@@ -1027,15 +1027,13 @@ section {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100svh;
-  overflow-y: auto;
-  scrollbar-width: none;
-  gap: clamp(16px, 3vw, 24px);
+  min-height: 100svh;
+  gap: clamp(14px, 2vw, 20px);
   background:
     radial-gradient(circle at 50% 50%, rgba(197, 155, 70, 0.04), transparent 60%),
     linear-gradient(180deg, var(--ink) 0%, #151c10 40%, var(--ink) 100%);
   color: var(--paper);
-  padding: 100px 20px 40px !important;
+  padding: clamp(100px, 12vh, 140px) clamp(16px, 3vw, 48px) clamp(40px, 5vh, 60px);
 }
 
 .booking .tiny-label {
@@ -1043,9 +1041,9 @@ section {
 }
 
 .booking h2 {
-  margin-top: 14px;
+  margin-top: 6px;
   font-family: var(--font-serif);
-  font-size: clamp(44px, 7.2vw, 108px);
+  font-size: clamp(32px, 5vw, 72px);
   font-weight: 400;
   font-style: italic;
   line-height: 0.95;
@@ -1073,30 +1071,30 @@ section {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 20px 32px;
-  margin-top: 20px;
+  gap: 12px 24px;
+  margin-top: 12px;
 }
 
 .booking-highlights span {
   display: inline-flex;
   width: fit-content;
-  min-height: 42px;
+  min-height: 34px;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   border: 1px solid rgba(197, 155, 70, 0.36);
   border-radius: 999px;
-  padding: 0 15px;
+  padding: 0 13px;
   color: rgba(244, 240, 228, 0.86);
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 850;
   text-transform: uppercase;
 }
 
 .booking-form {
   display: grid;
-  gap: 18px;
+  gap: 14px;
   border: 1px solid rgba(244, 240, 228, 0.16);
-  padding: clamp(22px, 4vw, 46px);
+  padding: clamp(16px, 2.5vw, 32px);
   background: rgba(244, 240, 228, 0.07);
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
@@ -1116,7 +1114,7 @@ section {
 
 .booking-form label {
   display: grid;
-  gap: 9px;
+  gap: 5px;
 }
 
 .booking .booking-form label {
@@ -1139,7 +1137,7 @@ section {
 
 .booking-form label > span {
   color: var(--gold);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 950;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1149,14 +1147,14 @@ section {
 .booking-form select,
 .booking-form textarea {
   width: 100%;
-  min-height: 56px;
+  min-height: 44px;
   border: 1px solid rgba(244, 240, 228, 0.22);
   border-radius: 0;
-  padding: 0 16px;
+  padding: 0 14px;
   background: rgba(17, 24, 13, 0.32);
   color: var(--paper);
   font: inherit;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 700;
   color-scheme: dark;
   outline: 0;
@@ -1164,8 +1162,8 @@ section {
 }
 
 .booking-form textarea {
-  min-height: 80px;
-  padding-top: 15px;
+  min-height: 60px;
+  padding-top: 12px;
   resize: vertical;
 }
 
@@ -1195,7 +1193,7 @@ section {
 
 .booking-form button[type="submit"] {
   display: inline-flex;
-  min-height: 58px;
+  min-height: 46px;
   width: fit-content;
   align-items: center;
   justify-content: center;
