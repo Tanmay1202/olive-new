@@ -1232,7 +1232,7 @@ function HomeAccommodation() {
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.64 }}
         >
-          <img src={images.swimmingPool1} alt="Villas" />
+          <img src={images.room1} alt="Villas" />
           <div>
             <span>Accommodation</span>
             <h3>Villas</h3>
@@ -1653,7 +1653,7 @@ function RoomsPage() {
         label="Rooms" 
         title="Luxury Villas." 
         copy="Experience unparalleled luxury in our private Villas designed for comfort and tranquility." 
-        image={images.swimmingPool1} 
+        image={images.room1} 
         action={<a className="gallery-more-btn" href={pageHref('bookings')}>Book Stay</a>}
       />
       <section className="intro">
@@ -1788,7 +1788,7 @@ function OffersPage() {
             </div>
           </article>
           <article className="venue-tile">
-            <img src={images.swimmingPool1} alt="Stay Offer" />
+            <img src={images.room1} alt="Stay Offer" />
             <div>
               <span>Accommodation</span>
               <h3>Stay 3, Pay 2</h3>
