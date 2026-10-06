@@ -1032,8 +1032,8 @@ section {
   scrollbar-width: none;
   gap: clamp(16px, 3vw, 24px);
   background:
-    radial-gradient(circle at 7% 14%, rgba(197, 155, 70, 0.16), transparent 28%),
-    linear-gradient(135deg, #0b1208 0%, #202a12 54%, #0d1510 100%);
+    radial-gradient(circle at 50% 50%, rgba(197, 155, 70, 0.04), transparent 60%),
+    linear-gradient(180deg, var(--ink) 0%, #151c10 40%, var(--ink) 100%);
   color: var(--paper);
   padding: 100px 20px 40px !important;
 }
@@ -1094,15 +1094,18 @@ section {
 
 .booking-form {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
   gap: 18px;
-  width: 100%;
-  max-width: 1200px;
   border: 1px solid rgba(244, 240, 228, 0.16);
   padding: clamp(22px, 4vw, 46px);
   background: rgba(244, 240, 228, 0.07);
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
+}
+
+.booking .booking-form {
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+  max-width: 1200px;
 }
 
 .form-grid {
@@ -1114,20 +1117,23 @@ section {
 .booking-form label {
   display: grid;
   gap: 9px;
+}
+
+.booking .booking-form label {
   grid-column: span 1;
 }
 
-.booking-form > label:nth-of-type(5) {
+.booking .booking-form > label:nth-of-type(5) {
   grid-column: span 2;
 }
 
-.booking-form > label:nth-of-type(8) {
+.booking .booking-form > label:nth-of-type(8) {
   grid-column: 1 / -1;
 }
 
-.booking-form button[type="submit"],
-.booking-form .booking-confirmation,
-.booking-form .form-error-msg {
+.booking .booking-form button[type="submit"],
+.booking .booking-form .booking-confirmation,
+.booking .booking-form .form-error-msg {
   grid-column: 1 / -1;
 }
 
@@ -1627,12 +1633,15 @@ footer img {
 
   /* Fix 8: Booking form — tighter padding on small screens */
   .booking-form {
-    grid-template-columns: 1fr;
     padding: clamp(16px, 4vw, 28px);
     gap: 14px;
   }
   
-  .booking-form > label {
+  .booking .booking-form {
+    grid-template-columns: 1fr;
+  }
+
+  .booking .booking-form > label {
     grid-column: span 1 !important;
   }
 

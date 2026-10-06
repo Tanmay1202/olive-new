@@ -855,8 +855,8 @@ function BookingSection({ title, copy, showHighlights = true }) {
           {showHighlights && (
             <div className="booking-highlights">
               <span><CalendarDays size={18} /> Date-led request</span>
-              <span><BedDouble size={18} /> Rooms, villas and venues</span>
-              <span><Sparkles size={18} /> Confirmation on submit</span>
+              <span><BedDouble size={18} /> Rooms / villas</span>
+              <span><Sparkles size={18} /> Quick confirmation</span>
             </div>
           )}
         </div>
