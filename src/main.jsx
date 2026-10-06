@@ -669,7 +669,7 @@ function Contact() {
   );
 }
 
-function BookingPage() {
+function BookingSection({ title, copy, showHighlights = true }) {
   const [booking, setBooking] = useState(initialBooking);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -848,26 +848,20 @@ function BookingPage() {
   };
 
   return (
-    <>
-      <PageHero
-        label="Bookings"
-        title="Reserve the stay. Enquire for the occasion."
-        copy="Share your dates, room needs and event preferences. The team can follow up with availability and details."
-        image={images.pool}
-      />
       <section className="booking page-section">
         <div className="booking-copy">
           <span className="tiny-label">Booking enquiry</span>
-          <h2>Start with the dates.</h2>
+          <h2>{title || "Start with the dates."}</h2>
           <p>
-            This front desk form keeps the first step focused: when you arrive, how many guests are
-            coming, what kind of space you need and how Olive Green should reach you.
+            {copy || "This front desk form keeps the first step focused: when you arrive, how many guests are coming, what kind of space you need and how Olive Green should reach you."}
           </p>
-          <div className="booking-highlights">
-            <span><CalendarDays size={18} /> Date-led request</span>
-            <span><BedDouble size={18} /> Rooms, villas and venues</span>
-            <span><Sparkles size={18} /> Confirmation on submit</span>
-          </div>
+          {showHighlights && (
+            <div className="booking-highlights">
+              <span><CalendarDays size={18} /> Date-led request</span>
+              <span><BedDouble size={18} /> Rooms, villas and venues</span>
+              <span><Sparkles size={18} /> Confirmation on submit</span>
+            </div>
+          )}
         </div>
         <form className="booking-form" onSubmit={handleSubmit} noValidate>
           <div className="form-grid">
@@ -969,6 +963,19 @@ function BookingPage() {
           )}
         </form>
       </section>
+  );
+}
+
+function BookingPage() {
+  return (
+    <>
+      <PageHero
+        label="Bookings"
+        title="Reserve the stay. Enquire for the occasion."
+        copy="Share your dates, room needs and event preferences. The team can follow up with availability and details."
+        image={images.pool}
+      />
+      <BookingSection />
     </>
   );
 }
@@ -1316,7 +1323,7 @@ function HomePage() {
   return (
     <>
       <Hero />
-      <HomeBookingForm />
+      <BookingSection title="Reserve your experience." />
       <Intro />
       <HomeAccommodation />
       <HomeAttractions />
@@ -1457,6 +1464,7 @@ function ContactPage() {
         image={images.frontDay}
       />
       <Contact />
+      <HomeBookingForm />
     </>
   );
 }
