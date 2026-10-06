@@ -460,7 +460,7 @@ body::before {
 
 .hero {
   position: relative;
-  min-height: 100svh;
+  height: 100svh;
   overflow: hidden;
   isolation: isolate;
 }
@@ -485,11 +485,16 @@ body::before {
 
 .hero-panel {
   display: flex;
-  min-height: 100svh;
+  height: 100svh;
   max-width: 1200px;
   flex-direction: column;
   justify-content: center;
   padding: clamp(76px, 8vw, 96px) clamp(20px, 5vw, 74px) 60px;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.hero-panel::-webkit-scrollbar {
+  display: none;
 }
 
 .tiny-label {
@@ -1439,7 +1444,7 @@ footer img {
   /* Fix 1: Hero panel — position content at bottom of hero so image fills top,
      text sits comfortably above slide controls */
   .hero-panel {
-    min-height: 100svh;
+    height: 100svh;
     padding-top: 80px;
     padding-bottom: 90px;
     justify-content: flex-end;
