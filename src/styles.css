@@ -173,7 +173,7 @@ body::before {
   position: fixed;
   z-index: 80;
   inset: 0 0 auto 0;
-  height: clamp(64px, 6vw, 76px);
+  height: clamp(64px, 7vw, 96px);
   border-bottom: 1px solid rgba(197, 155, 70, 0.12);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
@@ -188,7 +188,7 @@ body::before {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 0;
-  min-height: clamp(64px, 6vw, 76px);
+  min-height: clamp(64px, 7vw, 96px);
   padding: 0 clamp(20px, 4vw, 56px);
   color: var(--paper);
 }
