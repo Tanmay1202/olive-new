@@ -586,7 +586,7 @@ h1 {
 .hero-wordmark {
   position: absolute;
   right: clamp(18px, 5vw, 70px);
-  bottom: clamp(78px, 13vh, 128px);
+  bottom: clamp(140px, 18vh, 220px);
   display: grid;
   color: rgba(244, 240, 228, 0.07);
   font-family: var(--font-serif);
