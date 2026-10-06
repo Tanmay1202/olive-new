@@ -396,15 +396,15 @@ function Hero() {
 
   return (
     <section className="hero" id="top" aria-label="Olive Green Resort introduction">
-      <AnimatePresence mode="wait">
+      <AnimatePresence>
         <motion.img
           key={current.image}
           src={current.image}
           alt=""
-          initial={{ opacity: 0, scale: 1.1 }}
+          initial={{ opacity: 0, scale: 1.05 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 1.05 }}
-          transition={{ duration: 8.5, ease: 'easeOut' }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
         />
       </AnimatePresence>
       <div className="hero-overlay" />
