@@ -861,7 +861,6 @@ function BookingSection({ title, copy, showHighlights = true }) {
           )}
         </div>
         <form className="booking-form" onSubmit={handleSubmit} noValidate>
-          <div className="form-grid">
             <label>
               <span>Check in</span>
               <input type="date" name="arrival" value={booking.arrival} onChange={updateBooking} min={new Date().toISOString().split('T')[0]} />
@@ -880,8 +879,6 @@ function BookingSection({ title, copy, showHighlights = true }) {
               <span>Rooms</span>
               <input type="number" name="rooms" min="1" max="20" value={booking.rooms} onChange={updateBooking} />
             </label>
-          </div>
-          <div className="form-grid">
             <label>
               <span>Lead guest name</span>
               <input type="text" name="name" value={booking.name} onChange={updateBooking} placeholder="Your name" />
@@ -892,7 +889,6 @@ function BookingSection({ title, copy, showHighlights = true }) {
               <input type="tel" name="phone" value={booking.phone} onChange={updateBooking} placeholder="+91 98765 43210" />
               {errors.phone && <small>{errors.phone}</small>}
             </label>
-          </div>
           <label>
             <span>Email</span>
             <input type="email" name="email" value={booking.email} onChange={updateBooking} placeholder="name@example.com" />
