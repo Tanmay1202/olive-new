@@ -852,9 +852,6 @@ function BookingSection({ title, copy, showHighlights = true }) {
         <div className="booking-copy">
           <span className="tiny-label">Booking enquiry</span>
           <h2>{title || "Start with the dates."}</h2>
-          <p>
-            {copy || "This front desk form keeps the first step focused: when you arrive, how many guests are coming, what kind of space you need and how Olive Green should reach you."}
-          </p>
           {showHighlights && (
             <div className="booking-highlights">
               <span><CalendarDays size={18} /> Date-led request</span>
