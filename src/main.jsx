@@ -1455,6 +1455,29 @@ function HomePage() {
       <BookingSection title="Reserve your experience." />
       <Intro />
       <HomeAccommodation />
+      <section className="split-feature">
+        <div className="split-feature-content">
+          <span className="tiny-label">The Estate</span>
+          <h3>A World Within Itself</h3>
+          <p>Olive Green Resort & Villas spans acres of manicured landscapes, seamlessly blending luxurious architecture with natural beauty. Our estate offers a tranquil escape from the bustling city, providing a sanctuary where every corner invites you to relax.</p>
+          <p>Wander through our landscaped gardens, marvel at the illuminated grand facade, and discover quiet courtyards perfect for reflection.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.aerial} alt="Resort Aerial" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="split-feature reverse" style={{ paddingBottom: "clamp(72px, 11vw, 150px)" }}>
+        <div className="split-feature-content">
+          <span className="tiny-label">Leisure</span>
+          <h3>Endless Relaxation</h3>
+          <p>Whether you are taking a refreshing dip in our crystal-clear resort pool or unwinding with a book by the olive trees, leisure is at the heart of the Olive Green experience.</p>
+          <p>Our dedicated staff ensures that your time spent exploring our grounds or lounging by the poolside is completely uninterrupted and deeply rejuvenating.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.swimmingPool1} alt="Resort Pool" className="split-feature-img" />
+        </div>
+      </section>
       <HomeAttractions />
       <HomeTourPackage />
       <Manifesto />
@@ -1663,8 +1686,71 @@ function RoomsPage() {
         </div>
         <div className="intro-text">
           <p>Our luxury Villas offer an exquisite blend of modern elegance and comforting warmth. Wake up to serene views and enjoy a space crafted for ultimate relaxation. Each room features premium bedding, bespoke furnishings, and luxury amenities to make your stay feel like a true escape.</p>
+          <p>Enjoy complementary access to our grand swimming pool, manicured gardens, and exclusive resort lobbies during your stay.</p>
         </div>
       </section>
+
+      <section className="split-feature">
+        <div className="split-feature-content">
+          <span className="tiny-label">The Villas</span>
+          <h3>Designed for Serenity</h3>
+          <p>Our luxury villas are thoughtfully designed to provide the ultimate retreat. Expansive windows let in abundant natural light, highlighting the premium bespoke furnishings and refined earthy tones that echo the natural landscape outside.</p>
+          <p>Every detail, from the thread count of the linens to the ambient lighting, has been meticulously selected to ensure a restful, restorative stay.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.room2} alt="Villa Living" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="split-feature reverse">
+        <div className="split-feature-content">
+          <span className="tiny-label">Unmatched Comfort</span>
+          <h3>A Restful Slumber</h3>
+          <p>The centerpiece of every villa is the plush, king-sized bed adorned with ultra-soft, premium cotton bedding and a selection of pillows. We believe that true luxury begins with a flawless night sleep.</p>
+          <p>Wake up refreshed, draw back the blackout curtains, and step out onto your private balcony to greet the morning sun.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.room3} alt="Premium Bedding" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="split-feature">
+        <div className="split-feature-content">
+          <span className="tiny-label">Spacious Elegance</span>
+          <h3>Room to Breathe</h3>
+          <p>Beyond the bedroom, each villa features generous living and lounging areas, perfect for enjoying a morning coffee or an evening read. The seamless flow between the bedroom, living space, and en-suite luxury bathroom creates an uninterrupted aura of relaxation.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.room4} alt="Villa Interiors" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="page-section" style={{ padding: "0 clamp(20px, 5vw, 74px)" }}>
+        <div className="section-heading">
+          <span className="tiny-label">Gallery</span>
+          <h2>A Closer Look.</h2>
+        </div>
+        <div className="gallery-grid" style={{ marginTop: "40px" }}>
+          <button style={{ cursor: "default" }}><img src={images.room5} alt="Villa" /><span>Elegant Setup</span></button>
+          <button style={{ cursor: "default" }}><img src={images.room7} alt="Villa" /><span>Comfort & Luxury</span></button>
+          <button style={{ cursor: "default" }}><img src={images.room8} alt="Villa" /><span>Restful Sleep</span></button>
+          <button style={{ cursor: "default" }}><img src={images.room9} alt="Villa" /><span>Room Amenities</span></button>
+        </div>
+      </section>
+
+      <section className="page-section" style={{ padding: "0 clamp(20px, 5vw, 74px)", paddingBottom: "clamp(72px, 11vw, 150px)" }}>
+        <div className="section-heading">
+          <span className="tiny-label">Amenities</span>
+          <h2>The Suite Life.</h2>
+        </div>
+        <div className="gallery-grid" style={{ marginTop: "40px" }}>
+          <button className="wide" style={{ cursor: "default" }}><img src={images.swimmingPool2} alt="Swimming Pool" /><span>Resort Pool</span></button>
+          <button style={{ cursor: "default" }}><img src={images.restroom1} alt="Luxury Restroom" /><span>Luxury Bathrooms</span></button>
+          <button style={{ cursor: "default" }}><img src={images.lobby1Png} alt="Grand Lobby" /><span>Grand Lobby</span></button>
+          <button className="wide" style={{ cursor: "default" }}><img src={images.swimmingPoolArea1} alt="Poolside Lounging" /><span>Poolside Lounging</span></button>
+        </div>
+      </section>
+
       <Testimonials category="rooms" />
     </>
   );
@@ -1682,11 +1768,61 @@ function BanquetsPage() {
         <div className="intro-text">
           <p>We feature two exceptional banquet halls to cater to your specific event needs:</p>
           <ul className="attraction-list">
-            <li><strong>Intimate Hall:</strong> Perfect for smaller gatherings, with a capacity of 200–300 guests. Ideal for pre-wedding functions, corporate meetings, and private parties.</li>
-            <li><strong>Grand Hall &amp; Lawn:</strong> Designed for magnificent celebrations, accommodating 400–1500 guests. This hall opens up to our lush green lawn, offering a seamless indoor-outdoor experience for grand weddings and large-scale receptions.</li>
+            <li><strong>Intimate Hall:</strong> Perfect for smaller gatherings, with a capacity of 200�300 guests. Ideal for pre-wedding functions, corporate meetings, and private parties.</li>
+            <li><strong>Grand Hall &amp; Lawn:</strong> Designed for magnificent celebrations, accommodating 400�1500 guests. This hall opens up to our lush green lawn, offering a seamless indoor-outdoor experience for grand weddings and large-scale receptions.</li>
           </ul>
         </div>
       </section>
+
+      <section className="split-feature">
+        <div className="split-feature-content">
+          <span className="tiny-label">The Grand Hall</span>
+          <h3>A Canvas for Your Dreams</h3>
+          <p>With its soaring ceilings, intricate chandeliers, and vast floor space, the Grand Banquet Hall is engineered to host Kapurthala most prestigious events. The hall seamlessly integrates with the expansive outdoor lawn, providing a flawless indoor-outdoor flow for up to 1500 guests.</p>
+          <p>State-of-the-art acoustics and customizable lighting ensure that your wedding reception or mega-corporate event looks and sounds spectacular.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.bigBanquet1} alt="Grand Banquet Hall" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="split-feature reverse">
+        <div className="split-feature-content">
+          <span className="tiny-label">The Intimate Hall</span>
+          <h3>Elegance in Detail</h3>
+          <p>For more personal celebrations, the Intimate Hall offers a refined, cozy atmosphere without compromising on luxury. It is the perfect canvas for Roka ceremonies, anniversary parties, and exclusive corporate retreats.</p>
+          <p>Our dedicated events team will work closely with you to transform the space with custom decor, tailored seating arrangements, and personalized catering services.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.smallBanquet1} alt="Intimate Banquet Hall" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="split-feature">
+        <div className="split-feature-content">
+          <span className="tiny-label">Event Catering</span>
+          <h3>Culinary Excellence for Crowds</h3>
+          <p>A memorable event requires exceptional food. Our massive, state-of-the-art executive kitchen is fully equipped to cater to events of any scale, from intimate gatherings of 50 to grand weddings of 1500 guests.</p>
+          <p>Our expert team of chefs works tirelessly behind the scenes, crafting diverse, multi-course menus that bring the rich flavors of Punjab and beyond to your guests plates.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.kitchen1} alt="Executive Kitchen" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="page-section" style={{ padding: "0 clamp(20px, 5vw, 74px)" }}>
+        <div className="section-heading">
+          <span className="tiny-label">Venues</span>
+          <h2>Grand Halls.</h2>
+        </div>
+        <div className="gallery-grid" style={{ marginTop: "40px" }}>
+          <button className="wide" style={{ cursor: "default" }}><img src={images.bigBanquet2} alt="Grand Hall" /><span>Grand Banquet Hall</span></button>
+          <button style={{ cursor: "default" }}><img src={images.smallBanquet1} alt="Intimate Hall" /><span>Intimate Hall</span></button>
+          <button style={{ cursor: "default" }}><img src={images.smallBanquet2} alt="Intimate Hall Layout" /><span>Intimate Hall Layout</span></button>
+          <button className="wide" style={{ cursor: "default" }}><img src={images.lobby3Png} alt="Pre-function Area" /><span>Pre-function Area</span></button>
+        </div>
+      </section>
+
       <EventEnquiryForm defaultEventType="Wedding" />
       <Testimonials category="banquets" />
     </>
@@ -1704,8 +1840,49 @@ function RestaurantPage() {
         </div>
         <div className="intro-text">
           <p>Our restaurant offers a diverse menu of expertly crafted dishes, blending local traditions with global culinary trends. Enjoy a memorable dining experience characterized by exceptional taste and impeccable service.</p>
+          <p>We take pride in our open kitchens and interactive dining spaces, allowing you to witness the culinary artistry firsthand.</p>
         </div>
       </section>
+
+      <section className="split-feature">
+        <div className="split-feature-content">
+          <span className="tiny-label">The Menu</span>
+          <h3>Gourmet Excellence</h3>
+          <p>Our culinary team, led by our executive chef, sources only the freshest, highest-quality ingredients. Whether you are indulging in local Punjabi delicacies or exploring continental flavors, every dish is a masterpiece of taste and presentation.</p>
+          <p>Vegetarian, vegan, and gluten-free options are thoughtfully integrated into our extensive menu, ensuring every guest enjoys a tailored dining experience.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.food3} alt="Gourmet Food" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="split-feature reverse">
+        <div className="split-feature-content">
+          <span className="tiny-label">The Setting</span>
+          <h3>Dine in Style</h3>
+          <p>The restaurant interior is a harmonious blend of luxurious textures and elegant lighting. With spacious seating arrangements that offer both privacy and a vibrant atmosphere, it is the perfect venue for family dinners, romantic dates, or business lunches.</p>
+          <p>Large windows offer serene views of the resort lush landscapes, bringing the beauty of the outdoors inside.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.restaurant3} alt="Restaurant Seating" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="page-section" style={{ padding: "0 clamp(20px, 5vw, 74px)", paddingBottom: "clamp(72px, 11vw, 150px)" }}>
+        <div className="section-heading">
+          <span className="tiny-label">Experience</span>
+          <h2>Taste and Tradition.</h2>
+        </div>
+        <div className="gallery-grid" style={{ marginTop: "40px" }}>
+          <button className="wide" style={{ cursor: "default" }}><img src={images.restaurant1} alt="Restaurant Dining" /><span>Restaurant Dining</span></button>
+          <button style={{ cursor: "default" }}><img src={images.food1} alt="Signature Dish" /><span>Signature Dish</span></button>
+          <button style={{ cursor: "default" }}><img src={images.food2} alt="Gourmet Menu" /><span>Gourmet Menu</span></button>
+          <button className="wide" style={{ cursor: "default" }}><img src={images.kitchen1} alt="Executive Kitchen" /><span>Executive Kitchen</span></button>
+          <button style={{ cursor: "default" }}><img src={images.restaurant2} alt="Intimate Seating" /><span>Intimate Seating</span></button>
+          <button style={{ cursor: "default" }}><img src={images.food3} alt="Culinary Art" /><span>Culinary Art</span></button>
+        </div>
+      </section>
+
       <Testimonials category="restaurant" />
     </>
   );
@@ -1721,10 +1898,48 @@ function BarPage() {
           <h2>Relax and Recharge.</h2>
         </div>
         <div className="intro-text">
-          <p>Our bar offers a curated selection of premium spirits, signature cocktails, and fine wines. It’s the perfect spot to relax after a long day or celebrate special moments with friends and colleagues.</p>
+          <p>Our bar offers a curated selection of premium spirits, signature cocktails, and fine wines. It is the perfect spot to relax after a long day or celebrate special moments with friends and colleagues.</p>
           <p>We also provide access to our exclusive Private Dining Rooms (Tulip & Lily) for those seeking a more intimate setting for their gatherings.</p>
         </div>
       </section>
+
+      <section className="split-feature">
+        <div className="split-feature-content">
+          <span className="tiny-label">The Ambiance</span>
+          <h3>Warmth and Elegance</h3>
+          <p>The moment you step into the lounge, you are greeted by warm ambient lighting, plush seating, and an expansive wooden bar that commands the room. The decor is a masterful blend of modern chic and classic comfort, ensuring every evening spent here feels like a special occasion.</p>
+          <p>Whether you prefer an intimate corner booth or a seat right at the bar, the atmosphere is designed to make you lose track of time.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.bar1} alt="Bar Lounge" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="split-feature reverse">
+        <div className="split-feature-content">
+          <span className="tiny-label">Mixology</span>
+          <h3>Crafted to Perfection</h3>
+          <p>Our expert mixologists are passionate about their craft. From classic vintage cocktails to innovative new blends featuring local herbs and premium imported spirits, every drink is poured with precision and flair.</p>
+          <p>Pair your drink with our curated selection of bar bites and tapas, specifically designed to complement the bold flavors of our signature beverages.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.drinks} alt="Signature Drinks" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="page-section" style={{ padding: "0 clamp(20px, 5vw, 74px)", paddingBottom: "clamp(72px, 11vw, 150px)" }}>
+        <div className="section-heading">
+          <span className="tiny-label">Atmosphere</span>
+          <h2>A Glimpse Inside.</h2>
+        </div>
+        <div className="gallery-grid" style={{ marginTop: "40px" }}>
+          <button className="wide" style={{ cursor: "default" }}><img src={images.bar1} alt="Bar Lounge" /><span>Bar Lounge</span></button>
+          <button style={{ cursor: "default" }}><img src={images.bar2} alt="Bar Interior" /><span>Bar Interior</span></button>
+          <button style={{ cursor: "default" }}><img src={images.drinks} alt="Signature Drinks" /><span>Signature Drinks</span></button>
+          <button className="wide" style={{ cursor: "default" }}><img src={images.barPDR} alt="Bar & PDR Area" /><span>Bar & PDR Area</span></button>
+        </div>
+      </section>
+
       <Testimonials category="bar" />
     </>
   );
@@ -1743,6 +1958,31 @@ function KittyHallsPage() {
           <p>Our Kitty Halls are thoughtfully designed to host your private social events in an exclusive and intimate setting. Enjoy highly personalized service, custom-curated menus, and a vibrant atmosphere that ensures every get-together is a joyous occasion.</p>
         </div>
       </section>
+
+      <section className="split-feature">
+        <div className="split-feature-content">
+          <span className="tiny-label">The Setting</span>
+          <h3>Intimate and Exclusive</h3>
+          <p>The Kitty Hall is an exquisite, private space tailored for smaller social gatherings, kitty parties, and exclusive family get-togethers. The sophisticated interior features plush seating, warm lighting, and elegant decor.</p>
+          <p>Experience uninterrupted privacy and highly personalized service, ensuring your social event is both flawless and deeply memorable.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.kittyHall2} alt="Kitty Hall Interior" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="page-section" style={{ padding: "0 clamp(20px, 5vw, 74px)" }}>
+        <div className="section-heading">
+          <span className="tiny-label">Spaces</span>
+          <h2>Perfectly Proportioned.</h2>
+        </div>
+        <div className="gallery-grid" style={{ marginTop: "40px" }}>
+          <button className="wide" style={{ cursor: "default" }}><img src={images.kittyHall1} alt="Kitty Hall View" /><span>Kitty Hall</span></button>
+          <button style={{ cursor: "default" }}><img src={images.kittyHall2} alt="Kitty Hall Seating" /><span>Intimate Seating</span></button>
+          <button style={{ cursor: "default" }}><img src={images.food4} alt="Snacks" /><span>Chef Specials</span></button>
+        </div>
+      </section>
+
       <EventEnquiryForm defaultEventType="Kitty Party" />
       <Testimonials category="kitty" />
     </>
@@ -1759,9 +1999,34 @@ function PdrsPage() {
           <h2>Tulip & Lily.</h2>
         </div>
         <div className="intro-text">
-          <p>Experience the ultimate in private dining within our exclusive PDRs, Tulip and Lily. Whether it's a family dinner, a business lunch, or a romantic evening, these rooms offer privacy, dedicated service, and a bespoke culinary journey.</p>
+          <p>Experience the ultimate in private dining within our exclusive PDRs, Tulip and Lily. Whether it is a family dinner, a business lunch, or a romantic evening, these rooms offer privacy, dedicated service, and a bespoke culinary journey.</p>
         </div>
       </section>
+
+      <section className="split-feature">
+        <div className="split-feature-content">
+          <span className="tiny-label">Bespoke Dining</span>
+          <h3>Tulip & Lily</h3>
+          <p>Our exclusive Private Dining Rooms, Tulip and Lily, offer a secluded haven for intimate dinners, VIP business lunches, and romantic evenings. Each room is lavishly appointed with luxurious seating and classic decor.</p>
+          <p>Enjoy a dedicated waitstaff, bespoke menu curation, and direct access to our premium bar lounge, guaranteeing a dining experience that caters entirely to your pace and preferences.</p>
+        </div>
+        <div className="split-feature-img-wrapper">
+          <img src={images.pdr2} alt="PDR Setup" className="split-feature-img" />
+        </div>
+      </section>
+
+      <section className="page-section" style={{ padding: "0 clamp(20px, 5vw, 74px)" }}>
+        <div className="section-heading">
+          <span className="tiny-label">Private Dining</span>
+          <h2>Secluded Elegance.</h2>
+        </div>
+        <div className="gallery-grid" style={{ marginTop: "40px" }}>
+          <button className="wide" style={{ cursor: "default" }}><img src={images.pdr1} alt="PDR Interior" /><span>Tulip PDR</span></button>
+          <button style={{ cursor: "default" }}><img src={images.pdr2} alt="PDR Table Setup" /><span>Lily PDR</span></button>
+          <button style={{ cursor: "default" }}><img src={images.barPDR} alt="Bar & PDR" /><span>Connected Bar Access</span></button>
+        </div>
+      </section>
+
       <EventEnquiryForm defaultEventType="Corporate Event" />
       <Testimonials category="pdr" />
     </>
