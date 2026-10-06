@@ -1032,7 +1032,7 @@ function HomeBookingForm() {
           {loading ? 'Sending...' : 'Submit Enquiry'}
           {!loading && <ArrowRight size={19} />}
         </button>
-        {error && <p style={{ color: '#ff6b6b', marginTop: '10px' }}>{error}</p>}
+        {error && <p className="form-error-msg">{error}</p>}
         {submitted && (
           <motion.div
             className="booking-confirmation"
@@ -1124,7 +1124,7 @@ function TourBookingForm() {
           {loading ? 'Sending...' : 'Get a Quote'}
           {!loading && <ArrowRight size={19} />}
         </button>
-        {error && <p style={{ color: '#ff6b6b', marginTop: '10px' }}>{error}</p>}
+        {error && <p className="form-error-msg">{error}</p>}
         {submitted && (
           <motion.div
             className="booking-confirmation"
@@ -1202,7 +1202,7 @@ function HomeAttractions() {
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.64 }}
         >
-          <img src={images.palace} alt="Jagatjit Palace" style={{ filter: 'brightness(0.9)' }} />
+          <img src={images.palace} alt="Jagatjit Palace"  />
           <div>
             <span>Heritage</span>
             <h3>Jagatjit Palace</h3>
@@ -1216,7 +1216,7 @@ function HomeAttractions() {
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.64, delay: 0.1 }}
         >
-          <img src={images.mosque} alt="Moorish Mosque" style={{ filter: 'brightness(0.9)' }} />
+          <img src={images.mosque} alt="Moorish Mosque"  />
           <div>
             <span>Culture</span>
             <h3>Moorish Mosque</h3>
@@ -1230,7 +1230,7 @@ function HomeAttractions() {
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.64, delay: 0.2 }}
         >
-          <img src={images.lake} alt="Kanjli Wetland" style={{ filter: 'brightness(0.9)' }} />
+          <img src={images.lake} alt="Kanjli Wetland"  />
           <div>
             <span>Nature</span>
             <h3>Kanjli Wetland</h3>
@@ -1244,7 +1244,7 @@ function HomeAttractions() {
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.64, delay: 0.3 }}
         >
-          <img src={images.gurudwara} alt="Sultanpur Lodhi" style={{ filter: 'brightness(0.9)' }} />
+          <img src={images.gurudwara} alt="Sultanpur Lodhi"  />
           <div>
             <span>Spiritual</span>
             <h3>Sultanpur Lodhi</h3>
