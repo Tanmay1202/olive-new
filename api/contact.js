@@ -13,10 +13,12 @@ export default async function handler(req, res) {
   };
 
   const isTourLead = Boolean(req.body.isTourLead);
+  const isEventLead = Boolean(req.body.isEventLead);
   const name = sanitize(req.body.name);
   const phone = sanitize(req.body.phone, 20);
   const city = sanitize(req.body.city, 50);
   const bookingType = sanitize(req.body.bookingType, 50);
+  const eventType = sanitize(req.body.eventType, 50);
   const date = sanitize(req.body.date, 50);
   const from = sanitize(req.body.from, 100);
   const to = sanitize(req.body.to, 100);
@@ -25,6 +27,10 @@ export default async function handler(req, res) {
   if (isTourLead) {
     if (!from || !to || !date || !pax || !phone) {
       return res.status(400).json({ error: "All fields are required for tour lead and must be valid." });
+    }
+  } else if (isEventLead) {
+    if (!name || !phone || !eventType || !pax || !date) {
+      return res.status(400).json({ error: "All fields are required for event enquiry." });
     }
   } else {
     if (!name || !phone || !city || !bookingType || !date) {
@@ -55,6 +61,21 @@ export default async function handler(req, res) {
           <p><strong>To:</strong> ${to}</p>
           <p><strong>Travel Date:</strong> ${date}</p>
           <p><strong>Pax:</strong> ${pax}</p>
+        `,
+      };
+    } else if (isEventLead) {
+      mailOptions = {
+        from: `"Olive Green Website" <${process.env.GMAIL_USER}>`,
+        to: process.env.GMAIL_USER,
+        subject: `New Event Enquiry from ${name}`,
+        text: `New Event Enquiry:\n\nName: ${name}\nPhone: ${phone}\nEvent Type: ${eventType}\nExpected Guests (Pax): ${pax}\nDate: ${date}`,
+        html: `
+          <h2>New Event Enquiry</h2>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Event Type:</strong> ${eventType}</p>
+          <p><strong>Expected Guests (Pax):</strong> ${pax}</p>
+          <p><strong>Date:</strong> ${date}</p>
         `,
       };
     } else {

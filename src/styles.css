@@ -558,7 +558,7 @@ h1 {
 }
 
 .hero-actions a,
-.gallery-top button {
+.gallery-top button, .gallery-more-btn {
   display: inline-flex;
   min-height: 48px;
   align-items: center;
@@ -574,7 +574,7 @@ h1 {
 }
 
 .hero-actions a:hover,
-.gallery-top button:hover {
+.gallery-top button:hover, .gallery-more-btn:hover {
   transform: translateY(-2px);
 }
 
@@ -607,7 +607,7 @@ h1 {
 
 .page-hero {
   position: relative;
-  min-height: clamp(460px, 70svh, 680px);
+  min-height: 100svh;
   overflow: hidden;
   isolation: isolate;
   display: flex;
@@ -967,7 +967,7 @@ section {
   margin-bottom: clamp(30px, 5vw, 62px);
 }
 
-.gallery-top button {
+.gallery-top button, .gallery-more-btn {
   border-color: var(--gold);
   background: var(--gold);
   color: var(--ink);

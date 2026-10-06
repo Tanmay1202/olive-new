@@ -55,7 +55,50 @@ const images = {
   palace: '/images/attraction-palace.jpg',
   mosque: '/images/attraction-mosque.jpg',
   lake: '/images/attraction-lake.jpg',
-  gurudwara: '/images/attraction-gurudwara.jpg'
+  gurudwara: '/images/attraction-gurudwara.jpg',
+  barPDR: '/new-images/Bar ( sitting area ) & PDR Area.png',
+  bar1: '/new-images/Bar - 1.png',
+  bar2: '/new-images/Bar - 2.png',
+  bigBanquet1: '/new-images/Big Banquet - 1.png',
+  bigBanquet2: '/new-images/Big Banquet - 2.png',
+  drinks: '/new-images/Drinks.png',
+  elephant: '/new-images/Elephant.png',
+  food1: '/new-images/Food - 1.png',
+  food2: '/new-images/Food - 2.png',
+  food3: '/new-images/Food - 3.png',
+  food4: '/new-images/Food - 4.png',
+  frontWidePng: '/new-images/Front Wide.png',
+  frontPng: '/new-images/Front.png',
+  golfCar: '/new-images/Golf Car.png',
+  kitchen1: '/new-images/Kitchen - 1.png',
+  kitchen2: '/new-images/Kitchen - 2.png',
+  kittyHall1: '/new-images/Kitty Hall - 1.png',
+  kittyHall2: '/new-images/Kitty Hall - 2.png',
+  lobby1Png: '/new-images/Lobby - 1.png',
+  lobby2Png: '/new-images/Lobby - 2.png',
+  lobby3Png: '/new-images/Lobby - 3.png',
+  lobby4: '/new-images/Lobby - 4.png',
+  oliveTree: '/new-images/Olive Tree.png',
+  pdr1: '/new-images/PDR - 1.png',
+  pdr2: '/new-images/PDR - 2.png',
+  restaurant1: '/new-images/Restaurant - 1.png',
+  restaurant2: '/new-images/Restaurant - 2.png',
+  restaurant3: '/new-images/Restaurant - 3.png',
+  restaurant4: '/new-images/Restaurant - 4.png',
+  restroom1: '/new-images/Restroom - 1.png',
+  restroom2: '/new-images/Restroom - 2.png',
+  roadsideBoard: '/new-images/Roadside Board.png',
+  side1: '/new-images/Side - 1.png',
+  side2: '/new-images/Side - 2.png',
+  side3: '/new-images/Side - 3.png',
+  side4: '/new-images/Side - 4.png',
+  smallBanquet1: '/new-images/Small Banquet - 1.png',
+  smallBanquet2: '/new-images/Small Banquet - 2.png',
+  stairs: '/new-images/Stairs.png',
+  swimmingPool1: '/new-images/Swimming Pool - 1.png',
+  swimmingPool2: '/new-images/Swimming Pool - 2.png',
+  swimmingPoolArea1: '/new-images/Swimming Pool Area - 1.png',
+  swimmingPoolArea2: '/new-images/Swimming Pool Area - 2.png',
 };
 
 // All pages — used by the full-screen menu overlay (shows everything)
@@ -93,10 +136,10 @@ const desktopNavGroups = [
     page: 'rooms'
   },
   {
-    label: 'Events',
+    label: 'Halls',
     items: [
-      { label: 'Banquets', page: 'banquets' },
-      { label: 'Kitty Halls', page: 'kitty-halls' },
+      { label: 'Banquet Halls', page: 'banquets' },
+      { label: 'Kitty Hall', page: 'kitty-halls' },
       { label: 'PDRs', page: 'pdrs' }
     ]
   },
@@ -583,10 +626,6 @@ function Gallery() {
           <span className="tiny-label">Gallery</span>
           <h2>Proof in pictures.</h2>
         </div>
-        <button onClick={() => setShowAll((value) => !value)}>
-          {showAll ? 'Show less' : 'Show more'}
-          <ArrowRight size={18} />
-        </button>
       </div>
       <div className="gallery-grid">
         {visibleGallery.map((item, index) => (
@@ -606,6 +645,12 @@ function Gallery() {
             </span>
           </motion.button>
         ))}
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+        <button className="gallery-more-btn" onClick={() => setShowAll((value) => !value)}>
+          {showAll ? 'Show less' : 'Show more'}
+          <ArrowRight size={18} />
+        </button>
       </div>
       <AnimatePresence>
         {active && (
@@ -938,7 +983,7 @@ function BookingPage() {
   );
 }
 
-function PageHero({ label, title, copy, image }) {
+function PageHero({ label, title, copy, image, action }) {
   return (
     <section className="page-hero">
       <motion.img 
@@ -952,7 +997,8 @@ function PageHero({ label, title, copy, image }) {
       <div>
         <span className="tiny-label">{label}</span>
         <h1>{title}</h1>
-        <p>{copy}</p>
+        {copy && <p>{copy}</p>}
+        {action && <div style={{ marginTop: '24px' }}>{action}</div>}
       </div>
     </section>
   );
@@ -1155,11 +1201,11 @@ function HomeAccommodation() {
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.64 }}
         >
-          <img src={images.poolDay} alt="Villa Rooms" />
+          <img src={images.swimmingPool1} alt="Villas" />
           <div>
             <span>Accommodation</span>
-            <h3>Villa Rooms</h3>
-            <p>Experience our premium villa rooms with private access and serene views.</p>
+            <h3>Villas</h3>
+            <p>Experience our premium Villas with private access and serene views.</p>
             <a className="tile-cta" href={pageHref('bookings')}>
               Book Now <ArrowRight size={15} />
             </a>
@@ -1172,7 +1218,7 @@ function HomeAccommodation() {
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.64, delay: 0.1 }}
         >
-          <img src={images.banquet} alt="Grand Banquets" />
+          <img src={images.bigBanquet1} alt="Grand Banquets" />
           <div>
             <span>Celebrations</span>
             <h3>Banquets</h3>
@@ -1277,6 +1323,100 @@ function HomeTourPackage() {
   );
 }
 
+function EventEnquiryForm({ defaultEventType = "Wedding" }) {
+  const [formData, setFormData] = useState({ name: '', phone: '', eventType: defaultEventType, pax: '', date: '', isEventLead: true });
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.phone || !formData.pax || !formData.date) {
+      setError('All fields are required.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      
+      if (response.ok) {
+        setSubmitted(true);
+      } else {
+        const data = await response.json();
+        setError(data.error || 'Failed to send enquiry. Please try again.');
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Network error. Is the server running?');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section className="home-booking page-section">
+      <div className="home-booking-copy">
+        <span className="tiny-label">Event Enquiry</span>
+        <h2>Host your next event with us.</h2>
+      </div>
+      <form onSubmit={handleSubmit} className="booking-form" noValidate>
+        <div className="form-grid">
+          <label>
+            <span>Name</span>
+            <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Your Name" />
+          </label>
+          <label>
+            <span>Phone Number</span>
+            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="+91 98765 43210" />
+          </label>
+          <label>
+            <span>Event Type</span>
+            <select name="eventType" value={formData.eventType} onChange={handleChange}>
+              <option value="Wedding">Wedding</option>
+              <option value="Reception">Reception</option>
+              <option value="Corporate Event">Corporate Event</option>
+              <option value="Birthday Party">Birthday Party</option>
+              <option value="Kitty Party">Kitty Party</option>
+              <option value="Other">Other</option>
+            </select>
+          </label>
+          <label>
+            <span>Expected Guests (Pax)</span>
+            <input type="number" name="pax" value={formData.pax} onChange={handleChange} required placeholder="e.g. 150" min="1" />
+          </label>
+        </div>
+        <label>
+          <span>Preferred Date</span>
+          <input type="date" name="date" value={formData.date} onChange={handleChange} required />
+        </label>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Sending...' : 'Submit Event Enquiry'}
+          {!loading && <ArrowRight size={19} />}
+        </button>
+        {error && <p className="form-error-msg">{error}</p>}
+        {submitted && (
+          <motion.div
+            className="booking-confirmation"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <strong>Enquiry Sent!</strong>
+            <span>Your event enquiry has been successfully delivered. Our events team will contact you shortly.</span>
+          </motion.div>
+        )}
+      </form>
+    </section>
+  );
+}
+
 function HomePage() {
   return (
     <>
@@ -1298,7 +1438,7 @@ function ResortPage() {
         label="About Resort / Kapurthala"
         title="A green destination with a grand address."
         copy="Rooms, villas, lawns, poolside evenings and royal interiors near Kanjli Lake."
-        image={images.frontDay}
+        image={images.frontPng}
       />
       <section className="intro">
         <div className="intro-copy">
@@ -1326,7 +1466,7 @@ function ResortPage() {
           <strong>Everything you need.</strong>
         </div>
         <div className="manifesto-list">
-          <p>Luxury Villa Rooms</p>
+          <p>Luxury Villas</p>
           <p>Grand Banquet Halls</p>
           <p>Lush Green Lawns</p>
           <p>Swimming Pool</p>
@@ -1377,7 +1517,7 @@ function VenuesPage() {
         label="Venues"
         title="Banquets, lobbies and gardens built for occasion."
         copy="A focused look at the spaces that carry weddings, receptions and private events."
-        image={images.banquet}
+        image={images.bigBanquet1}
       />
       <VenueGrid />
     </>
@@ -1419,7 +1559,7 @@ function ContactPage() {
         label="Contact"
         title="Plan your visit to Olive Green."
         copy="Use the verified public details to enquire about rooms, banquets, dining or private events."
-        image={images.frontDay}
+        image={images.frontPng}
       />
       <Contact />
       <HomeBookingForm />
@@ -1428,7 +1568,7 @@ function ContactPage() {
 }
 
 const allReviews = [
-  { text: "Absolutely stunning property! The villa rooms were incredibly luxurious and private.", author: "Aman S.", category: "rooms" },
+  { text: "Absolutely stunning property! The Villas were incredibly luxurious and private.", author: "Aman S.", category: "rooms" },
   { text: "The perfect getaway. The green surroundings and the pool made our weekend.", author: "Priya M.", category: "resort" },
   { text: "We hosted our daughter's wedding here. The Grand Banquet was magnificent.", author: "Gurpreet K.", category: "banquets" },
   { text: "Food was exquisite. The ambiance in the restaurant is truly premium.", author: "Rahul V.", category: "restaurant" },
@@ -1478,14 +1618,20 @@ function Testimonials({ category }) {
 function RoomsPage() {
   return (
     <>
-      <PageHero label="Rooms" title="Luxury Villa Rooms." copy="Experience unparalleled luxury in our private villa rooms designed for comfort and tranquility." image={images.poolDay} />
+      <PageHero 
+        label="Rooms" 
+        title="Luxury Villas." 
+        copy="Experience unparalleled luxury in our private Villas designed for comfort and tranquility." 
+        image={images.swimmingPool1} 
+        action={<a className="gallery-more-btn" href={pageHref('bookings')}>Book Stay</a>}
+      />
       <section className="intro">
         <div className="intro-copy">
           <span className="tiny-label">Accommodation</span>
           <h2>Your Private Sanctuary.</h2>
         </div>
         <div className="intro-text">
-          <p>Our luxury villa rooms offer an exquisite blend of modern elegance and comforting warmth. Wake up to serene views and enjoy a space crafted for ultimate relaxation. Each room features premium bedding, bespoke furnishings, and luxury amenities to make your stay feel like a true escape.</p>
+          <p>Our luxury Villas offer an exquisite blend of modern elegance and comforting warmth. Wake up to serene views and enjoy a space crafted for ultimate relaxation. Each room features premium bedding, bespoke furnishings, and luxury amenities to make your stay feel like a true escape.</p>
         </div>
       </section>
       <Testimonials category="rooms" />
@@ -1496,7 +1642,7 @@ function RoomsPage() {
 function BanquetsPage() {
   return (
     <>
-      <PageHero label="Banquets" title="Spaces for Every Celebration." copy="Host your events in our elegant banquet halls, designed to impress." image={images.banquet} />
+      <PageHero label="Banquets" title="Spaces for Every Celebration." copy="Host your events in our elegant banquet halls, designed to impress." image={images.bigBanquet1} />
       <section className="intro">
         <div className="intro-copy">
           <span className="tiny-label">Events</span>
@@ -1510,6 +1656,7 @@ function BanquetsPage() {
           </ul>
         </div>
       </section>
+      <EventEnquiryForm defaultEventType="Wedding" />
       <Testimonials category="banquets" />
     </>
   );
@@ -1555,7 +1702,7 @@ function BarPage() {
 function KittyHallsPage() {
   return (
     <>
-      <PageHero label="Kitty Halls" title="Intimate Gatherings." copy="Perfect spaces for kitty parties and small get-togethers." image={images.banquet} />
+      <PageHero label="Kitty Halls" title="Intimate Gatherings." copy="Perfect spaces for kitty parties and small get-togethers." image={images.bigBanquet1} />
       <section className="intro">
         <div className="intro-copy">
           <span className="tiny-label">Social</span>
@@ -1565,6 +1712,7 @@ function KittyHallsPage() {
           <p>Our Kitty Halls are thoughtfully designed to host your private social events in an exclusive and intimate setting. Enjoy highly personalized service, custom-curated menus, and a vibrant atmosphere that ensures every get-together is a joyous occasion.</p>
         </div>
       </section>
+      <EventEnquiryForm defaultEventType="Kitty Party" />
       <Testimonials category="kitty" />
     </>
   );
@@ -1573,7 +1721,7 @@ function KittyHallsPage() {
 function PdrsPage() {
   return (
     <>
-      <PageHero label="PDRs" title="Private Dining Rooms." copy="Exclusive dining experiences in Tulip and Lily." image={images.lobby2} />
+      <PageHero label="PDRs" title="Private Dining Rooms." copy="Exclusive dining experiences in Tulip and Lily." image={images.pdr1} />
       <section className="intro">
         <div className="intro-copy">
           <span className="tiny-label">Exclusive</span>
@@ -1583,6 +1731,7 @@ function PdrsPage() {
           <p>Experience the ultimate in private dining within our exclusive PDRs, Tulip and Lily. Whether it's a family dinner, a business lunch, or a romantic evening, these rooms offer privacy, dedicated service, and a bespoke culinary journey.</p>
         </div>
       </section>
+      <EventEnquiryForm defaultEventType="Corporate Event" />
       <Testimonials category="pdr" />
     </>
   );
@@ -1608,11 +1757,11 @@ function OffersPage() {
             </div>
           </article>
           <article className="venue-tile">
-            <img src={images.poolDay} alt="Stay Offer" />
+            <img src={images.swimmingPool1} alt="Stay Offer" />
             <div>
               <span>Accommodation</span>
               <h3>Stay 3, Pay 2</h3>
-              <p>Book a 2-night stay in our luxury villa rooms and get the 3rd night absolutely free.</p>
+              <p>Book a 2-night stay in our luxury Villas and get the 3rd night absolutely free.</p>
               <a className="tile-cta" href={pageHref('bookings')}>Book Stay <ArrowRight size={15} /></a>
             </div>
           </article>
