@@ -5,7 +5,7 @@
   --font-sans: 'Lora', ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-serif: 'Cormorant Garamond', Georgia, "Times New Roman", serif;
   --font-smooth: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  font-family: var(--font-sans);
+  font-family: var(--font-smooth);
   --ink: #11180d;
   --ash: #0b1208;
   --paper: #f4f0e4;
@@ -754,7 +754,7 @@ section {
 .manifesto-pin strong {
   max-width: 260px;
   color: rgba(244, 240, 228, 0.54);
-  font-family: var(--font-sans);
+  font-family: var(--font-smooth);
   font-size: 11px;
   font-weight: 900;
   line-height: 1.4;
