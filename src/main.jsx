@@ -866,12 +866,12 @@ function BookingSection({ title, copy, showHighlights = true }) {
         <form className="booking-form" onSubmit={handleSubmit} noValidate>
           <div className="form-grid">
             <label>
-              <span>Arrival</span>
+              <span>Check in</span>
               <input type="date" name="arrival" value={booking.arrival} onChange={updateBooking} min={new Date().toISOString().split('T')[0]} />
               {errors.arrival && <small>{errors.arrival}</small>}
             </label>
             <label>
-              <span>Departure</span>
+              <span>Check out</span>
               <input type="date" name="departure" value={booking.departure} onChange={updateBooking} min={booking.arrival || new Date().toISOString().split('T')[0]} />
               {errors.departure && <small>{errors.departure}</small>}
             </label>
@@ -884,44 +884,9 @@ function BookingSection({ title, copy, showHighlights = true }) {
               <input type="number" name="rooms" min="1" max="20" value={booking.rooms} onChange={updateBooking} />
             </label>
           </div>
-          <label>
-            <span>Stay or event type</span>
-            <select name="stayType" value={booking.stayType} onChange={updateBooking} disabled={loadingRooms}>
-              {loadingRooms ? (
-                <option>Checking availability...</option>
-              ) : !booking.arrival || !booking.departure ? (
-                // No dates picked yet — don't show static fake options
-                <>
-                  <option value="">— Pick dates above to see rooms —</option>
-                  <option disabled>--- Event Occasions ---</option>
-                  {eventChoices.map((choice) => (
-                    <option key={choice} value={choice}>{choice}</option>
-                  ))}
-                </>
-              ) : availableRooms.length === 0 ? (
-                <option value="">No rooms available for these dates</option>
-              ) : (
-                <>
-                  {/* Only show rooms that have availability — hide sold-out ones entirely */}
-                  {availableRooms.filter(room => room.is_available).map((room) => (
-                    <option key={room.id} value={room.name}>
-                      {room.name} — ₹{Number(room.base_price).toFixed(0)}/night ({room.available_units} available)
-                    </option>
-                  ))}
-                  {availableRooms.every(r => !r.is_available) && (
-                    <option value="" disabled>All rooms sold out for these dates</option>
-                  )}
-                  <option disabled>--- Event Occasions ---</option>
-                  {eventChoices.map((choice) => (
-                    <option key={choice} value={choice}>{choice}</option>
-                  ))}
-                </>
-              )}
-            </select>
-          </label>
           <div className="form-grid">
             <label>
-              <span>Guest name</span>
+              <span>Lead guest name</span>
               <input type="text" name="name" value={booking.name} onChange={updateBooking} placeholder="Your name" />
               {errors.name && <small>{errors.name}</small>}
             </label>
@@ -938,7 +903,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
           </label>
           <label>
             <span>Special requests</span>
-            <textarea name="notes" rows="4" value={booking.notes} onChange={updateBooking} placeholder="Early check-in, banquet setup, dietary notes or anything the team should know." />
+            <textarea name="notes" rows="4" value={booking.notes} onChange={updateBooking} placeholder="Early check-in, extra bed, dietary notes or anything the team should know." />
           </label>
 
           {errors.submit && (
