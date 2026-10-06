@@ -99,6 +99,15 @@ const images = {
   swimmingPool2: '/new-images/Swimming Pool - 2.png',
   swimmingPoolArea1: '/new-images/Swimming Pool Area - 1.png',
   swimmingPoolArea2: '/new-images/Swimming Pool Area - 2.png',
+  room1: '/room-images/IMG_8540.JPG.jpeg',
+  room2: '/room-images/IMG_8541.PNG',
+  room3: '/room-images/IMG_8542.PNG',
+  room4: '/room-images/IMG_8543.PNG',
+  room5: '/room-images/IMG_8544.PNG',
+  room6: '/room-images/IMG_8545.PNG',
+  room7: '/room-images/IMG_8546.PNG',
+  room8: '/room-images/IMG_8547.PNG',
+  room9: '/room-images/IMG_8548.PNG',
 };
 
 // All pages — used by the full-screen menu overlay (shows everything)
@@ -283,7 +292,16 @@ const gallery = [
   { image: images.swimmingPool1, title: 'Swimming Pool', area: 'Leisure' },
   { image: images.swimmingPool2, title: 'Pool view', area: 'Leisure' },
   { image: images.swimmingPoolArea1, title: 'Poolside', area: 'Leisure' },
-  { image: images.swimmingPoolArea2, title: 'Pool lounging', area: 'Leisure' }
+  { image: images.swimmingPoolArea2, title: 'Pool lounging', area: 'Leisure' },
+  { image: images.room1, title: 'Luxury Villa Bedroom', area: 'Rooms' },
+  { image: images.room2, title: 'Villa Living Area', area: 'Rooms' },
+  { image: images.room3, title: 'Premium Suite', area: 'Rooms' },
+  { image: images.room4, title: 'Villa Interiors', area: 'Rooms' },
+  { image: images.room5, title: 'Elegant Setup', area: 'Rooms' },
+  { image: images.room6, title: 'Spacious Room', area: 'Rooms' },
+  { image: images.room7, title: 'Comfort & Luxury', area: 'Rooms' },
+  { image: images.room8, title: 'Restful Sleep', area: 'Rooms' },
+  { image: images.room9, title: 'Room Amenities', area: 'Rooms' }
 ];
 
 function usePointer() {
@@ -1948,7 +1966,7 @@ function BarPage() {
 function KittyHallsPage() {
   return (
     <>
-      <PageHero label="Kitty Halls" title="Intimate Gatherings." copy="Perfect spaces for kitty parties and small get-togethers." image={images.bigBanquet1} />
+      <PageHero label="Kitty Halls" title="Intimate Gatherings." copy="Perfect spaces for kitty parties and small get-togethers." image={images.kittyHall1} />
       <section className="intro">
         <div className="intro-copy">
           <span className="tiny-label">Social</span>
