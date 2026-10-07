@@ -1801,8 +1801,8 @@ function BanquetsPage() {
         <div className="intro-text">
           <p>We feature two exceptional banquet halls to cater to your specific event needs:</p>
           <ul className="attraction-list">
-            <li><strong>Intimate Hall:</strong> Perfect for smaller gatherings, with a capacity of 200�300 guests. Ideal for pre-wedding functions, corporate meetings, and private parties.</li>
-            <li><strong>Grand Hall &amp; Lawn:</strong> Designed for magnificent celebrations, accommodating 400�1500 guests. This hall opens up to our lush green lawn, offering a seamless indoor-outdoor experience for grand weddings and large-scale receptions.</li>
+            <li><strong>Intimate Hall:</strong> Perfect for smaller gatherings, with a capacity of 200-300 guests. Ideal for pre-wedding functions, corporate meetings, and private parties.</li>
+            <li><strong>Grand Hall &amp; Lawn:</strong> Designed for magnificent celebrations, accommodating 400-1500 guests. This hall opens up to our lush green lawn, offering a seamless indoor-outdoor experience for grand weddings and large-scale receptions.</li>
           </ul>
         </div>
       </section>
