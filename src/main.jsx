@@ -1801,8 +1801,8 @@ function BanquetsPage() {
         <div className="intro-text">
           <p>We feature two exceptional banquet halls to cater to your specific event needs:</p>
           <ul className="attraction-list">
-            <li><strong>Intimate Hall:</strong> Perfect for smaller gatherings, with a capacity of 200-300 guests. Ideal for pre-wedding functions, corporate meetings, and private parties.</li>
-            <li><strong>Grand Hall &amp; Lawn:</strong> Designed for magnificent celebrations, accommodating 400-1500 guests. This hall opens up to our lush green lawn, offering a seamless indoor-outdoor experience for grand weddings and large-scale receptions.</li>
+            <li><strong>Intimate Hall:</strong> Perfect for smaller gatherings, with a capacity of 200 to 300 guests. Ideal for pre-wedding functions, corporate meetings, and private parties.</li>
+            <li><strong>Grand Hall &amp; Lawn:</strong> Designed for magnificent celebrations, accommodating 500 to 1400 guests. This hall opens up to our lush green lawn, offering a seamless indoor-outdoor experience for grand weddings and large-scale receptions.</li>
           </ul>
         </div>
       </section>
@@ -1811,7 +1811,7 @@ function BanquetsPage() {
         <div className="split-feature-content">
           <span className="tiny-label">The Grand Hall</span>
           <h3>A Canvas for Your Dreams</h3>
-          <p>With its soaring ceilings, intricate chandeliers, and vast floor space, the Grand Banquet Hall is engineered to host Kapurthala's most prestigious events. The hall seamlessly integrates with the expansive outdoor lawn, providing a flawless indoor-outdoor flow for up to 1500 guests.</p>
+          <p>With its soaring ceilings, intricate chandeliers, and vast floor space, the Grand Banquet Hall is engineered to host Kapurthala's most prestigious events. The hall seamlessly integrates with the expansive outdoor lawn, providing a flawless indoor-outdoor flow for up to 1400 guests.</p>
           <p>State-of-the-art acoustics and customizable lighting ensure that your wedding reception or mega-corporate event looks and sounds spectacular.</p>
         </div>
         <div className="split-feature-img-wrapper">
@@ -1835,7 +1835,7 @@ function BanquetsPage() {
         <div className="split-feature-content">
           <span className="tiny-label">Event Catering</span>
           <h3>Culinary Excellence for Crowds</h3>
-          <p>A memorable event requires exceptional food. Our massive, state-of-the-art executive kitchen is fully equipped to cater to events of any scale, from intimate gatherings of 50 to grand weddings of 1500 guests.</p>
+          <p>A memorable event requires exceptional food. Our massive, state-of-the-art executive kitchen is fully equipped to cater to events of any scale, from intimate gatherings of 50 to grand weddings of 1400 guests.</p>
           <p>Our expert team of chefs works tirelessly behind the scenes, crafting diverse, multi-course menus that bring the rich flavors of Punjab and beyond to your guests' plates.</p>
         </div>
         <div className="split-feature-img-wrapper">
