@@ -255,7 +255,6 @@ const gallery = [
   { image: images.side2, title: 'Resort pathway', area: 'Exterior' },
   { image: images.side3, title: 'Outdoor view', area: 'Exterior' },
   { image: images.side4, title: 'Resort view', area: 'Exterior' },
-  { image: images.board, title: 'Entrance sign', area: 'Wayfinding' },
   { image: images.roadsideBoard, title: 'Roadside board', area: 'Wayfinding' },
   { image: images.lobby1Png, title: 'Resort Lobby', area: 'Interior' },
   { image: images.lobby2Png, title: 'Marble gallery', area: 'Interior' },
@@ -301,7 +300,23 @@ const gallery = [
   { image: images.room6, title: 'Spacious Room', area: 'Rooms' },
   { image: images.room7, title: 'Comfort & Luxury', area: 'Rooms' },
   { image: images.room8, title: 'Restful Sleep', area: 'Rooms' },
-  { image: images.room9, title: 'Room Amenities', area: 'Rooms' }
+  { image: images.room9, title: 'Room Amenities', area: 'Rooms' },
+  { image: images.frontDay, title: 'Resort day view', area: 'Exterior' },
+  { image: images.facade, title: 'Classic facade', area: 'Arrival' },
+  { image: images.banquet, title: 'Banquet setup', area: 'Events' },
+  { image: images.bar, title: 'Classic Bar', area: 'Dining' },
+  { image: images.food, title: 'Classic dish', area: 'Dining' },
+  { image: images.golf, title: 'Golf cart', area: 'Grounds' },
+  { image: images.lobby1, title: 'Classic lobby 1', area: 'Interior' },
+  { image: images.lobby2, title: 'Classic lobby 2', area: 'Interior' },
+  { image: images.lobby3, title: 'Classic lobby 3', area: 'Interior' },
+  { image: images.olive, title: 'Classic olive tree', area: 'Landscape' },
+  { image: images.pool, title: 'Classic pool', area: 'Leisure' },
+  { image: images.poolDay, title: 'Classic pool day', area: 'Leisure' },
+  { image: images.palace, title: 'Kapurthala Palace', area: 'Local Attractions' },
+  { image: images.mosque, title: 'Moorish Mosque', area: 'Local Attractions' },
+  { image: images.lake, title: 'Kanjli Wetland', area: 'Local Attractions' },
+  { image: images.gurudwara, title: 'Sultanpur Lodhi', area: 'Local Attractions' }
 ];
 
 function usePointer() {
