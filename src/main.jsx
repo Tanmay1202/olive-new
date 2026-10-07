@@ -1739,7 +1739,7 @@ function RoomsPage() {
         <div className="split-feature-content">
           <span className="tiny-label">Unmatched Comfort</span>
           <h3>A Restful Slumber</h3>
-          <p>The centerpiece of every villa is the plush, king-sized bed adorned with ultra-soft, premium cotton bedding and a selection of pillows. We believe that true luxury begins with a flawless night sleep.</p>
+          <p>The centerpiece of every villa is the plush, king-sized bed adorned with ultra-soft, premium cotton bedding and a selection of pillows. We believe that true luxury begins with a flawless night's sleep.</p>
           <p>Wake up refreshed, draw back the blackout curtains, and step out onto your private balcony to greet the morning sun.</p>
         </div>
         <div className="split-feature-img-wrapper">
@@ -1811,7 +1811,7 @@ function BanquetsPage() {
         <div className="split-feature-content">
           <span className="tiny-label">The Grand Hall</span>
           <h3>A Canvas for Your Dreams</h3>
-          <p>With its soaring ceilings, intricate chandeliers, and vast floor space, the Grand Banquet Hall is engineered to host Kapurthala most prestigious events. The hall seamlessly integrates with the expansive outdoor lawn, providing a flawless indoor-outdoor flow for up to 1500 guests.</p>
+          <p>With its soaring ceilings, intricate chandeliers, and vast floor space, the Grand Banquet Hall is engineered to host Kapurthala's most prestigious events. The hall seamlessly integrates with the expansive outdoor lawn, providing a flawless indoor-outdoor flow for up to 1500 guests.</p>
           <p>State-of-the-art acoustics and customizable lighting ensure that your wedding reception or mega-corporate event looks and sounds spectacular.</p>
         </div>
         <div className="split-feature-img-wrapper">
@@ -1836,7 +1836,7 @@ function BanquetsPage() {
           <span className="tiny-label">Event Catering</span>
           <h3>Culinary Excellence for Crowds</h3>
           <p>A memorable event requires exceptional food. Our massive, state-of-the-art executive kitchen is fully equipped to cater to events of any scale, from intimate gatherings of 50 to grand weddings of 1500 guests.</p>
-          <p>Our expert team of chefs works tirelessly behind the scenes, crafting diverse, multi-course menus that bring the rich flavors of Punjab and beyond to your guests plates.</p>
+          <p>Our expert team of chefs works tirelessly behind the scenes, crafting diverse, multi-course menus that bring the rich flavors of Punjab and beyond to your guests' plates.</p>
         </div>
         <div className="split-feature-img-wrapper">
           <img src={images.kitchen1} alt="Executive Kitchen" className="split-feature-img" />
@@ -1894,7 +1894,7 @@ function RestaurantPage() {
           <span className="tiny-label">The Setting</span>
           <h3>Dine in Style</h3>
           <p>The restaurant interior is a harmonious blend of luxurious textures and elegant lighting. With spacious seating arrangements that offer both privacy and a vibrant atmosphere, it is the perfect venue for family dinners, romantic dates, or business lunches.</p>
-          <p>Large windows offer serene views of the resort lush landscapes, bringing the beauty of the outdoors inside.</p>
+          <p>Large windows offer serene views of the resort's lush landscapes, bringing the beauty of the outdoors inside.</p>
         </div>
         <div className="split-feature-img-wrapper">
           <img src={images.restaurant3} alt="Restaurant Seating" className="split-feature-img" />
