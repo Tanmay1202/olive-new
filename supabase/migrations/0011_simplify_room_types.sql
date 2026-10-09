@@ -1,7 +1,7 @@
 ﻿-- 0011_simplify_room_types.sql
 
 -- 1. Create a "Standard Room" if no active room type exists, or pick the first one.
-DO \$\$
+DO $$
 DECLARE
   v_standard_id uuid;
 BEGIN
@@ -32,4 +32,4 @@ BEGIN
   -- 4. Delete all other room types
   DELETE FROM room_types WHERE id != v_standard_id;
 
-END \$\$;
+END $$;
