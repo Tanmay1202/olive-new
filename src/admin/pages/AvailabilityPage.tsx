@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Plus, Trash2, Calendar, X, Info } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import { RoomType, RoomUnit } from './RoomTypesPage';
@@ -204,15 +204,7 @@ export function AvailabilityPage() {
                     Upcoming bookings and blocked dates per room
                   </p>
                 </div>
-                <select
-                  className="admin-filter-select"
-                  value={selectedRoomTypeId}
-                  onChange={(e) => setSelectedRoomTypeId(e.target.value)}
-                >
-                  {roomTypes.map((rt) => (
-                    <option key={rt.id} value={rt.id}>{rt.name}</option>
-                  ))}
-                </select>
+                
               </div>
 
               {roomUnits.length === 0 ? (
@@ -339,13 +331,7 @@ export function AvailabilityPage() {
             <form onSubmit={handleCreateBlock} className="admin-modal-form">
               <div className="form-grid">
                 <label>
-                  <span>Room Category</span>
-                  <select value={blockRoomTypeId} onChange={(e) => setBlockRoomTypeId(e.target.value)} required>
-                    <option value="">Select category...</option>
-                    {roomTypes.map((rt) => (
-                      <option key={rt.id} value={rt.id}>{rt.name}</option>
-                    ))}
-                  </select>
+                  <span>Accommodation</span><div style={{ padding: "0.5rem", background: "#f5f5f5", border: "1px solid #ddd", borderRadius: "4px" }}>{roomTypes.find(rt => rt.id === blockRoomTypeId)?.name || "Standard Room"}</div>
                 </label>
                 <label>
                   <span>Which room?</span>
@@ -395,3 +381,5 @@ export function AvailabilityPage() {
     </div>
   );
 }
+
+

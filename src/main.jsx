@@ -32,7 +32,7 @@ import { useAuth } from './admin/hooks/useAuth';
 import { LoginPage } from './admin/pages/LoginPage';
 import { AdminLayout } from './admin/layouts/AdminLayout';
 import { DashboardPage } from './admin/pages/DashboardPage';
-import { RoomTypesPage } from './admin/pages/RoomTypesPage';
+
 import { AvailabilityPage } from './admin/pages/AvailabilityPage';
 import { BookingsPage } from './admin/pages/BookingsPage';
 
@@ -1117,15 +1117,13 @@ function BookingSection({ title, copy, showHighlights = true }) {
             </label>
             
             <label className="full-width">
-              <span>Room Type / Accommodation</span>
-              <select name="stayType" value={booking.stayType} onChange={updateBooking} disabled={!booking.arrival || !booking.departure || loadingRooms}>
-                <option value="" disabled>{loadingRooms ? "Loading availability..." : (!booking.arrival || !booking.departure ? "Select dates first" : "Choose a room")}</option>
-                {availableRooms.map(r => (
-                  <option key={r.id} value={r.name} disabled={!r.is_available}>
-                    {r.name} {r.is_available ? "" : "(Sold out)"}
-                  </option>
-                ))}
-              </select>
+              <span>Accommodation Type</span>
+              <div style={{ padding: '0.75rem', border: '1px solid var(--border)', borderRadius: '4px', backgroundColor: '#f9f9f9', color: '#333' }}>
+                {loadingRooms ? "Loading availability..." : 
+                  (!booking.arrival || !booking.departure ? "Select dates first" : 
+                    (booking.stayType || "Sold out for these dates")
+                  )}
+              </div>
             </label>
 
             <label>
@@ -2362,7 +2360,7 @@ function App() {
         ) : (
           <AdminLayout page={page} setPage={setPage} profile={profile} logout={logout}>
             {page === 'admin/dashboard' && <DashboardPage />}
-            {page === 'admin/room-types' && <RoomTypesPage />}
+            
             {page === 'admin/availability' && <AvailabilityPage />}
             {page === 'admin/bookings' && <BookingsPage />}
           </AdminLayout>

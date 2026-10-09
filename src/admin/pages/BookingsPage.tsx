@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+﻿import React, { useEffect, useState } from 'react';
 import { Calendar, Plus, Search, Eye, X, PhoneCall } from 'lucide-react';
 import { supabase } from '../../lib/supabaseClient';
 import { RoomType } from './RoomTypesPage';
@@ -245,10 +245,7 @@ export function BookingsPage() {
           <option value="cancelled">Cancelled</option>
           <option value="expired">Expired</option>
         </select>
-        <select className="admin-filter-select" value={filterRoomType} onChange={(e) => setFilterRoomType(e.target.value)}>
-          <option value="">All room types</option>
-          {roomTypes.map((rt) => <option key={rt.id} value={rt.id}>{rt.name}</option>)}
-        </select>
+
       </div>
 
       {/* Bookings table */}
@@ -428,12 +425,7 @@ export function BookingsPage() {
               <div className="form-section-label">Room & Dates</div>
               <div className="form-grid">
                 <label>
-                  <span>Room Type</span>
-                  <select value={formRoomTypeId} onChange={(e) => setFormRoomTypeId(e.target.value)} required>
-                    {roomTypes.map((rt) => (
-                      <option key={rt.id} value={rt.id}>{rt.name} (₹{rt.base_price}/night)</option>
-                    ))}
-                  </select>
+                  <span>Accommodation</span><div style={{ padding: "0.5rem", background: "#f5f5f5", border: "1px solid #ddd", borderRadius: "4px" }}>{roomTypes.find(rt => rt.id === formRoomTypeId)?.name || "Standard Room"}</div>
                 </label>
                 <label>
                   <span>Number of Rooms</span>
@@ -519,3 +511,4 @@ export function BookingsPage() {
     </div>
   );
 }
+
