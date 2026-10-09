@@ -878,6 +878,11 @@ function BookingSection({ title, copy, showHighlights = true }) {
       return;
     }
     
+    if (availableRooms.length === 0) {
+      setErrors({ ...nextErrors, submit: "Sorry, we are not accepting online bookings at this time." });
+      return;
+    }
+    
     const selectedRoom = availableRooms.find(r => r.name === booking.stayType && r.is_available);
     if (!selectedRoom) {
       setErrors({ ...nextErrors, submit: "Sorry, all rooms are occupied for the selected duration." });
@@ -1122,6 +1127,12 @@ function BookingSection({ title, copy, showHighlights = true }) {
               <input type="date" name="departure" value={booking.departure} onChange={updateBooking} min={booking.arrival || new Date().toISOString().split("T")[0]} />
               {errors.departure && <small>{errors.departure}</small>}
             </label>
+            
+            {booking.arrival && booking.departure && !loadingRooms && availableRooms.length === 0 && !eventChoices.includes(booking.stayType) && (
+              <div className="full-width" style={{ padding: '0.75rem', border: '1px solid #ffcdd2', borderRadius: '4px', backgroundColor: '#ffebee', color: '#c62828', textAlign: 'center', margin: '8px 0' }}>
+                Sorry, we are not accepting online bookings at this time.
+              </div>
+            )}
             
             {booking.arrival && booking.departure && !loadingRooms && availableRooms.length > 0 && !availableRooms[0].is_available && !eventChoices.includes(booking.stayType) && (
               <div className="full-width" style={{ padding: '0.75rem', border: '1px solid #ffcdd2', borderRadius: '4px', backgroundColor: '#ffebee', color: '#c62828', textAlign: 'center', margin: '8px 0' }}>
