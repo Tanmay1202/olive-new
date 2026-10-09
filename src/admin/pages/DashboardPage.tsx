@@ -113,6 +113,25 @@ export function DashboardPage() {
     }
   };
 
+  
+  const handleResetBookings = async () => {
+    if (!window.confirm("DANGER: This will permanently delete ALL bookings from the database. Are you absolutely sure?")) {
+      return;
+    }
+    
+    setLoading(true);
+    try {
+      const { error } = await supabase.from('bookings').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+      if (error) throw error;
+      
+      alert("All bookings have been cleared.");
+      await fetchDashboardData();
+    } catch (err) {
+      alert("Failed to clear bookings: " + (err instanceof Error ? err.message : String(err)));
+      setLoading(false);
+    }
+  };
+
   const quickActions = [
     {
       href: '#/admin/bookings',
@@ -185,12 +204,10 @@ export function DashboardPage() {
                   accent: '#c59b46',
                 },
                 {
-                  label: 'Confirmed bookings',
-                  value: String(stats.confirmedBookingsCount),
+                  label: 'Rooms Occupied Today',
+                  value: `${stats.inHouseTonight} / ${stats.totalUnitsCount}`,
                   icon: BedDouble,
-                  sub: stats.inHouseTonight > 0
-                    ? `${stats.inHouseTonight} in-house tonight · ${stats.totalUnitsCount} rooms total`
-                    : `None in-house tonight · ${stats.totalUnitsCount} rooms total`,
+                  sub: `Total ${stats.confirmedBookingsCount} upcoming bookings`,
                   accent: 'var(--olive)',
                 },
                 {
@@ -282,6 +299,30 @@ export function DashboardPage() {
                   </a>
                 ))}
               </div>
+            </div>
+
+            <div className="admin-card" style={{ marginTop: '24px', border: '1px solid rgba(220, 38, 38, 0.3)', background: 'rgba(220, 38, 38, 0.02)' }}>
+              <h3 className="admin-card-title dashboard-card-title" style={{ color: 'rgba(220, 38, 38, 0.9)' }}>Danger Zone</h3>
+              <p style={{ fontSize: '0.9rem', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '16px' }}>
+                Wipe all booking history. This will delete all bookings and cannot be undone. Use this to clean the system for production.
+              </p>
+              <button 
+                onClick={handleResetBookings}
+                style={{ 
+                  background: 'rgba(220, 38, 38, 0.1)', 
+                  color: 'rgb(252, 165, 165)', 
+                  border: '1px solid rgba(220, 38, 38, 0.4)',
+                  padding: '8px 16px',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: 500,
+                  transition: 'all 0.2s'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.background = 'rgba(220, 38, 38, 0.2)'; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(220, 38, 38, 0.1)'; }}
+              >
+                Clear All Bookings
+              </button>
             </div>
           </div>
         </>
