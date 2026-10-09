@@ -140,7 +140,7 @@ create or replace function confirm_booking_and_assign_units(
 returns boolean
 language plpgsql
 security definer
-as $$body$$
+as $$
 declare
   v_booking record;
   v_unit record;
@@ -200,4 +200,4 @@ begin
 
   return true;
 end;
-$$body$$;
+$$;
