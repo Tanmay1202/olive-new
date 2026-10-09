@@ -786,11 +786,15 @@ function BookingSection({ title, copy, showHighlights = true }) {
   const [loadingRooms, setLoadingRooms] = useState(false);
   const [paying, setPaying] = useState(false);
   const [successInfo, setSuccessInfo] = useState(null);
+  
+  // Checkout specific state
+  const [showCheckout, setShowCheckout] = useState(false);
+  const [withBreakfast, setWithBreakfast] = useState(false);
 
   const updateBooking = (event) => {
     const { name, value } = event.target;
     setBooking((current) => ({ ...current, [name]: value }));
-    setErrors((current) => ({ ...current, [name]: '' }));
+    setErrors((current) => ({ ...current, [name]: "" }));
     setSubmitted(false);
   };
 
@@ -801,13 +805,16 @@ function BookingSection({ title, copy, showHighlights = true }) {
     const arrival = booking.arrival ? new Date(booking.arrival) : null;
     const departure = booking.departure ? new Date(booking.departure) : null;
 
-    if (!booking.arrival) nextErrors.arrival = 'Choose an arrival date.';
-    if (!booking.departure) nextErrors.departure = 'Choose a departure date.';
-    if (arrival && arrival < today) nextErrors.arrival = 'Arrival cannot be in the past.';
-    if (arrival && departure && departure <= arrival) nextErrors.departure = 'Departure must be after arrival.';
-    if (!booking.name.trim()) nextErrors.name = 'Enter the guest name.';
-    if (!/^[0-9+\-\s()]{8,}$/.test(booking.phone.trim())) nextErrors.phone = 'Enter a valid phone number.';
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(booking.email.trim())) nextErrors.email = 'Enter a valid email address.';
+    if (!arrival) nextErrors.arrival = "Required";
+    else if (arrival < today) nextErrors.arrival = "Cannot be in the past";
+
+    if (!departure) nextErrors.departure = "Required";
+    else if (arrival && departure <= arrival) nextErrors.departure = "Must be after check-in";
+
+    if (!booking.name.trim()) nextErrors.name = "Required";
+    if (!booking.phone.trim()) nextErrors.phone = "Required";
+    if (!booking.email.trim()) nextErrors.email = "Required";
+    else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(booking.email)) nextErrors.email = "Invalid address";
 
     return nextErrors;
   };
@@ -815,14 +822,13 @@ function BookingSection({ title, copy, showHighlights = true }) {
   useEffect(() => {
     const fetchRooms = async () => {
       if (!booking.arrival || !booking.departure) return;
-      
       const arrivalDate = new Date(booking.arrival);
       const departureDate = new Date(booking.departure);
       if (departureDate <= arrivalDate) return;
 
       setLoadingRooms(true);
       try {
-        const { data, error } = await supabase.rpc('get_room_types_with_availability', {
+        const { data, error } = await supabase.rpc("get_room_types_with_availability", {
           p_check_in: booking.arrival,
           p_check_out: booking.departure
         });
@@ -830,7 +836,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
         if (error) throw error;
         setAvailableRooms(data || []);
       } catch (err) {
-        console.error('Error fetching available rooms:', err);
+        console.error("Error fetching available rooms:", err);
       } finally {
         setLoadingRooms(false);
       }
@@ -841,8 +847,6 @@ function BookingSection({ title, copy, showHighlights = true }) {
 
   useEffect(() => {
     if (availableRooms.length > 0) {
-      // If current selection is no longer a valid room name (e.g. was empty or a stale room),
-      // auto-select the first available room from the database
       const isRoomSelection = availableRooms.some(r => r.name === booking.stayType && r.is_available);
       const isEventSelection = eventChoices.includes(booking.stayType);
 
@@ -855,7 +859,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
     }
   }, [availableRooms]);
 
-  const handleSubmit = async (event) => {
+  const handleProceedToCheckout = (event) => {
     event.preventDefault();
     const nextErrors = validateBooking();
     setErrors(nextErrors);
@@ -863,20 +867,26 @@ function BookingSection({ title, copy, showHighlights = true }) {
     if (Object.keys(nextErrors).length > 0) return;
 
     const selectedRoom = availableRooms.find(r => r.name === booking.stayType);
-
     if (!selectedRoom) {
-      // Occasion enquiry (no online payment needed)
+      // It's an event enquiry
       setSuccessInfo({
         title: "Enquiry received.",
-        detail: `We have captured your ${booking.stayType.toLowerCase()} request for ${booking.guests} guest(s). Olive Green will follow up with details.`
+        detail: `We have captured your ${booking.stayType?.toLowerCase()} request for ${booking.guests} guest(s). Olive Green will follow up with details.`
       });
       setSubmitted(true);
       return;
     }
+    
+    setShowCheckout(true);
+  };
+
+  const handlePayNow = async () => {
+    const selectedRoom = availableRooms.find(r => r.name === booking.stayType);
+    if (!selectedRoom) return;
 
     setPaying(true);
     try {
-      const { data: orderData, error: orderError } = await supabase.functions.invoke('create-booking-order', {
+      const { data: orderData, error: orderError } = await supabase.functions.invoke("create-booking-order", {
         body: {
           room_type_id: selectedRoom.id,
           check_in: booking.arrival,
@@ -884,18 +894,20 @@ function BookingSection({ title, copy, showHighlights = true }) {
           guest_name: booking.name,
           guest_email: booking.email,
           guest_phone: booking.phone,
+          guests_count: Number(booking.guests || 2),
           qty: Number(booking.rooms || 1),
-          notes: booking.notes
+          notes: booking.notes,
+          with_breakfast: withBreakfast
         }
       });
 
       if (orderError || !orderData) {
-        throw new Error(orderError?.message || 'Failed to create booking order');
+        throw new Error(orderError?.message || "Failed to create booking order");
       }
 
       const scriptLoaded = await loadRazorpayScript();
       if (!scriptLoaded) {
-        throw new Error('Razorpay SDK failed to load. Please check your internet connection.');
+        throw new Error("Razorpay SDK failed to load. Please check your internet connection.");
       }
 
       const options = {
@@ -913,7 +925,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
         handler: async (response) => {
           setPaying(true);
           try {
-            const { data: verifyData, error: verifyError } = await supabase.functions.invoke('verify-payment', {
+            const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-payment", {
               body: {
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -922,7 +934,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
             });
 
             if (verifyError || !verifyData || !verifyData.success) {
-              throw new Error(verifyError?.message || 'Payment verification failed');
+              throw new Error(verifyError?.message || "Payment verification failed");
             }
 
             setSuccessInfo({
@@ -930,9 +942,10 @@ function BookingSection({ title, copy, showHighlights = true }) {
               detail: `Your booking for ${selectedRoom.name} from ${booking.arrival} to ${booking.departure} is confirmed. Payment ID: ${response.razorpay_payment_id}.`
             });
             setSubmitted(true);
+            setShowCheckout(false);
           } catch (err) {
-            console.error('Verification error:', err);
-            setErrors({ submit: err.message || 'Payment verification failed. Please contact support.' });
+            console.error("Verification error:", err);
+            setErrors({ submit: err.message || "Payment verification failed. Please contact support." });
           } finally {
             setPaying(false);
           }
@@ -940,7 +953,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
         modal: {
           ondismiss: () => {
             setPaying(false);
-            setErrors({ submit: 'Checkout was cancelled. You can try paying again.' });
+            setErrors({ submit: "Checkout was cancelled. You can try paying again." });
           }
         },
         theme: {
@@ -950,11 +963,133 @@ function BookingSection({ title, copy, showHighlights = true }) {
 
       openRazorpayCheckout(options);
     } catch (err) {
-      console.error('Order creation error:', err);
-      setErrors({ submit: err.message || 'Failed to initiate booking payment.' });
+      console.error("Order creation error:", err);
+      setErrors({ submit: err.message || "Failed to initiate booking payment." });
       setPaying(false);
     }
   };
+
+  const selectedRoom = availableRooms.find(r => r.name === booking.stayType);
+
+  let nights = 0;
+  let roomSubtotal = 0;
+  let roomGST = 0;
+  let breakfastSubtotal = 0;
+  let breakfastGST = 0;
+  let totalAmount = 0;
+
+  if (showCheckout && selectedRoom) {
+    const arrivalDate = new Date(booking.arrival);
+    const departureDate = new Date(booking.departure);
+    nights = Math.round((departureDate.getTime() - arrivalDate.getTime()) / (1000 * 60 * 60 * 24));
+    
+    roomSubtotal = Number(selectedRoom.base_price) * nights * Number(booking.rooms || 1);
+    roomGST = Math.round(roomSubtotal * 0.18);
+    
+    if (withBreakfast) {
+      breakfastSubtotal = 500 * nights * Number(booking.guests || 2);
+      breakfastGST = Math.round(breakfastSubtotal * 0.18);
+    }
+    
+    totalAmount = roomSubtotal + roomGST + breakfastSubtotal + breakfastGST;
+  }
+
+  if (showCheckout && selectedRoom) {
+    return (
+      <section className="booking page-section checkout-section">
+        <div className="checkout-container">
+          <button className="back-btn" onClick={() => setShowCheckout(false)}>&larr; Back to details</button>
+          
+          <div className="checkout-grid">
+            <div className="checkout-details">
+              <h3>Order Summary</h3>
+              <div className="summary-card">
+                <h4>{selectedRoom.name}</h4>
+                <p>{booking.rooms} Room{booking.rooms > 1 ? "s" : ""} • {booking.guests} Guest{booking.guests > 1 ? "s" : ""}</p>
+                <div className="dates-row">
+                  <div>
+                    <span className="tiny-label">Check-in</span>
+                    <strong>{new Date(booking.arrival).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</strong>
+                  </div>
+                  <ArrowRight size={16} style={{ marginTop: "16px" }} />
+                  <div>
+                    <span className="tiny-label">Check-out</span>
+                    <strong>{new Date(booking.departure).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</strong>
+                  </div>
+                </div>
+              </div>
+
+              <h3>Meal Plan</h3>
+              <div className="meal-options">
+                <label className={`meal-option ${!withBreakfast ? "selected" : ""}`}>
+                  <input type="radio" name="meal" checked={!withBreakfast} onChange={() => setWithBreakfast(false)} />
+                  <div>
+                    <strong>Room Only</strong>
+                    <span>No meals included</span>
+                  </div>
+                </label>
+                <label className={`meal-option ${withBreakfast ? "selected" : ""}`}>
+                  <input type="radio" name="meal" checked={withBreakfast} onChange={() => setWithBreakfast(true)} />
+                  <div>
+                    <strong>Room + Breakfast</strong>
+                    <span>₹500 / guest / night</span>
+                  </div>
+                </label>
+              </div>
+
+              <h3>Guest Details</h3>
+              <div className="guest-info-card">
+                <p><strong>{booking.name}</strong></p>
+                <p>{booking.email}</p>
+                <p>{booking.phone}</p>
+              </div>
+            </div>
+
+            <div className="checkout-sidebar">
+              <h3>Price Breakdown</h3>
+              <div className="price-breakdown">
+                <div className="price-row">
+                  <span>Room Charges ({nights} Night{nights > 1 ? "s" : ""})</span>
+                  <span>₹{roomSubtotal.toLocaleString()}</span>
+                </div>
+                {withBreakfast && (
+                  <div className="price-row">
+                    <span>Breakfast Charges</span>
+                    <span>₹{breakfastSubtotal.toLocaleString()}</span>
+                  </div>
+                )}
+                <div className="price-row taxes">
+                  <span>Room GST (18%)</span>
+                  <span>₹{roomGST.toLocaleString()}</span>
+                </div>
+                {withBreakfast && (
+                  <div className="price-row taxes">
+                    <span>Breakfast GST (18%)</span>
+                    <span>₹{breakfastGST.toLocaleString()}</span>
+                  </div>
+                )}
+                <div className="price-row total">
+                  <strong>Total Amount</strong>
+                  <strong>₹{totalAmount.toLocaleString()}</strong>
+                </div>
+              </div>
+              
+              {errors.submit && (
+                <div className="form-error-msg" style={{ marginTop: "24px" }}>
+                  {errors.submit}
+                </div>
+              )}
+
+              <button className="checkout-pay-btn" onClick={handlePayNow} disabled={paying}>
+                {paying ? "Processing Securely..." : `Pay ₹${totalAmount.toLocaleString()}`}
+                <ArrowRight size={19} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
       <section className="booking page-section">
@@ -969,17 +1104,30 @@ function BookingSection({ title, copy, showHighlights = true }) {
             </div>
           )}
         </div>
-        <form className="booking-form" onSubmit={handleSubmit} noValidate>
+        <form className="booking-form" onSubmit={handleProceedToCheckout} noValidate>
             <label>
               <span>Check in</span>
-              <input type="date" name="arrival" value={booking.arrival} onChange={updateBooking} min={new Date().toISOString().split('T')[0]} />
+              <input type="date" name="arrival" value={booking.arrival} onChange={updateBooking} min={new Date().toISOString().split("T")[0]} />
               {errors.arrival && <small>{errors.arrival}</small>}
             </label>
             <label>
               <span>Check out</span>
-              <input type="date" name="departure" value={booking.departure} onChange={updateBooking} min={booking.arrival || new Date().toISOString().split('T')[0]} />
+              <input type="date" name="departure" value={booking.departure} onChange={updateBooking} min={booking.arrival || new Date().toISOString().split("T")[0]} />
               {errors.departure && <small>{errors.departure}</small>}
             </label>
+            
+            <label className="full-width">
+              <span>Room Type / Accommodation</span>
+              <select name="stayType" value={booking.stayType} onChange={updateBooking} disabled={!booking.arrival || !booking.departure || loadingRooms}>
+                <option value="" disabled>{loadingRooms ? "Loading availability..." : (!booking.arrival || !booking.departure ? "Select dates first" : "Choose a room")}</option>
+                {availableRooms.map(r => (
+                  <option key={r.id} value={r.name} disabled={!r.is_available}>
+                    {r.name} {r.is_available ? "" : "(Sold out)"}
+                  </option>
+                ))}
+              </select>
+            </label>
+
             <label>
               <span>Guests</span>
               <input type="number" name="guests" min="1" max="80" value={booking.guests} onChange={updateBooking} />
@@ -1014,10 +1162,11 @@ function BookingSection({ title, copy, showHighlights = true }) {
             </div>
           )}
 
-          <button type="submit" disabled={paying}>
-            {paying ? 'Processing Checkout...' : 'Pay & Book Now'}
+          <button type="submit">
+            Proceed to Checkout
             <ArrowRight size={19} />
           </button>
+          
           {submitted && successInfo && (
             <motion.div
               className="booking-confirmation"

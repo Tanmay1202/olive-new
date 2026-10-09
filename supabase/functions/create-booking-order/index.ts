@@ -122,7 +122,27 @@ serve(async (req) => {
       });
     }
 
-    const totalAmount = Number(roomType.base_price) * nights * bookingQty;
+    const withBreakfast = Boolean(body.with_breakfast);
+    
+    let roomSubtotal = Number(roomType.base_price) * nights * bookingQty;
+    let roomGST = Math.round(roomSubtotal * 0.18);
+    
+    let breakfastSubtotal = 0;
+    let breakfastGST = 0;
+
+    if (withBreakfast) {
+      breakfastSubtotal = 500 * nights * bookingGuestsCount;
+      breakfastGST = Math.round(breakfastSubtotal * 0.18);
+    }
+    
+    const totalAmount = roomSubtotal + roomGST + breakfastSubtotal + breakfastGST;
+    
+    let finalNotes = notes ? String(notes).trim().slice(0, 950) : "";
+    if (withBreakfast) {
+      finalNotes = (finalNotes + "\n\n[Meal Plan: Room + Breakfast]").trim();
+    } else {
+      finalNotes = (finalNotes + "\n\n[Meal Plan: Room Only]").trim();
+    }
 
     // 3 & 4. Atomically check availability and create pending booking via RPC
     const { data: bookingId, error: rpcError } = await supabaseClient.rpc("create_pending_booking", {
@@ -135,7 +155,7 @@ serve(async (req) => {
       p_guests_count: bookingGuestsCount,
       p_qty: bookingQty,
       p_total_amount: totalAmount,
-      p_notes: notes ? String(notes).trim().slice(0, 1000) : null,
+      p_notes: finalNotes || null,
     });
 
     if (rpcError || !bookingId) {
