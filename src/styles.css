@@ -2415,3 +2415,16 @@ footer img {
   cursor: not-allowed;
 }
 
+
+
+/* Mobile Hero Adjustments */
+@media (max-width: 768px) {
+  .hero {
+    height: 80svh;
+  }
+  .hero-panel {
+    height: 80svh;
+    padding: 100px 24px 60px;
+    justify-content: flex-end;
+  }
+}
