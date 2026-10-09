@@ -40,6 +40,12 @@ const menuItems = [
     icon: Lock,
     hint: 'Maintenance / owner stay',
   },
+  {
+    label: 'Room Info',
+    id: 'admin/room-types',
+    icon: BedDouble,
+    hint: 'Edit prices & details',
+  },
 ];
 
 export function AdminLayout({
@@ -197,3 +203,4 @@ export function AdminLayout({
     </div>
   );
 }
+

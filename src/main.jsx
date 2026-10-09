@@ -35,6 +35,7 @@ import { DashboardPage } from './admin/pages/DashboardPage';
 
 import { AvailabilityPage } from './admin/pages/AvailabilityPage';
 import { BookingsPage } from './admin/pages/BookingsPage';
+import { RoomInfoPage } from './admin/pages/RoomInfoPage';
 
 const images = {
   logo: '/images/logo.png',
@@ -2365,6 +2366,7 @@ function App() {
             
             {page === 'admin/availability' && <AvailabilityPage />}
             {page === 'admin/bookings' && <BookingsPage />}
+            {page === 'admin/room-types' && <RoomInfoPage />}
           </AdminLayout>
         )
       ) : (
@@ -2392,4 +2394,5 @@ function App() {
 }
 
 createRoot(document.getElementById('root')).render(<App />);
+
 
