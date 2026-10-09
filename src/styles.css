@@ -2428,3 +2428,18 @@ footer img {
     justify-content: flex-end;
   }
 }
+
+
+/* Fix blank space after footer on short pages/mobile browsers */
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+main {
+  flex: 1;
+}
+
+.admin-root {
+  flex: 1;
+}
