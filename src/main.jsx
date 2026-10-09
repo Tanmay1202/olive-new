@@ -1051,10 +1051,14 @@ function BookingSection({ title, copy, showHighlights = true }) {
 
               <h3>Guest Details</h3>
               <div className="guest-info-card">
-                <p><strong>{booking.name}</strong></p>
-                <p>{booking.email}</p>
-                <p>{booking.phone}</p>
-              </div>
+<p><strong>{booking.name}</strong></p>
+<p>{booking.email}</p>
+<p>{booking.phone}</p>
+</div>
+<h3>Special Requests</h3>
+<div className="guest-info-card" style={{ padding: '0', background: 'none' }}>
+<textarea name="notes" rows="3" value={booking.notes} onChange={updateBooking} placeholder="Early check-in, extra bed, dietary notes or anything the team should know." style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.1)', fontFamily: 'inherit', resize: 'vertical' }} />
+</div>
             </div>
 
             <div className="checkout-sidebar">
@@ -1163,10 +1167,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
             <input type="email" name="email" value={booking.email} onChange={updateBooking} placeholder="name@example.com" />
             {errors.email && <small>{errors.email}</small>}
           </label>
-          <label>
-            <span>Special requests</span>
-            <textarea name="notes" rows="4" value={booking.notes} onChange={updateBooking} placeholder="Early check-in, extra bed, dietary notes or anything the team should know." />
-          </label>
+          
 
           {errors.submit && (
             <div className="form-error-msg">
@@ -1269,7 +1270,7 @@ function HomeBookingForm() {
     <section className="home-booking page-section">
       <div className="home-booking-copy">
         <span className="tiny-label">Booking Enquiry</span>
-        <h2>Reserve your experience.</h2>
+        <h2>Reserve your luxury stay.</h2>
       </div>
       <form onSubmit={handleSubmit} className="booking-form" noValidate>
         <div className="form-grid">
@@ -1646,7 +1647,7 @@ function HomePage() {
   return (
     <>
       <Hero />
-      <BookingSection title="Reserve your experience." />
+      <BookingSection title="Reserve your luxury stay." />
       <Intro />
       <HomeAccommodation />
       <section className="split-feature">
@@ -2405,5 +2406,6 @@ function App() {
 }
 
 createRoot(document.getElementById('root')).render(<App />);
+
 
 
