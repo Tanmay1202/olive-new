@@ -362,7 +362,7 @@ function pageFromHash() {
   }
 
   let page = hashPage || 'home';
-  const validPages = ['home', ...nav.map((item) => item.page)];
+  const validPages = ['home', 'checkout', ...nav.map((item) => item.page)];
   return validPages.includes(page) ? page : 'home';
 }
 
