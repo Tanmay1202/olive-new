@@ -890,7 +890,8 @@ function BookingSection({ title, copy, showHighlights = true }) {
       return;
     }
     
-    setShowCheckout(true);
+    sessionStorage.setItem('checkoutData', JSON.stringify({ booking, selectedRoom }));
+    window.location.hash = '/checkout';
   };
 
   const handlePayNow = async () => {
@@ -2275,6 +2276,273 @@ function OffersPage() {
   );
 }
 
+
+function CheckoutPage() {
+  const data = React.useMemo(() => {
+    try {
+      const stored = sessionStorage.getItem('checkoutData');
+      return stored ? JSON.parse(stored) : null;
+    } catch (e) {
+      return null;
+    }
+  }, []);
+
+  const [booking, setBooking] = useState(data?.booking || {});
+  const selectedRoom = data?.selectedRoom;
+
+  const [withBreakfast, setWithBreakfast] = useState(false);
+  const [withExtraBed, setWithExtraBed] = useState(false);
+  const [paying, setPaying] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [successInfo, setSuccessInfo] = useState(null);
+
+  useEffect(() => {
+    if (!data) window.location.hash = '/';
+  }, [data]);
+
+  if (!data || !selectedRoom) return null;
+
+  if (successInfo) {
+    return (
+      <section className="booking page-section checkout-section" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div className="checkout-container" style={{ textAlign: 'center' }}>
+          <h2 style={{ color: 'var(--gold)', marginBottom: '16px' }}>{successInfo.title}</h2>
+          <p style={{ fontSize: '1.1rem', opacity: 0.9, maxWidth: '600px', margin: '0 auto 32px' }}>{successInfo.detail}</p>
+          <button className="back-btn" style={{ padding: '12px 24px', border: '1px solid var(--gold)', borderRadius: '6px', color: 'var(--gold)' }} onClick={() => window.location.hash = '/'}>Return Home</button>
+        </div>
+      </section>
+    );
+  }
+
+  let nights = 0;
+  const arrivalDate = new Date(booking.arrival);
+  const departureDate = new Date(booking.departure);
+  nights = Math.round((departureDate.getTime() - arrivalDate.getTime()) / (1000 * 60 * 60 * 24));
+  
+  const roomSubtotal = Number(selectedRoom.base_price) * nights * Number(booking.rooms || 1);
+  const roomGST = Math.round(roomSubtotal * 0.18);
+  
+  let breakfastSubtotal = 0;
+  let breakfastGST = 0;
+  if (withBreakfast) {
+    breakfastSubtotal = 1000 * nights * Number(booking.rooms || 1);
+    breakfastGST = Math.round(breakfastSubtotal * 0.18);
+  }
+  
+  let extraBedSubtotal = 0;
+  let extraBedGST = 0;
+  if (withExtraBed) {
+    extraBedSubtotal = 1000 * nights * Number(booking.rooms || 1);
+    extraBedGST = Math.round(extraBedSubtotal * 0.18);
+  }
+  
+  const totalAmount = roomSubtotal + roomGST + breakfastSubtotal + breakfastGST + extraBedSubtotal + extraBedGST;
+
+  const handlePayNow = async () => {
+    setPaying(true);
+    setErrors({});
+    try {
+      const { data: orderData, error: orderError } = await supabase.functions.invoke("create-booking-order", {
+        body: {
+          room_type_id: selectedRoom.id,
+          check_in: booking.arrival,
+          check_out: booking.departure,
+          guest_name: booking.name,
+          guest_email: booking.email,
+          guest_phone: booking.phone,
+          guests_count: Number(booking.guests || 2),
+          qty: Number(booking.rooms || 1),
+          notes: booking.notes,
+          with_breakfast: withBreakfast
+        }
+      });
+
+      if (orderError || !orderData) {
+        throw new Error(orderError?.message || "Failed to create booking order");
+      }
+
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        throw new Error("Razorpay SDK failed to load. Please check your internet connection.");
+      }
+
+      const options = {
+        key: orderData.key_id,
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: "Olive Green Resort & Villas",
+        description: `Booking for ${selectedRoom.name}`,
+        order_id: orderData.razorpay_order_id,
+        prefill: {
+          name: booking.name,
+          email: booking.email,
+          contact: booking.phone
+        },
+        handler: async (response) => {
+          setPaying(true);
+          try {
+            const { data: verifyData, error: verifyError } = await supabase.functions.invoke("verify-payment", {
+              body: {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature
+              }
+            });
+
+            if (verifyError || !verifyData || !verifyData.success) {
+              throw new Error(verifyError?.message || "Payment verification failed");
+            }
+
+            setSuccessInfo({
+              title: "Booking Confirmed!",
+              detail: `Your booking for ${selectedRoom.name} from ${booking.arrival} to ${booking.departure} is confirmed. Payment ID: ${response.razorpay_payment_id}.`
+            });
+            sessionStorage.removeItem('checkoutData');
+          } catch (err) {
+            console.error("Verification error:", err);
+            setErrors({ submit: err.message || "Payment verification failed. Please contact support." });
+          } finally {
+            setPaying(false);
+          }
+        },
+        modal: {
+          ondismiss: () => {
+            setPaying(false);
+            setErrors({ submit: "Checkout was cancelled. You can try paying again." });
+          }
+        },
+        theme: {
+          color: "#4f661f"
+        }
+      };
+
+      openRazorpayCheckout(options);
+    } catch (err) {
+      console.error("Order creation error:", err);
+      setErrors({ submit: err.message || "Failed to initiate booking payment." });
+      setPaying(false);
+    }
+  };
+
+  const updateBooking = (event) => {
+    const { name, value } = event.target;
+    setBooking((current) => ({ ...current, [name]: value }));
+  };
+
+  return (
+    <section className="booking page-section checkout-section">
+      <div className="checkout-container">
+        <button className="back-btn" onClick={() => window.location.hash = '/'}>&larr; Back to details</button>
+        
+        <div className="checkout-grid">
+          <div className="checkout-details">
+            <h3>Order Summary</h3>
+            <div className="summary-card">
+              <h4>{selectedRoom.name}</h4>
+              <p>{booking.rooms} Room{booking.rooms > 1 ? "s" : ""} • {booking.guests} Guest{booking.guests > 1 ? "s" : ""}</p>
+              <div className="dates-row">
+                <div>
+                  <span className="tiny-label">Check-in</span>
+                  <strong>{new Date(booking.arrival).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</strong>
+                </div>
+                <ArrowRight size={16} style={{ marginTop: "16px" }} />
+                <div>
+                  <span className="tiny-label">Check-out</span>
+                  <strong>{new Date(booking.departure).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</strong>
+                </div>
+              </div>
+            </div>
+
+            <h3>Optional Add-ons</h3>
+            <div className="meal-options">
+              <label className={"meal-option " + (withBreakfast ? "selected" : "")}>
+                <input type="checkbox" checked={withBreakfast} onChange={(e) => setWithBreakfast(e.target.checked)} />
+                <div>
+                  <strong>Morning Breakfast</strong>
+                  <span>Includes morning breakfast</span>
+                </div>
+              </label>
+              <label className={"meal-option " + (withExtraBed ? "selected" : "")}>
+                <input type="checkbox" checked={withExtraBed} onChange={(e) => setWithExtraBed(e.target.checked)} />
+                <div>
+                  <strong>Extra Bed</strong>
+                  <span>Additional bed in the room</span>
+                </div>
+              </label>
+            </div>
+
+            <h3>Guest Details</h3>
+            <div className="guest-info-card">
+              <p><strong>{booking.name}</strong></p>
+              <p>{booking.email}</p>
+              <p>{booking.phone}</p>
+            </div>
+            
+            <h3>Special Requests</h3>
+            <div className="guest-info-card" style={{ padding: '0', background: 'none' }}>
+              <textarea name="notes" rows="3" value={booking.notes} onChange={updateBooking} placeholder="Early check-in, extra bed, dietary notes or anything the team should know." style={{ width: '100%', padding: '12px', borderRadius: '8px', border: '1px solid rgba(0,0,0,0.1)', fontFamily: 'inherit', resize: 'vertical' }} />
+            </div>
+          </div>
+
+          <div className="checkout-sidebar">
+            <h3>Price Breakdown</h3>
+            <div className="price-breakdown">
+              <div className="price-row">
+                <span>Room Charges ({nights} Night{nights > 1 ? "s" : ""})</span>
+                <span>₹{roomSubtotal.toLocaleString()}</span>
+              </div>
+              {withBreakfast && (
+                <div className="price-row">
+                  <span>Breakfast Charges</span>
+                  <span>₹{breakfastSubtotal.toLocaleString()}</span>
+                </div>
+              )}
+              {withExtraBed && (
+                <div className="price-row">
+                  <span>Extra Bed Charges</span>
+                  <span>₹{extraBedSubtotal.toLocaleString()}</span>
+                </div>
+              )}
+              <div className="price-row taxes">
+                <span>Room GST (18%)</span>
+                <span>₹{roomGST.toLocaleString()}</span>
+              </div>
+              {withBreakfast && (
+                <div className="price-row taxes">
+                  <span>Breakfast GST (18%)</span>
+                  <span>₹{breakfastGST.toLocaleString()}</span>
+                </div>
+              )}
+              {withExtraBed && (
+                <div className="price-row taxes">
+                  <span>Extra Bed GST (18%)</span>
+                  <span>₹{extraBedGST.toLocaleString()}</span>
+                </div>
+              )}
+              <div className="price-row total">
+                <strong>Total Amount</strong>
+                <strong>₹{totalAmount.toLocaleString()}</strong>
+              </div>
+            </div>
+            
+            {errors.submit && (
+              <div className="form-error-msg" style={{ marginTop: "24px" }}>
+                {errors.submit}
+              </div>
+            )}
+
+            <button className="checkout-pay-btn" onClick={handlePayNow} disabled={paying}>
+              {paying ? "Processing Securely..." : `Pay ₹${totalAmount.toLocaleString()}`}
+              <ArrowRight size={19} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+
 function CurrentPage({ page }) {
   const pages = {
     home: <HomePage />,
@@ -2288,7 +2556,8 @@ function CurrentPage({ page }) {
     offers: <OffersPage />,
     bookings: <BookingPage />,
     gallery: <GalleryPage />,
-    contact: <ContactPage />
+    contact: <ContactPage />,
+    checkout: <CheckoutPage />
   };
 
   return (

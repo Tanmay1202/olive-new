@@ -2183,20 +2183,12 @@ footer img {
 
 /* Checkout Page Styles */
 .checkout-section {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 10000;
   background-color: var(--ink);
   padding-top: clamp(120px, 15vw, 160px);
   padding-bottom: 80px;
   padding-left: clamp(20px, 5vw, 40px);
   padding-right: clamp(20px, 5vw, 40px);
-  overflow-y: auto;
+  min-height: 100vh;
   background-image: radial-gradient(circle at top right, rgba(197, 155, 70, 0.08) 0%, transparent 40%), radial-gradient(circle at bottom left, rgba(197, 155, 70, 0.05) 0%, transparent 40%);
 }
 
