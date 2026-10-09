@@ -1,4 +1,4 @@
-﻿-- 0011_simplify_room_types.sql
+-- 0011_simplify_room_types.sql
 
 -- 1. Create a "Standard Room" if no active room type exists, or pick the first one.
 DO $$
