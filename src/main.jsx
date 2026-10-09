@@ -866,14 +866,20 @@ function BookingSection({ title, copy, showHighlights = true }) {
 
     if (Object.keys(nextErrors).length > 0) return;
 
-    const selectedRoom = availableRooms.find(r => r.name === booking.stayType);
-    if (!selectedRoom) {
+    const isEventSelection = eventChoices.includes(booking.stayType);
+    if (isEventSelection) {
       // It's an event enquiry
       setSuccessInfo({
         title: "Enquiry received.",
         detail: `We have captured your ${booking.stayType?.toLowerCase()} request for ${booking.guests} guest(s). Olive Green will follow up with details.`
       });
       setSubmitted(true);
+      return;
+    }
+    
+    const selectedRoom = availableRooms.find(r => r.name === booking.stayType && r.is_available);
+    if (!selectedRoom) {
+      setErrors({ ...nextErrors, submit: "Sorry, all rooms are occupied for the selected duration." });
       return;
     }
     
@@ -1116,15 +1122,11 @@ function BookingSection({ title, copy, showHighlights = true }) {
               {errors.departure && <small>{errors.departure}</small>}
             </label>
             
-            <label className="full-width">
-              <span>Accommodation Type</span>
-              <div style={{ padding: '0.75rem', border: '1px solid var(--border)', borderRadius: '4px', backgroundColor: '#f9f9f9', color: '#333' }}>
-                {loadingRooms ? "Loading availability..." : 
-                  (!booking.arrival || !booking.departure ? "Select dates first" : 
-                    (booking.stayType || "Sold out for these dates")
-                  )}
+            {booking.arrival && booking.departure && !loadingRooms && availableRooms.length > 0 && !availableRooms[0].is_available && !eventChoices.includes(booking.stayType) && (
+              <div className="full-width" style={{ padding: '0.75rem', border: '1px solid #ffcdd2', borderRadius: '4px', backgroundColor: '#ffebee', color: '#c62828', textAlign: 'center', margin: '8px 0' }}>
+                Sorry, all rooms are occupied for the selected duration.
               </div>
-            </label>
+            )}
 
             <label>
               <span>Guests</span>
