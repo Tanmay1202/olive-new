@@ -24,7 +24,7 @@ returns table (
 language plpgsql
 stable
 security definer
-as 
+as $$
 begin
   return query
   select
@@ -87,7 +87,7 @@ begin
   where rt.is_active = true
   order by rt.display_order;
 end;
-;
+$$;
 
 
 create or replace function check_availability(
@@ -100,7 +100,7 @@ returns boolean
 language plpgsql
 volatile
 security definer
-as 
+as $$
 declare
   v_total_units int;
   v_booked int;
@@ -130,7 +130,7 @@ begin
 
   return (v_total_units - v_booked - v_blocked) >= p_qty;
 end;
-;
+$$;
 
 create or replace function confirm_booking_and_assign_units(
   p_booking_id uuid,
@@ -140,7 +140,7 @@ create or replace function confirm_booking_and_assign_units(
 returns boolean
 language plpgsql
 security definer
-as body
+as $$body$$
 declare
   v_booking record;
   v_unit record;
@@ -200,4 +200,4 @@ begin
 
   return true;
 end;
-body;
+$$body$$;
