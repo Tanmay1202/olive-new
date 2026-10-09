@@ -1163,7 +1163,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
           )}
 
           <button type="submit">
-            Proceed to Checkout
+            Book Now
             <ArrowRight size={19} />
           </button>
           
@@ -2392,3 +2392,4 @@ function App() {
 }
 
 createRoot(document.getElementById('root')).render(<App />);
+

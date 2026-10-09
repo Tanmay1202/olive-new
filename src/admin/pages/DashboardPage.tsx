@@ -113,6 +113,39 @@ export function DashboardPage() {
     }
   };
 
+  const handleAdjustInventory = async (change: number) => {
+    try {
+      setLoading(true);
+      const { data: rt } = await supabase.from('room_types').select('id').limit(1).single();
+      if (!rt) throw new Error('No room type found');
+
+      if (change > 0) {
+        const { data: maxUnit } = await supabase.from('room_units')
+          .select('unit_label').order('created_at', { ascending: false }).limit(1);
+        let nextNum = stats.totalUnitsCount + 1;
+        if (maxUnit && maxUnit.length > 0) {
+          const match = maxUnit[0].unit_label.match(/\d+/);
+          if (match) nextNum = parseInt(match[0]) + 1;
+        }
+        await supabase.from('room_units').insert({
+          room_type_id: rt.id,
+          unit_label: "Room " + nextNum,
+          is_active: true
+        });
+      } else {
+        if (stats.totalUnitsCount <= 1) throw new Error('Cannot reduce below 1 room');
+        const { data: units } = await supabase.from('room_units').select('id').eq('is_active', true).order('created_at', { ascending: false }).limit(1);
+        if (units && units.length > 0) {
+          await supabase.from('room_units').update({ is_active: false }).eq('id', units[0].id);
+        }
+      }
+      await fetchDashboardData();
+    } catch (e: any) {
+      alert(e.message || 'Error updating inventory');
+      setLoading(false);
+    }
+  };
+
   const quickActions = [
     {
       href: '#/admin/bookings',
@@ -289,3 +322,5 @@ export function DashboardPage() {
     </div>
   );
 }
+
+

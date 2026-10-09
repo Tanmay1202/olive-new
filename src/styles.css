@@ -2183,7 +2183,20 @@ footer img {
 
 /* Checkout Page Styles */
 .checkout-section {
-  padding-top: clamp(100px, 15vw, 150px);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 10000;
+  background-color: var(--color-background);
+  padding-top: clamp(80px, 10vw, 100px);
+  padding-bottom: 60px;
+  padding-left: clamp(20px, 5vw, 40px);
+  padding-right: clamp(20px, 5vw, 40px);
+  overflow-y: auto;
 }
 
 .checkout-container {
@@ -2367,3 +2380,4 @@ footer img {
   justify-content: space-between;
   align-items: center;
 }
+
