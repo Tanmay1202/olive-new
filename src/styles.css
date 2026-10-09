@@ -2191,7 +2191,7 @@ footer img {
   width: 100vw;
   height: 100vh;
   z-index: 10000;
-  background-color: var(--color-background);
+  background-color: var(--ink);
   padding-top: clamp(120px, 15vw, 160px);
   padding-bottom: 80px;
   padding-left: clamp(20px, 5vw, 40px);
