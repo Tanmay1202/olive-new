@@ -999,7 +999,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
     roomGST = Math.round(roomSubtotal * 0.18);
     
     if (withBreakfast) {
-      breakfastSubtotal = 500 * nights * Number(booking.guests || 2);
+      breakfastSubtotal = 1000 * nights * Number(booking.rooms || 1);
       breakfastGST = Math.round(breakfastSubtotal * 0.18);
     }
     
@@ -1044,7 +1044,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
                   <input type="radio" name="meal" checked={withBreakfast} onChange={() => setWithBreakfast(true)} />
                   <div>
                     <strong>Room + Breakfast</strong>
-                    <span>₹500 / guest / night</span>
+                    <span>Includes morning breakfast</span>
                   </div>
                 </label>
               </div>
@@ -2406,6 +2406,7 @@ function App() {
 }
 
 createRoot(document.getElementById('root')).render(<App />);
+
 
 
 
