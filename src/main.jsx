@@ -791,6 +791,7 @@ function BookingSection({ title, copy, showHighlights = true }) {
   // Checkout specific state
   const [showCheckout, setShowCheckout] = useState(false);
   const [withBreakfast, setWithBreakfast] = useState(false);
+  const [withExtraBed, setWithExtraBed] = useState(false);
 
   const updateBooking = (event) => {
     const { name, value } = event.target;
@@ -1031,20 +1032,20 @@ function BookingSection({ title, copy, showHighlights = true }) {
                 </div>
               </div>
 
-              <h3>Meal Plan</h3>
+              <h3>Optional Add-ons</h3>
               <div className="meal-options">
-                <label className={`meal-option ${!withBreakfast ? "selected" : ""}`}>
-                  <input type="radio" name="meal" checked={!withBreakfast} onChange={() => setWithBreakfast(false)} />
+                <label className={"meal-option " + (withBreakfast ? "selected" : "")}>
+                  <input type="checkbox" checked={withBreakfast} onChange={(e) => setWithBreakfast(e.target.checked)} />
                   <div>
-                    <strong>Room Only</strong>
-                    <span>No meals included</span>
+                    <strong>Morning Breakfast</strong>
+                    <span>Includes morning breakfast</span>
                   </div>
                 </label>
-                <label className={`meal-option ${withBreakfast ? "selected" : ""}`}>
-                  <input type="radio" name="meal" checked={withBreakfast} onChange={() => setWithBreakfast(true)} />
+                <label className={"meal-option " + (withExtraBed ? "selected" : "")}>
+                  <input type="checkbox" checked={withExtraBed} onChange={(e) => setWithExtraBed(e.target.checked)} />
                   <div>
-                    <strong>Room + Breakfast</strong>
-                    <span>Includes morning breakfast</span>
+                    <strong>Extra Bed</strong>
+                    <span>Additional bed in the room</span>
                   </div>
                 </label>
               </div>
@@ -1074,6 +1075,12 @@ function BookingSection({ title, copy, showHighlights = true }) {
                     <span>₹{breakfastSubtotal.toLocaleString()}</span>
                   </div>
                 )}
+                {withExtraBed && (
+                  <div className="price-row">
+                    <span>Extra Bed Charges</span>
+                    <span>₹{extraBedSubtotal.toLocaleString()}</span>
+                  </div>
+                )}
                 <div className="price-row taxes">
                   <span>Room GST (18%)</span>
                   <span>₹{roomGST.toLocaleString()}</span>
@@ -1082,6 +1089,12 @@ function BookingSection({ title, copy, showHighlights = true }) {
                   <div className="price-row taxes">
                     <span>Breakfast GST (18%)</span>
                     <span>₹{breakfastGST.toLocaleString()}</span>
+                  </div>
+                )}
+                {withExtraBed && (
+                  <div className="price-row taxes">
+                    <span>Extra Bed GST (18%)</span>
+                    <span>₹{extraBedGST.toLocaleString()}</span>
                   </div>
                 )}
                 <div className="price-row total">

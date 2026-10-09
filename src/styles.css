@@ -2192,11 +2192,12 @@ footer img {
   height: 100vh;
   z-index: 10000;
   background-color: var(--color-background);
-  padding-top: clamp(80px, 10vw, 100px);
-  padding-bottom: 60px;
+  padding-top: clamp(120px, 15vw, 160px);
+  padding-bottom: 80px;
   padding-left: clamp(20px, 5vw, 40px);
   padding-right: clamp(20px, 5vw, 40px);
   overflow-y: auto;
+  background-image: radial-gradient(circle at top right, rgba(197, 155, 70, 0.08) 0%, transparent 40%), radial-gradient(circle at bottom left, rgba(197, 155, 70, 0.05) 0%, transparent 40%);
 }
 
 .checkout-container {
@@ -2204,7 +2205,31 @@ footer img {
   margin: 0 auto;
 }
 
-.back-btn {
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 48px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(197, 155, 70, 0.15);
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.checkout-sidebar {
+  background: rgba(0, 0, 0, 0.2);
+  padding: 32px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.summary-card, .guest-info-card, .meal-options {
+  background: rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  margin-bottom: 32px;
+}.back-btn {
   background: none;
   border: none;
   color: var(--color-primary);
@@ -2397,3 +2422,4 @@ footer img {
   opacity: 0.7;
   cursor: not-allowed;
 }
+
