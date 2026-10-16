@@ -123,25 +123,30 @@ serve(async (req) => {
     }
 
     const withBreakfast = Boolean(body.with_breakfast);
+    const withExtraBed = Boolean(body.with_extra_bed);
     
     let roomSubtotal = Number(roomType.base_price) * nights * bookingQty;
-    let roomGST = Math.round(roomSubtotal * 0.18);
     
     let breakfastSubtotal = 0;
-    let breakfastGST = 0;
-
     if (withBreakfast) {
       breakfastSubtotal = 500 * nights * bookingGuestsCount;
-      breakfastGST = Math.round(breakfastSubtotal * 0.18);
+    }
+
+    let extraBedSubtotal = 0;
+    if (withExtraBed) {
+      extraBedSubtotal = 1000 * nights * bookingQty;
     }
     
-    const totalAmount = roomSubtotal + roomGST + breakfastSubtotal + breakfastGST;
+    const totalAmount = roomSubtotal + breakfastSubtotal + extraBedSubtotal;
     
     let finalNotes = notes ? String(notes).trim().slice(0, 950) : "";
     if (withBreakfast) {
       finalNotes = (finalNotes + "\n\n[Meal Plan: Room + Breakfast]").trim();
     } else {
       finalNotes = (finalNotes + "\n\n[Meal Plan: Room Only]").trim();
+    }
+    if (withExtraBed) {
+      finalNotes = (finalNotes + "\n[Add-on: Extra Bed]").trim();
     }
 
     // 3 & 4. Atomically check availability and create pending booking via RPC

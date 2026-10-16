@@ -911,7 +911,8 @@ function BookingSection({ title, copy, showHighlights = true }) {
           guests_count: Number(booking.guests || 2),
           qty: Number(booking.rooms || 1),
           notes: booking.notes,
-          with_breakfast: withBreakfast
+          with_breakfast: withBreakfast,
+          with_extra_bed: withExtraBed
         }
       });
 
@@ -987,9 +988,8 @@ function BookingSection({ title, copy, showHighlights = true }) {
 
   let nights = 0;
   let roomSubtotal = 0;
-  let roomGST = 0;
   let breakfastSubtotal = 0;
-  let breakfastGST = 0;
+  let extraBedSubtotal = 0;
   let totalAmount = 0;
 
   if (showCheckout && selectedRoom) {
@@ -998,14 +998,16 @@ function BookingSection({ title, copy, showHighlights = true }) {
     nights = Math.round((departureDate.getTime() - arrivalDate.getTime()) / (1000 * 60 * 60 * 24));
     
     roomSubtotal = Number(selectedRoom.base_price) * nights * Number(booking.rooms || 1);
-    roomGST = Math.round(roomSubtotal * 0.18);
     
     if (withBreakfast) {
       breakfastSubtotal = 1000 * nights * Number(booking.rooms || 1);
-      breakfastGST = Math.round(breakfastSubtotal * 0.18);
+    }
+
+    if (withExtraBed) {
+      extraBedSubtotal = 1000 * nights * Number(booking.rooms || 1);
     }
     
-    totalAmount = roomSubtotal + roomGST + breakfastSubtotal + breakfastGST;
+    totalAmount = roomSubtotal + breakfastSubtotal + extraBedSubtotal;
   }
 
   if (showCheckout && selectedRoom) {
@@ -1080,22 +1082,6 @@ function BookingSection({ title, copy, showHighlights = true }) {
                   <div className="price-row">
                     <span>Extra Bed Charges</span>
                     <span>₹{extraBedSubtotal.toLocaleString()}</span>
-                  </div>
-                )}
-                <div className="price-row taxes">
-                  <span>Room GST (18%)</span>
-                  <span>₹{roomGST.toLocaleString()}</span>
-                </div>
-                {withBreakfast && (
-                  <div className="price-row taxes">
-                    <span>Breakfast GST (18%)</span>
-                    <span>₹{breakfastGST.toLocaleString()}</span>
-                  </div>
-                )}
-                {withExtraBed && (
-                  <div className="price-row taxes">
-                    <span>Extra Bed GST (18%)</span>
-                    <span>₹{extraBedGST.toLocaleString()}</span>
                   </div>
                 )}
                 <div className="price-row total">
@@ -2320,23 +2306,18 @@ function CheckoutPage() {
   nights = Math.round((departureDate.getTime() - arrivalDate.getTime()) / (1000 * 60 * 60 * 24));
   
   const roomSubtotal = Number(selectedRoom.base_price) * nights * Number(booking.rooms || 1);
-  const roomGST = Math.round(roomSubtotal * 0.18);
   
   let breakfastSubtotal = 0;
-  let breakfastGST = 0;
   if (withBreakfast) {
     breakfastSubtotal = 1000 * nights * Number(booking.rooms || 1);
-    breakfastGST = Math.round(breakfastSubtotal * 0.18);
   }
   
   let extraBedSubtotal = 0;
-  let extraBedGST = 0;
   if (withExtraBed) {
     extraBedSubtotal = 1000 * nights * Number(booking.rooms || 1);
-    extraBedGST = Math.round(extraBedSubtotal * 0.18);
   }
   
-  const totalAmount = roomSubtotal + roomGST + breakfastSubtotal + breakfastGST + extraBedSubtotal + extraBedGST;
+  const totalAmount = roomSubtotal + breakfastSubtotal + extraBedSubtotal;
 
   const handlePayNow = async () => {
     setPaying(true);
@@ -2353,7 +2334,8 @@ function CheckoutPage() {
           guests_count: Number(booking.guests || 2),
           qty: Number(booking.rooms || 1),
           notes: booking.notes,
-          with_breakfast: withBreakfast
+          with_breakfast: withBreakfast,
+          with_extra_bed: withExtraBed
         }
       });
 
@@ -2501,22 +2483,6 @@ function CheckoutPage() {
                 <div className="price-row">
                   <span>Extra Bed Charges</span>
                   <span>₹{extraBedSubtotal.toLocaleString()}</span>
-                </div>
-              )}
-              <div className="price-row taxes">
-                <span>Room GST (18%)</span>
-                <span>₹{roomGST.toLocaleString()}</span>
-              </div>
-              {withBreakfast && (
-                <div className="price-row taxes">
-                  <span>Breakfast GST (18%)</span>
-                  <span>₹{breakfastGST.toLocaleString()}</span>
-                </div>
-              )}
-              {withExtraBed && (
-                <div className="price-row taxes">
-                  <span>Extra Bed GST (18%)</span>
-                  <span>₹{extraBedGST.toLocaleString()}</span>
                 </div>
               )}
               <div className="price-row total">
